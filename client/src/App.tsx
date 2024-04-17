@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import Mushahid from './Mushahid'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,6 +11,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <Mushahid/>
       </div>
     </>
   )
