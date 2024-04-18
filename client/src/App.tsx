@@ -1,4 +1,3 @@
-
 import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
@@ -7,16 +6,12 @@ import Home from "./Home";
 import Ahsan from "./Ahsan";
 import Mushahid from "./Mushahid";
 
-
-function App() {
-=======
+export const OnlineUserContext = createContext("");
 interface UserData {
+  userid : string;
   username: string;
   password: string;
 }
-
-export const OnlineUserContext = createContext("");
-
 const App: React.FC = () => {
   const [currentLoginUser, setCurrentLoginUser] = useState(0);
   const getdata: UserData[] = JSON.parse(
@@ -24,8 +19,8 @@ const App: React.FC = () => {
   );
   const localhostUserData: UserData[] = getdata;
 
-  const addUser = (username: string, password: string) => {
-    localhostUserData.push({ username, password });
+  const addUser = (userid: string, username: string, password: string) => {
+    localhostUserData.push({ userid, username, password });
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
@@ -56,7 +51,6 @@ const App: React.FC = () => {
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
-
     </>
   );
 };
