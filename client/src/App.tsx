@@ -3,13 +3,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
 import UserLogIn from "./Authentication/UserLogIn";
 import Home from "./Home";
+import Ahsan from "./Ahsan";
+import Mushahid from "./Mushahid";
 
 interface UserData {
   username: string;
   password: string;
 }
 
-// Create the context
 export const OnlineUserContext = createContext("");
 
 const App: React.FC = () => {
@@ -21,17 +22,15 @@ const App: React.FC = () => {
 
   const addUser = (username: string, password: string) => {
     localhostUserData.push({ username, password });
-    // Storing data
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
     );
     console.log(localhostUserData);
-    console.log("localhostUserData");
   };
+
   return (
     <>
-      {/* Use the OnlineUserContext.Provider */}
       <OnlineUserContext.Provider
         value={{ currentLoginUser, setCurrentLoginUser }}
       >
@@ -48,6 +47,8 @@ const App: React.FC = () => {
               element={<UserLogIn users={localhostUserData} />}
             />
             <Route path="/" element={<Home />} />
+            <Route path="/ahsan" element={<Ahsan />} />
+            <Route path="/mushahid" element={<Mushahid />} />
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
