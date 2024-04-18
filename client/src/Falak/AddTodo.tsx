@@ -15,9 +15,10 @@ interface FormData {
 interface Model2Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setUpdate:React.Dispatch<React.SetStateAction<number>>
 }
 
-const AddTodo: React.FC<Model2Props> = ({ open, setOpen }) => {
+const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
   const {
     register,
     handleSubmit,
@@ -38,14 +39,14 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen }) => {
     const existingTodos = JSON.parse(localStorage.getItem('todos') || '[]');
     console.log(existingTodos);
 
-    const updatedTodos = [...existingTodos, curTodo];
+    const updatedTodos = [curTodo , ...existingTodos];
     console.log(updatedTodos);
 
    localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
     reset();
     setOpen(false);    
-
+    setUpdate((pre)=>pre+1);
   };
 
   const handleClose = () => {

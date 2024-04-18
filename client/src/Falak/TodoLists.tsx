@@ -27,12 +27,13 @@ const TodoLists = () => {
 
   return (
    <>
+   <h1>from TodoLists </h1>
     {/* <AddTodo></AddTodo> */}
-    <AddTodo open={open} setOpen={setOpen} />
+    {/* <AddTodo open={open} setOpen={setOpen} /> */}
     {/* <Model2 open={open} setOpen={setOpen} /> */}
 
-    <button onClick={()=>{setOpen(true)}}>click</button>
-    <div className="max-w-md mx-auto mt-8 ">
+    {/* <button onClick={()=>{setOpen(true)}}>click</button> */}
+    {/* <div className="max-w-md mx-auto mt-8 ">
       <h1 className="text-3xl font-semibold mb-4">To-Do List</h1>
       <p className="text-gray-600 mb-4">
         Add and manage your to-dos with ease!
@@ -68,7 +69,7 @@ const TodoLists = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </div> */}
    <Final></Final>
    
    </>

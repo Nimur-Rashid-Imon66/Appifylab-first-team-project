@@ -1,8 +1,8 @@
 
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import TodoLists from './Falak/TodoLists'
-import Add from './Falak/notin/Add';
+import TodoApps from './Falak/TodoApp';
+import TodoLists from './Falak/TodoLists';
 
 
 function App() {
@@ -10,8 +10,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+            <Route path="/todoapp" element={<TodoApps />} />
             <Route path="/todolists" element={<TodoLists />} />
-            <Route path="/addtodo" element={<Add />} />
           {/* <Route path="/" element={<Home />} /> */}
           {/* <Route path="/about" element={<About />} /> */}
          </Routes>
