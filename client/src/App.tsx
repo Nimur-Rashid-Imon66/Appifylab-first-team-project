@@ -1,8 +1,12 @@
-import { useState } from 'react'
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Ahsan from './Ahsan'
-import Mushahid from './Mushahid'
+
+import React, { createContext, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import UserRegistration from "./Authentication/UserRegistration";
+import UserLogIn from "./Authentication/UserLogIn";
+import Home from "./Home";
+import Ahsan from "./Ahsan";
+import Mushahid from "./Mushahid";
+
 
 function App() {
 =======
@@ -11,7 +15,6 @@ interface UserData {
   password: string;
 }
 
-// Create the context
 export const OnlineUserContext = createContext("");
 
 const App: React.FC = () => {
@@ -23,24 +26,37 @@ const App: React.FC = () => {
 
   const addUser = (username: string, password: string) => {
     localhostUserData.push({ username, password });
-    // Storing data
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
     );
     console.log(localhostUserData);
-    console.log("localhostUserData");
   };
+
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-          <Route path='/ahsan' element={<Ahsan />} />
-          <Route path='/mushahid' element={<Mushahid/>}/>
-        </Routes>
-      </BrowserRouter>
+      <OnlineUserContext.Provider
+        value={{ currentLoginUser, setCurrentLoginUser }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/registration"
+              element={
+                <UserRegistration addUser={addUser} users={localhostUserData} />
+              }
+            />
+            <Route
+              path="/login"
+              element={<UserLogIn users={localhostUserData} />}
+            />
+            <Route path="/" element={<Home />} />
+            <Route path="/ahsan" element={<Ahsan />} />
+            <Route path="/mushahid" element={<Mushahid />} />
+          </Routes>
+        </BrowserRouter>
+      </OnlineUserContext.Provider>
+
     </>
   );
 };
