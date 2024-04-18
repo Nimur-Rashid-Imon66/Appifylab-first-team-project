@@ -31,26 +31,14 @@ const App: React.FC = () => {
   };
   return (
     <>
-      {/* Use the OnlineUserContext.Provider */}
-      <OnlineUserContext.Provider
-        value={{ currentLoginUser, setCurrentLoginUser }}
-      >
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/registration"
-              element={
-                <UserRegistration addUser={addUser} users={localhostUserData} />
-              }
-            />
-            <Route
-              path="/login"
-              element={<UserLogIn users={localhostUserData} />}
-            />
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      </OnlineUserContext.Provider>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={<Home />} /> */}
+          {/* <Route path="/about" element={<About />} /> */}
+          <Route path='/ahsan' element={<Ahsan />} />
+          <Route path='/mushahid' element={<Mushahid/>}/>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
