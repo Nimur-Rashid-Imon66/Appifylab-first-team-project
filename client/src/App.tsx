@@ -27,6 +27,7 @@ const App: React.FC = () => {
       JSON.stringify(localhostUserData)
     );
     console.log(localhostUserData);
+    console.log("localhostUserData");
   };
   return (
     <>
