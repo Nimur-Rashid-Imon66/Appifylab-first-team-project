@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Falak = () => {
+const Hello = () => {
     return (
         <div>
-            <h1>hello from falak</h1>
+            <h1>helloooo</h1>
         </div>
     );
 };
 
-export default Falak;
+export default Hello;
