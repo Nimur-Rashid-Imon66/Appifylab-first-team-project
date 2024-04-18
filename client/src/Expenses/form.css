@@ -1,0 +1,114 @@
+.container {
+  margin: 0 auto;
+  background-color: #171425;
+  position: relative;
+  text-align: center;
+  height: 100vh;
+  overflow: scroll;
+}
+.incomeContainer {
+  background-color: #a3c0a3;
+}
+.expenseContainer {
+  background-color: #c0a3a3;
+}
+.centered {
+  width: 400px;
+  position: absolute; 
+  top: 50%;
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  color: black;
+}
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group input:focus {
+  outline: none;
+}
+
+.input-group button {
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input-group button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.inc {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: black;
+  background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: 1em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.inc:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em #14a73e98;
+}
+
+.inc:active {
+  box-shadow: 0 0.3em 1em -0.5em #14a73e98;
+}
+
+.exp {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: black;
+  background: linear-gradient(0deg, rgb(167, 25, 20) 0%, rgb(247, 102, 102) 100%);
+  box-shadow: 0 0.7em 1.5em -0.5em #a7141498;
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.exp:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em #a7141498;
+}
+
+.exp:active {
+  box-shadow: 0 0.3em 1em -0.5em #a7141498;
+}

@@ -1,17 +1,26 @@
-import { useState } from 'react'
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Income from './Expenses/Income'
+import Expense from './Expenses/Expense'
+import Home from './Expenses/Home'
+import {RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path : '/',
+      element : <Home/>,
+    },
+    {
+      path : '/income',
+      element : <Income/>,
+    },
+    {
+      path : '/expense',
+      element : <Expense/>,
+    }
+  ])
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-         </Routes>
-      </BrowserRouter>
-    </>
+    <RouterProvider router = {router}/>
   )
 }
 
