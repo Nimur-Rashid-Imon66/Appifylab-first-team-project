@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
 import UserLogIn from "./Authentication/UserLogIn";
 import Home from "./Home";
+import Ahsan from "./Ahsan";
+import Mushahid from "./Mushahid";
 
 interface UserData {
   username: string;

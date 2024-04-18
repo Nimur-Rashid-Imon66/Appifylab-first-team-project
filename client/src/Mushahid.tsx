@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
-import { Dropdown } from "react-bootstrap";
+import './App.css'
 
 function Mushahid() {
 
     let data = JSON.parse(localStorage.getItem('data'));
 
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("nobody");
+    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
