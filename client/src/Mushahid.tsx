@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
+import { Dropdown } from "react-bootstrap";
 
 function Mushahid() {
 
-    const data = JSON.parse(localStorage.getItem('blogs'));
+    let data = JSON.parse(localStorage.getItem('data'));
 
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("nobody");
+    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
@@ -14,18 +16,20 @@ function Mushahid() {
     const [postBody, setPostBody] = useState("");
 
 
-    if (data === null) {
+    if (data == null) {
         const cratingData = {
-           blogs: [
+            blogs: [
                 {
-                "title": "example_title",
-                "body": "this example body for blog",
-                "author": "nobody"
+                    "title": "example_title",
+                    "body": "this example body for blog",
+                    "author": "nobody"
                 }
             ]
         };
         localStorage.setItem('data', JSON.stringify(cratingData));
     }
+
+    console.log(blogs);
 
     console.log('okk')
 
@@ -47,6 +51,21 @@ function Mushahid() {
 
         alert(blogTitel);
         alert(postBody);
+
+        const newPost = {
+            title: blogTitel,
+            body: postBody,
+            author: whoIsLoggedIn
+        }
+
+        let localData = JSON.parse(localStorage.getItem('data'));
+
+        localData['blogs'].push(newPost);
+
+        localStorage.setItem('data', JSON.stringify(localData));
+
+        setBlogs(localData);
+
         setPostBody("");
         setBlogTitel("");
         setShowBlogInputBox(false);
@@ -59,7 +78,7 @@ function Mushahid() {
         <>
             <div>
                 {
-                    showCreatButton &&
+                    showCreatButton && (whoIsLoggedIn != 'nobody') &&
                     <button onClick={openBlogInputBox} type="button" className="btn">Write a Blog</button>
                 }
             </div>
@@ -79,17 +98,27 @@ function Mushahid() {
                     </div>
                 )
             }
-            {/* <div>
+            <div>
                 {
-                    showBlogs && blogs.map((val) => (
+                    showBlogs && blogs.blogs.map((val) => (
                         <>
-                            <b>{val.title}</b>
-                            <small>Blog by {val.author}</small>
-                            <p>{val.body}</p>
+                            <br />
+                            {/* <b>{val.title} {" "} </b>
+                            <small>(author: {val.author})</small> */}
+                            
+
+                            <div style={{ border: '1px solid gray', margin: '8px', padding: '8px' }}>
+                                <b>{val.title} {" "} </b>
+                                <small>(author: {val.author})</small>
+                                
+                                <p>{val.body}</p>
+                                <button style={{ marginRight: '5px', padding: '5px 10px', backgroundColor: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                                <button style={{ padding: '5px 10px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                            </div>
                         </>
                     ))
                 }
-            </div> */}
+            </div>
         </>
     )
 }
