@@ -1,9 +1,11 @@
-import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import UserRegistration from "./Authentication/UserRegistration";
-import UserLogIn from "./Authentication/UserLogIn";
-import Home from "./Home";
+import { useState } from 'react'
+import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Ahsan from './Ahsan'
+import Mushahid from './Mushahid'
 
+function App() {
+=======
 interface UserData {
   username: string;
   password: string;
@@ -31,26 +33,14 @@ const App: React.FC = () => {
   };
   return (
     <>
-      {/* Use the OnlineUserContext.Provider */}
-      <OnlineUserContext.Provider
-        value={{ currentLoginUser, setCurrentLoginUser }}
-      >
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/registration"
-              element={
-                <UserRegistration addUser={addUser} users={localhostUserData} />
-              }
-            />
-            <Route
-              path="/login"
-              element={<UserLogIn users={localhostUserData} />}
-            />
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      </OnlineUserContext.Provider>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={<Home />} /> */}
+          {/* <Route path="/about" element={<About />} /> */}
+          <Route path='/ahsan' element={<Ahsan />} />
+          <Route path='/mushahid' element={<Mushahid/>}/>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
