@@ -1,23 +1,52 @@
-
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React, { useState, createContext } from 'react';
+import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Ahsan from './Ahsan';
+import Mushahid from './Mushahid';
 import TodoApps from './Falak/TodoApp';
 import TodoLists from './Falak/TodoLists';
 
+interface UserData {
+  username: string;
+  password: string;
+}
 
-function App() {
+// Create the context
+export const OnlineUserContext = createContext("");
+
+const App: React.FC = () => {
+  const [currentLoginUser, setCurrentLoginUser] = useState(0);
+  const getdata: UserData[] = JSON.parse(
+    localStorage.getItem("localhostUserData") || "[]"
+  );
+  const localhostUserData: UserData[] = getdata;
+
+  const addUser = (username: string, password: string) => {
+    localhostUserData.push({ username, password });
+    // Storing data
+    localStorage.setItem(
+      "localhostUserData",
+      JSON.stringify(localhostUserData)
+    );
+    console.log(localhostUserData);
+    console.log("localhostUserData");
+  };
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="/todoapp" element={<TodoApps />} />
-            <Route path="/todolists" element={<TodoLists />} />
           {/* <Route path="/" element={<Home />} /> */}
           {/* <Route path="/about" element={<About />} /> */}
-         </Routes>
+          
+          <Route path='/todoapps' element={<TodoApps />} />
+          <Route path='/todoLists' element={<TodoLists />} />
+          <Route path='/ahsan' element={<Ahsan />} />
+          <Route path='/mushahid' element={<Mushahid/>}/>
+        </Routes>
       </BrowserRouter>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
