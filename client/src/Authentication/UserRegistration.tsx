@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import "./UserRegistration.css";
-
+import { v4 as uuidv4 } from "uuid";
 interface UserData {
   username: string;
   password: string;
@@ -30,16 +30,8 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (username && password) {
-      const randomNumber = Math.floor(Math.random() * 1000);
-      const uniqUserName = `${username}${randomNumber}`;
-      const isUserExist = users.findIndex(
-        (user: UserData) => user.username === uniqUserName
-      );
-      if (isUserExist === -1) {
-        addUser(uniqUserName, password);
-      } else {
-        alert("Username already exists. Please try another one.");
-      }
+      const userid = uuidv4();
+      addUser(userid, username, password);
     }
   };
 
