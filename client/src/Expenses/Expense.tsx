@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './form.css'
 import { useNavigate } from 'react-router-dom';
+import { OnlineUserContext } from '../App';
 
 interface Expense {
   id: number;
@@ -18,9 +19,11 @@ const Expense: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>(() => {
     const storedExpenses = localStorage.getItem('expenses');
     return storedExpenses ? JSON.parse(storedExpenses) : [];
-  });
-  const [loginUserID, setLoginUserID] = useState<number>(3);
+  }); 
 
+  const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
+  const loginUserID = parseInt(currentLoginUser);
   useEffect(() => {
     localStorage.setItem('expenses', JSON.stringify(expenses));
   }, [expenses]);
@@ -48,7 +51,7 @@ const Expense: React.FC = () => {
     setExpenses(updatedExpenses);
     setTimeout(() => {
       alert('Done!');
-      navigate('/');
+      navigate("/expensehome");
     }, 300);
   };
 

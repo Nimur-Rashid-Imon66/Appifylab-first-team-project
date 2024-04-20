@@ -29,14 +29,14 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
     const isUserExist = users.findIndex(
       (e: UserData) => e.username == username
     );
-    console.log(isUserExist);
+    // console.log(isUserExist);
     if (
       isUserExist != -1 &&
       users[isUserExist].username == username &&
       users[isUserExist].password == password
     ) {
       setCurrentLoginUser(isUserExist);
-      navigate("/");
+      navigate("/mainpage");
     } else alert("username and password wrong");
   };
 
