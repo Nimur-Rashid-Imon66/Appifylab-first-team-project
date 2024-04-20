@@ -1,23 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './form.css'
+import { useNavigate } from 'react-router-dom';
 
+interface Expense {
+  id: number;
+  balance: number;
+  history: Transaction[];
+}
+interface Transaction {
+  desc: string;
+  amount: number;
+  type: string;
+}
 
 const Expense: React.FC = () => {
-  const [balance, setBalance] = useState<number>(0);
-  const [ammountdesc, setAmmountDesc] = useState<string>('');
-  const [ammount, setAmmount] = useState<string>('');
+  const navigate = useNavigate();
+  const [expenses, setExpenses] = useState<Expense[]>(() => {
+    const storedExpenses = localStorage.getItem('expenses');
+    return storedExpenses ? JSON.parse(storedExpenses) : [];
+  });
+  const [loginUserID, setLoginUserID] = useState<number>(3);
+
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+  }, [expenses]);
+
+  const User: Expense[] = expenses.filter((usr) => usr.id === loginUserID);
+  const [balance, setBalance] = useState<number>(User.length > 0 ? User[0].balance : 0);
+  const [amountdesc, setAmountDesc] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
 
   const hanldeExpense = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBalance(prevBalance => prevBalance - parseFloat(ammount));
-  };
-  const handleAmmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmmount(e.target.value);
-  };
-  const handleAmmountDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmmountDesc(e.target.value);
+    const newBalance = balance - parseFloat(amount);
+    setBalance(newBalance);
+    const updatedExpenses = expenses.map(expense => {
+      if (expense.id === loginUserID) {
+        expense.history.push({
+          amount: parseFloat(amount),
+          desc: amountdesc,
+          type: 'Expense'
+        })
+        return { ...expense, balance: newBalance };
+      }
+      return expense;
+    });
+    setExpenses(updatedExpenses);
+    setTimeout(() => {
+      alert('Done!');
+      navigate('/');
+    }, 300);
   };
 
+  const handleAmmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+  };
+  const handleAmmountDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmountDesc(e.target.value);
+  };
   return (
     <div className="container">
       <div className='expenseContainer centered'>
@@ -27,7 +67,7 @@ const Expense: React.FC = () => {
             <input
               type='text'
               name='income_description'
-              value={ammountdesc}
+              value={amountdesc}
               onChange={handleAmmountDesc}
               placeholder="Enter description" />
           </div>
@@ -36,7 +76,7 @@ const Expense: React.FC = () => {
             <input
               type='text'
               name='income_amount'
-              value={ammount}
+              value={amount}
               onChange={handleAmmount}
               placeholder="Enter amount" />
           </div>
