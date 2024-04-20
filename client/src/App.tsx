@@ -48,10 +48,14 @@ const App: React.FC = () => {
             />
             <Route path="/" element={<Home />} />
             <Route path="/ahsan" element={<Ahsan />} />
-            <Route path="/mushahid" element={<Mushahid />} />
+            <Route path="/mushahid" element={<Mushahid />} /> 
+          
+          <Route path='/todoapps' element={<TodoApps />} />
+          <Route path='/todoLists' element={<TodoLists />} />
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
+      
     </>
   );
 };
