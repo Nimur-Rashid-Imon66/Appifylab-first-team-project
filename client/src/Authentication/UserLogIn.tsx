@@ -2,6 +2,7 @@ import React, { useState, FormEvent, ChangeEvent, useContext } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import "./UserRegistration.css";
+import './UserRegistration.css'
 import { OnlineUserContext } from "../App";
 interface UserData {
   username: string;

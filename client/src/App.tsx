@@ -1,19 +1,20 @@
-import React, { useState, createContext } from 'react';
-import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Ahsan from './Ahsan';
-import Mushahid from './Mushahid';
-import TodoApps from './Falak/TodoApp';
-import TodoLists from './Falak/TodoLists';
+import React, { createContext, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import UserRegistration from "./Authentication/UserRegistration";
+import UserLogIn from "./Authentication/UserLogIn";
+import Home from "./Home";
 
+import Ahsan from "./Ahsan";
+import Mushahid from "./Mushahid";
+import TodoApps from "./Falak/TodoApp";
+import TodoLists from "./Falak/TodoLists";
+
+export const OnlineUserContext = createContext("");
 interface UserData {
+  userid : string;
   username: string;
   password: string;
 }
-
-// Create the context
-export const OnlineUserContext = createContext("");
-
 const App: React.FC = () => {
   const [currentLoginUser, setCurrentLoginUser] = useState(0);
   const getdata: UserData[] = JSON.parse(
@@ -21,30 +22,42 @@ const App: React.FC = () => {
   );
   const localhostUserData: UserData[] = getdata;
 
-  const addUser = (username: string, password: string) => {
-    localhostUserData.push({ username, password });
-    // Storing data
+  const addUser = (userid: string, username: string, password: string) => {
+    localhostUserData.push({ userid, username, password });
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
     );
     console.log(localhostUserData);
-    console.log("localhostUserData");
   };
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
+      <OnlineUserContext.Provider
+        value={{ currentLoginUser, setCurrentLoginUser }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/registration"
+              element={
+                <UserRegistration addUser={addUser} users={localhostUserData} />
+              }
+            />
+            <Route
+              path="/login"
+              element={<UserLogIn users={localhostUserData} />}
+            />
+            <Route path="/" element={<Home />} />
+            <Route path="/ahsan" element={<Ahsan />} />
+            <Route path="/mushahid" element={<Mushahid />} /> 
           
           <Route path='/todoapps' element={<TodoApps />} />
           <Route path='/todoLists' element={<TodoLists />} />
-          <Route path='/ahsan' element={<Ahsan />} />
-          <Route path='/mushahid' element={<Mushahid/>}/>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </OnlineUserContext.Provider>
+      
     </>
   );
 };
