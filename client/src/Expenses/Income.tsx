@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
-import './form.css'
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import "./form.css";
+import { OnlineUserContext } from "../App";
 
 interface Expense {
   id: number;
@@ -16,39 +17,43 @@ interface Transaction {
 const Income: React.FC = () => {
   const navigate = useNavigate();
   const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const storedExpenses = localStorage.getItem('expenses');
+    const storedExpenses = localStorage.getItem("expenses");
     return storedExpenses ? JSON.parse(storedExpenses) : [];
   });
-  const [loginUserID, setLoginUserID] = useState<number>(3);
 
+  const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
+  const loginUserID = parseInt(currentLoginUser);
   useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
+    localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
   const User: Expense[] = expenses.filter((usr) => usr.id === loginUserID);
-  const [balance, setBalance] = useState<number>(User.length > 0 ? User[0].balance : 0);
-  const [amountdesc, setAmountDesc] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
+  const [balance, setBalance] = useState<number>(
+    User.length > 0 ? User[0].balance : 0
+  );
+  const [amountdesc, setAmountDesc] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
 
   const handleIncome = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newBalance = balance + parseFloat(amount);
     setBalance(newBalance);
-    const updatedExpenses = expenses.map(expense => {
+    const updatedExpenses = expenses.map((expense) => {
       if (expense.id === loginUserID) {
         expense.history.push({
           amount: parseFloat(amount),
           desc: amountdesc,
-          type: 'Income'
-        })
+          type: "Income",
+        });
         return { ...expense, balance: newBalance };
       }
       return expense;
     });
     setExpenses(updatedExpenses);
     setTimeout(() => {
-      alert('Done!');
-      navigate('/');
+      alert("Done!");
+      navigate("/expensehome");
     }, 300);
   };
 
@@ -60,34 +65,36 @@ const Income: React.FC = () => {
   };
   return (
     <div className="container">
-      <div className='incomeContainer centered'>
+      <div className="incomeContainer centered">
         <form onSubmit={handleIncome}>
           <div className="input-group">
             <label>Description:</label>
             <input
-              type='text'
-              name='income_description'
+              type="text"
+              name="income_description"
               value={amountdesc}
               onChange={handleAmmountDesc}
-              placeholder="Enter description" />
+              placeholder="Enter description"
+            />
           </div>
           <div className="input-group">
             <label>Amount:</label>
             <input
-              type='text'
-              name='income_amount'
+              type="text"
+              name="income_amount"
               value={amount}
               onChange={handleAmmount}
-              placeholder="Enter amount" />
+              placeholder="Enter amount"
+            />
           </div>
-          <button type="submit" className='inc'> Add </button>
-
+          <button type="submit" className="inc">
+            {" "}
+            Add{" "}
+          </button>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Income
-
-
+export default Income;
