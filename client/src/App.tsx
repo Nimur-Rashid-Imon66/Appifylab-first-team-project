@@ -60,8 +60,8 @@ const App: React.FC = () => {
             <Route path="/mushahid" element={<Mushahid />} />
             
 
-            <Route path="/todo" element={<TodoApps />} />
-            <Route path="/todo-lists" element={<TodoLists />} />
+            <Route path="/todoapp" element={<TodoApps />} />
+            <Route path="/todoLists" element={<TodoLists />} />
             <Route path='/addProductCategory' element={<AddProductCategory />} />
           <Route path='/addProduct' element={<AddProduct />} />
           <Route path='/showProducts' element={<ShowProduct />} />
