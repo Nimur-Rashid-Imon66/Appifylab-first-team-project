@@ -13,7 +13,7 @@ function NavBar() {
           <Link to="/todoapps">To DO</Link>
         </li>
         <li>
-          <Link to="/expensehome">Expense Mangement</Link>
+          <Link to="/expense-management">Expense Mangement</Link>
         </li>
         <li>
           <Link to="/mushahid">Blog Post</Link>
