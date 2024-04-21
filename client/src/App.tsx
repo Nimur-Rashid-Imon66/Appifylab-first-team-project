@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import Homee from "./Expenses/Home";
@@ -25,7 +25,12 @@ interface UserData {
 }
 
 const App: React.FC = () => {
-  const [currentLoginUser, setCurrentLoginUser] = useState({});
+  const onlineUserFromLocalHost: UserData[] = JSON.parse(
+    localStorage.getItem("localhostonlineusesr") || "{}"
+  );
+  const [currentLoginUser, setCurrentLoginUser] = useState(
+    onlineUserFromLocalHost
+  );
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
