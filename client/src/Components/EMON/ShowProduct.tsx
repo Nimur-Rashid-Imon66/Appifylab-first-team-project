@@ -20,8 +20,8 @@ const ShowProduct = () => {
     const getProduct = () => {
         let data = localStorage.getItem('products');
         if (data) {
-            let newData = JSON.parse(data);
-            return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);  
+            return JSON.parse(data);
+            // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);  
         }
         else return [];
     }

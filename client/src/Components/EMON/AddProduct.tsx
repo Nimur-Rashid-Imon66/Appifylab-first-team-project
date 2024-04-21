@@ -37,6 +37,7 @@ const AddProduct = () => {
 
     const getProduct = () => {
         let data = localStorage.getItem('products');
+        console.log(data)
         if (data) {
             return JSON.parse(data);
             // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
@@ -74,8 +75,8 @@ const AddProduct = () => {
     
 
     useEffect(() => {
-        if (!loginUserID)
-            navigate('/login')
+        // if (!loginUserID)
+        //     navigate('/login')
         localStorage.setItem('products', JSON.stringify(products));
     }, [products]);
 
