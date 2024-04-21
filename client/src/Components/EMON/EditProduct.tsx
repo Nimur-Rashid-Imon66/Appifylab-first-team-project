@@ -1,60 +1,90 @@
 import React, { useEffect, useState } from 'react';
-import uniqid from 'uniqid';
-interface Product {
+import { useParams } from 'react-router-dom';
+import uniqid from 'uniqid'
+
+
+
+interface ProductInterface {
     productId: string;
     productName: string;
     productDescription: string;
-    productPrice: number|"";
+    productPrice: number;
     productCategory: string;
     productStatus: string;
-
 }
 
 
-const AddProduct = () => {
+
+const EditProduct: React.FC = ({}) => {
+    const {id} = useParams();
+    
     const getProduct = () => {
-        let data = localStorage.getItem('Products');
+        let data = localStorage.getItem('products');
         if (data) {
             return JSON.parse(data);
         }
         else return [];
     }
-    const [productInfo, setProductInfo] = useState<Product>({
-        productId: uniqid(),
-        productName: "",
-        productDescription: "",
-        productPrice: "",
-        productCategory: "cat1",
-        productStatus: "inStock"
-    });
-    const [products, setProducts] = useState<Product[]>(getProduct());
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault(); 
-        if (productInfo.productName === "" || productInfo.productDescription === "" || productInfo.productPrice === "" || productInfo.productCategory === "" || productInfo.productStatus === "") {
-            alert("Please fill all the fields");
-            return;
+    const [products, setProducts] = useState<ProductInterface[]>(getProduct());
+    const getIndividualProduct = (id: string | undefined) => {
+        console.log(id,1)
+        if (products && id) {
+            const x = products.find((product: ProductInterface) => product.productId === id);
+            if (x) return x;
+            else return {
+                productId: uniqid(),
+                productName: "",
+                productDescription: "",
+                productPrice: 0,
+                productCategory: "cat1",
+                productStatus: "In Stock" }
         }
-        setProducts([...products, productInfo ]);
-        alert("Product Added Successfully");
-        setProductInfo({
+        else return {
             productId: uniqid(),
             productName: "",
             productDescription: "",
-            productPrice: "",
+            productPrice: 0,
             productCategory: "cat1",
-            productStatus: "inStock"
-        });
+            productStatus: "In Stock" }
+    }
+    const [productInfo, setProductInfo] = useState<ProductInterface>({
+            productId: uniqid(),
+            productName: "",
+            productDescription: "",
+            productPrice: 0,
+            productCategory: "cat1",
+            productStatus: "In Stock" 
+    });
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault(); 
+        if (productInfo.productName === "" || productInfo.productDescription === "" || productInfo.productPrice === 0 || productInfo.productCategory === "" || productInfo.productStatus === "") {
+            alert("Please fill all the fields");
+            return;
+        }
+        const newProducts = products.filter((product: ProductInterface) => product.productId !== id);
+        setProducts([...newProducts, productInfo ]);
+        alert("Product Update Successfully");
+        
     }
     
 
     useEffect(() => {
-        localStorage.setItem('products', JSON.stringify(products));
-    }, [products]);
+           console.log(id)
+        const x:ProductInterface = getIndividualProduct(id);
+        console.log(x)
+            if(x) setProductInfo(x)
+        
+        
+    }, []);
 
+    useEffect(() => { 
+        localStorage.setItem('products', JSON.stringify(products));
+    }, [products]
+    )
     return (
         <div className="flex items-center justify-center ">
             <div className="flex flex-col min-w-[40vw]">
-                <h1 className="rounded-t-lg border text-2xl p-2">Add Product</h1>
+                <h1 className="rounded-t-lg border text-2xl p-2">Edit Product</h1>
                 <form
                     className='flex flex-col gap-4 p-4  rounded-b-lg items-center justify-center bg-gray-200 border'
                     onSubmit={handleSubmit}
@@ -110,8 +140,8 @@ const AddProduct = () => {
                             onChange={e => setProductInfo({ ...productInfo, productStatus: e.target.value })}
                             required
                         >
-                            <option value="inStock">In Stock </option>
-                            <option value="outoOfStock">Out of Stock</option>
+                            <option value="In Stock">In Stock </option>
+                            <option value="Out Of Stock">Out of Stock</option>
                         </select>
                     </span>
                     <button
@@ -123,4 +153,4 @@ const AddProduct = () => {
     );
 };
 
-export default AddProduct;
+export default EditProduct;

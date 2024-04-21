@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { OnlineUserContext } from '../../App';
 
 
 const AddProductCategory = () => {
+    const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
+    const loginUserID = parseInt(currentLoginUser);
 
     const [userId, setUserId] = useState(101); //user info coming from login
     const [productCategory, setProductCategory] = useState([
         {
+            loginUserID: loginUserID,
             categoryName: "cat1",
             categoryDescription: "All cat1 items"
         },
         {
+            loginUserID: loginUserID,
             categoryName: "cat2",
             categoryDescription: "All types of cat2"
         },
         {
+            loginUserID: loginUserID,
             categoryName: "cat3",
             categoryDescription: "All types of cat3"
         }
     ]); // product category info coming from user product list
 
     const [categoryInfo, setCategoryInfo] = useState({
+        loginUserID: loginUserID,
         categoryName: "",
         categoryDescription: ""
     });
@@ -31,6 +39,7 @@ const AddProductCategory = () => {
         }
         setProductCategory([...productCategory, categoryInfo]);
         setCategoryInfo({
+            loginUserID: loginUserID,
             categoryName: "",
             categoryDescription: ""
         });
