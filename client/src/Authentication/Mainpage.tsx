@@ -4,10 +4,9 @@ import { OnlineUserContext } from "../App";
 
 
 const Mainpage = () => {
-  const navigate = useNavigate();
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
-  console.log(currentLoginUser);
+
   return (
     <div className="flex flex-col justify-center items-center min-h-[95vh]">
       {/* <h1>sadf {currentLoginUser.userid}</h1> */}

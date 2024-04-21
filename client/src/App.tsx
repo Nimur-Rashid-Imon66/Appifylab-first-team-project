@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import ExpenseHome from "./Expenses/Home";
@@ -14,6 +14,7 @@ import AddProduct from "./Components/EMON/AddProduct";
 import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
+import PrivateRouting from "./Authentication/PrivateRouting";
 
 export const OnlineUserContext = createContext({});
 
@@ -25,7 +26,12 @@ interface UserData {
 }
 
 const App: React.FC = () => {
-  const [currentLoginUser, setCurrentLoginUser] = useState({});
+  const onlineUserFromLocalHost: UserData[] = JSON.parse(
+    localStorage.getItem("localhostonlineusesr") || "{}"
+  );
+  const [currentLoginUser, setCurrentLoginUser] = useState(
+    onlineUserFromLocalHost
+  );
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
@@ -63,20 +69,24 @@ const App: React.FC = () => {
               path="/login"
               element={<UserLogIn users={localhostUserData} />}
             />
-            <Route path="/expense-management" element={<ExpenseHome />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/expense" element={<Expense />} />
-            <Route path="/mushahid" element={<Mushahid />} />
-            <Route path="/mainpage" element={<Mainpage />} />
-            <Route path="/todoapps" element={<TodoApps />} />
-            <Route path="/todoLists" element={<TodoLists />} />
-            <Route
-              path="/addProductCategory"
-              element={<AddProductCategory />}
-            />
-            <Route path="/addProduct" element={<AddProduct />} />
-            <Route path="/showProducts" element={<ShowProduct />} />
-            <Route path="/editProduct/:id" element={<EditProduct />} />
+            <Route path="/" element={<PrivateRouting />}>
+              <Route path="/expensehome" element={<ExpenseHome />} />
+              <Route path="/income" element={<Income />} />
+              <Route path="/expense" element={<Expense />} />
+              {/* <Route path="/ahsan" element={<Ahsan />} /> */}
+              <Route path="/mushahid" element={<Mushahid />} />
+
+              <Route path="/mainpage" element={<Mainpage />} />
+              <Route path="/todoapps" element={<TodoApps />} />
+              <Route path="/todoLists" element={<TodoLists />} />
+              <Route
+                path="/addProductCategory"
+                element={<AddProductCategory />}
+              />
+              <Route path="/addProduct" element={<AddProduct />} />
+              <Route path="/showProducts" element={<ShowProduct />} />
+              <Route path="/editProduct/:id" element={<EditProduct />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
