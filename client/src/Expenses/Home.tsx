@@ -68,7 +68,7 @@ const Home: React.FC = () => {
           <h3>
             <u>History</u>
           </h3>
-          <table>
+          <table className="naz">
             <thead>
               <tr>
                 <th>S. No</th>

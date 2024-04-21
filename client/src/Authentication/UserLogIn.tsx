@@ -1,11 +1,10 @@
 import React, { useState, FormEvent, ChangeEvent, useContext } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { Link, useNavigate } from "react-router-dom";
 import "./UserRegistration.css";
-import './UserRegistration.css'
+import "./UserRegistration.css";
 import { OnlineUserContext } from "../App";
 interface UserData {
-  username: string;
+  email: string;
   password: string;
 }
 interface UserRegistrationProps {}
@@ -13,30 +12,28 @@ interface UserRegistrationProps {}
 const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
-  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const isUserExist = users.findIndex(
-      (e: UserData) => e.username == username
-    );
-    // console.log(isUserExist);
+    const isUserExist = users.filter((e: UserData) => e.email == email);
     if (
-      isUserExist != -1 &&
-      users[isUserExist].username == username &&
-      users[isUserExist].password == password
+      isUserExist.length > 0 &&
+      isUserExist[0].email == email &&
+      isUserExist[0].password == password
     ) {
-      setCurrentLoginUser(isUserExist);
-      navigate("/");
+      console.log(isUserExist[0]);
+      setCurrentLoginUser(isUserExist[0]);
+      navigate("/mainpage");
     } else alert("username and password wrong");
   };
 
@@ -45,12 +42,12 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
       <h1>User Log In</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Email:</label>
           <input
-            type="text"
+            type="email"
             id="username"
-            value={username}
-            onChange={handleUsernameChange}
+            value={email}
+            onChange={handleEmailChange}
             required
           />
         </div>
