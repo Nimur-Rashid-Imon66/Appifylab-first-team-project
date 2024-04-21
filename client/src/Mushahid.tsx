@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './App.css'
+import './Mushahid.css'
 
 function Mushahid() {
 
@@ -152,8 +152,8 @@ function Mushahid() {
                                         <small>(author: {val.author})</small>
 
                                         <p>{val.body}</p>
-                                        <button onClick={() => edit(indx, val.author, val.body)} style={{ marginRight: '5px', padding: '5px 10px', backgroundColor: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-                                        <button onClick={() => remove(indx, val.author)} style={{ padding: '5px 10px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                        <button onClick={() => edit(indx, val.author, val.body)} style={{ height:"30px", width:"120px", marginRight: '5px', padding: '5px 10px', backgroundColor: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                                        <button onClick={() => remove(indx, val.author)} style={{ height:"30px", width:"120px", padding: '5px 10px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
 
                                     </>
                                     )
