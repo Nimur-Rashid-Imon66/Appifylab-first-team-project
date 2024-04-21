@@ -1,33 +1,64 @@
 import  { useEffect, useState } from 'react';
 import AddTodo from '../AddTodo';
+import EditTodo from '../EditTodo';
+
 interface FormData {
+  userid: string;
   id:string 
   title: string;
   description: string;
   priority: string;
   tags: string;
 }
+
 const Final = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchBy, setSearchBy] = useState('title');
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [update,setUpdate] =useState(0);
   const [todos, setTodos] = useState<FormData[]>([]);
+  const  [editTodoId,setEditTodoId]=useState('');
+  const [editData, setEditData] = useState<FormData | null>(null);
   useEffect(() => {
-
     const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
-      console.log(JSON.parse(storedTodos))
     }
-  
   }, [update]);
+
+  const handleEdit = (id: string) => {
+    // Handle edit action here
+    console.log('handleEdit ',id)
+    setEditTodoId(id);
+    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
+    console.log(existingTodos);
+    if (existingTodos) {
+      const editData = existingTodos.find((todo: FormData) => {
+        return todo.id === id;
+      });
+      console.log("editData from final ", editData);
+      setEditData(editData);
+    }
+
+    setOpenEdit(true);
+  };
+
+
+  const handleDelete = (id: string) => {
+    console.log('Delete id ',id);
+    const afterDeleteData = todos.filter((todo)=>{
+      return todo.id !== id ;
+    })
+    console.log('after delete data ',afterDeleteData);
+    setTodos(afterDeleteData);
+    localStorage.setItem('todos', JSON.stringify(afterDeleteData));
+  };
 
   return (
     <>
-      <AddTodo open={open} setOpen={setOpen} 
-               setUpdate={setUpdate}
-      />
+      <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} />
+      <EditTodo open={openEdit} setOpen={setOpenEdit} setUpdate={setUpdate} editTodoId={editTodoId} editData={editData} />
       <div className="overflow-x-auto">
         <div className="flex justify-between mb-4">
           <div className="flex items-center">
@@ -47,7 +78,6 @@ const Final = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-
           <button className="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-4" onClick={() => setOpen(true)}>Add User</button>
         </div>
         <table className="table-auto w-full border-collapse border">
@@ -57,19 +87,24 @@ const Final = () => {
               <th className="border px-4 py-2">Description</th>
               <th className="border px-4 py-2">Priority</th>
               <th className="border px-4 py-2">Tags</th>
-              <th className="border px-4 py-2">Action</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {todos.map((todo) => (
-              <tr key={todo.id} className="border">
-                <td className="border px-4 py-2">{todo?.title}</td>
-                <td className="border px-4 py-2">{todo?.description}</td>
-                <td className="border px-4 py-2">{todo?.priority}</td>
-                <td className="border px-4 py-2">{todo?.tags}</td>
-                <td className="border px-4 py-2">Actions</td>
-              </tr>
-            ))}
+          {todos
+              .filter(todo => todo.userid === '1')
+              .map((todo) => (
+                <tr key={todo.id} className="border">
+                  <td className="border px-4 py-2">{todo.title}</td>
+                  <td className="border px-4 py-2">{todo.description}</td>
+                  <td className="border px-4 py-2">{todo.priority}</td>
+                  <td className="border px-4 py-2">{todo.tags}</td>
+                  <td className="border px-4 py-2 flex">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(todo.id)}>Edit</button>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDelete(todo.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
