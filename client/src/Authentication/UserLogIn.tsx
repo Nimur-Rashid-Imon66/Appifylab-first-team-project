@@ -2,6 +2,7 @@ import React, { useState, FormEvent, ChangeEvent, useContext } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import "./UserRegistration.css";
+import './UserRegistration.css'
 import { OnlineUserContext } from "../App";
 interface UserData {
   username: string;
@@ -28,14 +29,14 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
     const isUserExist = users.findIndex(
       (e: UserData) => e.username == username
     );
-    console.log(isUserExist);
+    // console.log(isUserExist);
     if (
       isUserExist != -1 &&
       users[isUserExist].username == username &&
       users[isUserExist].password == password
     ) {
       setCurrentLoginUser(isUserExist);
-      navigate("/");
+      navigate("/mainpage");
     } else alert("username and password wrong");
   };
 
