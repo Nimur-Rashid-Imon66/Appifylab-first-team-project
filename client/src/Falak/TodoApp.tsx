@@ -56,6 +56,8 @@ const TodoApp = () => {
     localStorage.setItem('todos', JSON.stringify(afterDeleteData));
   };
 
+  
+
   return (
     <>
       <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} />
@@ -64,7 +66,7 @@ const TodoApp = () => {
         <div className="flex justify-between mb-4">
           <div className="flex items-center">
             <select
-              className="mr-2 px-2 py-1 border border-gray-300 bg-white rounded-md"
+              className="mr-2 px-2 py-1 border border-gray-300 bg-white rounded-md my-10"
               value={searchBy}
               onChange={(e) => setSearchBy(e.target.value)}
             >
@@ -79,7 +81,9 @@ const TodoApp = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-4" onClick={() => setOpen(true)}>Add User</button>
+         
+          <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-28 my-10" onClick={() => setOpen(true)}>Add Task</button>
+
         </div>
         <table className="table-auto w-full border-collapse border">
           <thead>

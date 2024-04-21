@@ -1,28 +1,35 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "./UserRegistration.css";
 import './UserRegistration.css'
 import { v4 as uuidv4 } from "uuid";
 interface UserData {
   username: string;
+  email: string;
+  id: string;
   password: string;
 }
 
 interface UserRegistrationProps {
   users: UserData[];
-  addUser: (username: string, password: string) => void;
+  addUser: (userid: string, username: string,email : string, password: string) => void;
 }
 
 const UserRegistration: React.FC<UserRegistrationProps> = ({
   users,
   addUser,
 }) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
+ const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+   setEmail(event.target.value);
+ };
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
@@ -30,9 +37,11 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('user',username,email,password)
     if (username && password) {
       const userid = uuidv4();
-      addUser(userid, username, password);
+      addUser(userid, username,email, password);
+      navigate('/login');
     }
   };
 
@@ -49,6 +58,16 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
             required
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="username">Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            required
+          />
+        </div>
+         
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input

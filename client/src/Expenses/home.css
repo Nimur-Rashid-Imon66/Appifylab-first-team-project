@@ -1,9 +1,3 @@
-
-h1,h2,h3,h4,h5,h6 {
-  margin: 0;
-  padding: 0;
-}
-
 .container {
   margin: 0 auto;
   background-color: #171425;
@@ -86,16 +80,16 @@ h1,h2,h3,h4,h5,h6 {
   box-shadow: 0 0.7em 1.5em -0.5em #a7311498;
   border-radius: 1em;
 }
-table {
+.naz{
   margin-top: 10px;
   width: 100%;
   border-collapse: collapse;
 }
-th, td {
+.naz th, td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
-th {
+.naz th {
   background-color: #b93919;
 }

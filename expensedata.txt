@@ -1,0 +1,67 @@
+const [expenses, setExpenses] = useState<Expense[]>(
+    [
+      {
+        id: 1,
+        balance: 1000,
+        history: [
+          {
+            desc: 'food',
+            amount: 50,
+            type: 'expense',
+          },
+          {
+            desc: 'party',
+            amount: 100,
+            type: 'expense',
+          },
+          {
+            desc: 'salary',
+            amount: 3000,
+            type: 'income',
+          },
+        ],
+      },
+      {
+        id: 2,
+        balance: 2000,
+        history: [
+          {
+            desc: 'car',
+            amount: 200,
+            type: 'expense',
+          },
+          {
+            desc: 'rent',
+            amount: 500,
+            type: 'expense',
+          },
+          {
+            desc: 'salary',
+            amount: 2000,
+            type: 'income',
+          },
+        ],
+      },
+      {
+        id: 3,
+        balance: 3000,
+        history: [
+          {
+            desc: 'food',
+            amount: 30,
+            type: 'expense',
+          },
+          {
+            desc: 'groceries',
+            amount: 70,
+            type: 'expense',
+          },
+          {
+            desc: 'freelance',
+            amount: 600,
+            type: 'income',
+          },
+        ],
+      },
+    ]
+  );

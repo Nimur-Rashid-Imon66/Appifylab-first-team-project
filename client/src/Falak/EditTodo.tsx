@@ -77,26 +77,26 @@ React.useEffect(()=>{
     
     setOpen(false);
     return ;
-    const uuid = uuidv4();
-    const curTodo = {
-      userid: "1",
-      id: uuid,
-      title: data.title,
-      description: data.description,
-      priority: data.priority,
-      tags: data.tags,
-    };
-    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    console.log(existingTodos);
+    // const uuid = uuidv4();
+    // const curTodo = {
+    //   userid: "1",
+    //   id: uuid,
+    //   title: data.title,
+    //   description: data.description,
+    //   priority: data.priority,
+    //   tags: data.tags,
+    // };
+    // const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
+    // console.log(existingTodos);
 
-    const updatedTodos = [curTodo, ...existingTodos];
-    console.log(updatedTodos);
+    // const updatedTodos = [curTodo, ...existingTodos];
+    // console.log(updatedTodos);
 
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    // localStorage.setItem("todos", JSON.stringify(updatedTodos));
 
-    reset();
-    setOpen(false);
-    setUpdate((pre) => pre + 1);
+    // reset();
+    // setOpen(false);
+    // setUpdate((pre) => pre + 1);
   };
 
   const handleClose = () => {
