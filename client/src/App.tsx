@@ -14,6 +14,7 @@ import AddProduct from "./Components/EMON/AddProduct";
 import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
+import PrivateRouting from "./Authentication/PrivateRouting";
 
 export const OnlineUserContext = createContext({});
 
@@ -68,20 +69,24 @@ const App: React.FC = () => {
               path="/login"
               element={<UserLogIn users={localhostUserData} />}
             />
-            <Route path="/expense-management" element={<ExpenseHome />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/expense" element={<Expense />} />
-            <Route path="/mushahid" element={<Mushahid />} />
-            <Route path="/mainpage" element={<Mainpage />} />
-            <Route path="/todoapps" element={<TodoApps />} />
-            <Route path="/todoLists" element={<TodoLists />} />
-            <Route
-              path="/addProductCategory"
-              element={<AddProductCategory />}
-            />
-            <Route path="/addProduct" element={<AddProduct />} />
-            <Route path="/showProducts" element={<ShowProduct />} />
-            <Route path="/editProduct/:id" element={<EditProduct />} />
+            <Route path="/" element={<PrivateRouting />}>
+              <Route path="/expensehome" element={<ExpenseHome />} />
+              <Route path="/income" element={<Income />} />
+              <Route path="/expense" element={<Expense />} />
+              {/* <Route path="/ahsan" element={<Ahsan />} /> */}
+              <Route path="/mushahid" element={<Mushahid />} />
+
+              <Route path="/mainpage" element={<Mainpage />} />
+              <Route path="/todoapps" element={<TodoApps />} />
+              <Route path="/todoLists" element={<TodoLists />} />
+              <Route
+                path="/addProductCategory"
+                element={<AddProductCategory />}
+              />
+              <Route path="/addProduct" element={<AddProduct />} />
+              <Route path="/showProducts" element={<ShowProduct />} />
+              <Route path="/editProduct/:id" element={<EditProduct />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
