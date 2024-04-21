@@ -9,6 +9,10 @@ import TodoLists from "./Falak/TodoLists";
 import Mainpage from "./Authentication/Mainpage";
 import UserRegistration from "./Authentication/UserRegistration";
 import UserLogIn from "./Authentication/UserLogIn";
+import AddProductCategory from "./Components/EMON/AddProductCategory";
+import AddProduct from "./Components/EMON/AddProduct";
+import ShowProduct from "./Components/EMON/ShowProduct";
+import EditProduct from "./Components/EMON/EditProduct";
 
 export const OnlineUserContext = createContext("");
 
@@ -52,11 +56,15 @@ const App: React.FC = () => {
             <Route path="/expensehome" element={<Homee />} />
             <Route path="/income" element={<Income />} />
             <Route path="/expense" element={<Expense />} />
-            <Route path="/ahsan" element={<Ahsan />} />
+            {/* <Route path="/ahsan" element={<Ahsan />} /> */}
             <Route path="/mushahid" element={<Mushahid />} />
             <Route path="/mainpage" element={<Mainpage />} />
             <Route path="/todoapps" element={<TodoApps />} />
             <Route path="/todoLists" element={<TodoLists />} />
+            <Route path='/addProductCategory' element={<AddProductCategory />} />
+          <Route path='/addProduct' element={<AddProduct />} />
+          <Route path='/showProducts' element={<ShowProduct />} />
+          <Route path='/editProduct/:id' element={<EditProduct  />} />
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
