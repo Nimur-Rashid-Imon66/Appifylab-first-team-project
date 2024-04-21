@@ -6,6 +6,7 @@ const AddProductCategory = () => {
     const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
     const loginUserID = parseInt(currentLoginUser);
+    console.log(loginUserID);
 
     const [userId, setUserId] = useState(101); //user info coming from login
     const [productCategory, setProductCategory] = useState([
