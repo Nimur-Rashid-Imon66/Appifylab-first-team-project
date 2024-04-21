@@ -20,7 +20,6 @@ const Home: React.FC = () => {
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
   const loginUserID = parseInt(currentLoginUser);
-  console.log("from nahid", currentLoginUser);
   const [balance, setBalance] = useState<number>(0);
   const [history, setHistory] = useState<Transaction[]>([]);
 
@@ -69,7 +68,7 @@ const Home: React.FC = () => {
           <h3>
             <u>History</u>
           </h3>
-          <table>
+          <table className="naz">
             <thead>
               <tr>
                 <th>S. No</th>

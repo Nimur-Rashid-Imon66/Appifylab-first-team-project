@@ -53,7 +53,7 @@ const Income: React.FC = () => {
     setExpenses(updatedExpenses);
     setTimeout(() => {
       alert("Done!");
-      navigate("/expensehome");
+      navigate("/expense-management");
     }, 300);
   };
 
