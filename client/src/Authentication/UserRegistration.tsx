@@ -37,12 +37,14 @@ const UserRegistration: React.FC<UserRegistrationProps> = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('user',username,email,password)
-    if (username && password) {
+    
+    const isUserExist = users.filter((e: UserData) => e.email == email);
+    if (!isUserExist.length && username && password) {
       const userid = uuidv4();
-      addUser(userid, username,email, password);
+      addUser(userid, username, email, password);
       navigate('/login');
     }
+    else alert('email exist')
   };
 
   return (

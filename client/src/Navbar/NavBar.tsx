@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import "./navbar.css"; // Import your CSS file
 
 function NavBar() {
+  const handleOnlineId = () => {
+    localStorage.setItem("localhostonlineusesr", JSON.stringify({id:-1}));
+  };
   return (
     <nav className="navbar">
       <ul>
@@ -28,7 +31,9 @@ function NavBar() {
           <Link to="/showProducts">Show Products</Link>
         </li>
         <li>
-          <Link to="/login">Log Out</Link>
+          <Link to="/login" onClick={handleOnlineId}>
+            Log Out
+          </Link>
         </li>
       </ul>
     </nav>
