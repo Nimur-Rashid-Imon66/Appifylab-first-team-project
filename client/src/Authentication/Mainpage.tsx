@@ -5,6 +5,10 @@ import { OnlineUserContext } from "../App";
 const Mainpage = () => {
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
+  
+  if (currentLoginUser.username) {
+    console.log('ok')
+  }
 
   return (
     <>
