@@ -16,6 +16,7 @@ import {
 } from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
 import UserLogIn from "./Authentication/UserLogIn";
+import NavBar from "./Navbar/NavBar";
 // import Home from "./Home";
 
 export const OnlineUserContext = createContext("");
@@ -60,6 +61,7 @@ const App: React.FC = () => {
       >
         <RouterProvider router={router} />
         <BrowserRouter>
+          <NavBar/>
           <Routes>
             <Route
               path="/registration"

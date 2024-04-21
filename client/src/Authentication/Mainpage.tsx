@@ -1,8 +1,8 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Mainpage = () => {
-const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div>
       <div onClick={() => navigate("/todoapps")}>Todo</div>
@@ -11,6 +11,6 @@ const navigate = useNavigate()
       <div>Product</div>
     </div>
   );
-}
+};
 
-export default Mainpage
+export default Mainpage;
