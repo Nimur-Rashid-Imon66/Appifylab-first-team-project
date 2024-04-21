@@ -52,11 +52,11 @@ const App: React.FC = () => {
             <Route path="/expensehome" element={<Homee />} />
             <Route path="/income" element={<Income />} />
             <Route path="/expense" element={<Expense />} />
-            <Route path="/ahsan" element={<Ahsan />} />
+            
             <Route path="/mushahid" element={<Mushahid />} />
             <Route path="/mainpage" element={<Mainpage />} />
-            <Route path="/todoapps" element={<TodoApps />} />
-            <Route path="/todoLists" element={<TodoLists />} />
+            {/* <Route path="/todoapps" element={<TodoApps />} />
+            <Route path="/todoLists" element={<TodoLists />} /> */}
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>

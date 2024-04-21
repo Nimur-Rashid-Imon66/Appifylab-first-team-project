@@ -35,6 +35,7 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
       users[isUserExist].username == username &&
       users[isUserExist].password == password
     ) {
+      localStorage.setItem('whoIsLoggedIn', JSON.stringify(username));
       setCurrentLoginUser(isUserExist);
       navigate("/mainpage");
     } else alert("username and password wrong");
