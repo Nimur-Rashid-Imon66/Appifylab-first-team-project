@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import ExpenseHome from "./Expenses/Home";
@@ -70,7 +70,7 @@ const App: React.FC = () => {
               element={<UserLogIn users={localhostUserData} />}
             />
             <Route path="/" element={<PrivateRouting />}>
-              <Route path="/expensehome" element={<ExpenseHome />} />
+              <Route path="/expense-management" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
               <Route path="/expense" element={<Expense />} />
               {/* <Route path="/ahsan" element={<Ahsan />} /> */}
