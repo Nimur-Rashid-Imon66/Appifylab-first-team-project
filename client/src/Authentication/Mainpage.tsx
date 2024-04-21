@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { OnlineUserContext } from "../App";
 
@@ -9,20 +9,23 @@ const Mainpage = () => {
     useContext(OnlineUserContext);
   console.log(currentLoginUser);
   return (
-    <div>
-      <h1>sadf {currentLoginUser.userid}</h1>
+    <div className="flex flex-col justify-center items-center min-h-[95vh]">
+      {/* <h1>sadf {currentLoginUser.userid}</h1> */}
+      <div className="w-[150px] h-[150px] border border-black mb-4 rounded-3xl flex flex-col justify-center items-center">
+        <h1>{currentLoginUser.username}</h1>
+      </div>
       <table>
-        <tr className="text-2xl bg-white">
-          <th className="">User ID</th>
-          <td>{currentLoginUser.userid}</td>
+        <tr className="">
+          <th className="border px-2">User ID</th>
+          <td className="border px-2">{currentLoginUser.userid}</td>
         </tr>
         <tr>
-          <th>User Email</th>
-          <td>{currentLoginUser.email}</td>
+          <th className="border px-2">User Email</th>
+          <td className="border px-2">{currentLoginUser.email}</td>
         </tr>
         <tr>
-          <th>User Name</th>
-          <td>{currentLoginUser.username}</td>
+          <th className="border px-2">User Name</th>
+          <td className="border px-2">{currentLoginUser.username}</td>
         </tr>
       </table>
     </div>

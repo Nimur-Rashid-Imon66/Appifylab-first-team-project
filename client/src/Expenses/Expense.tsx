@@ -51,7 +51,7 @@ const Expense: React.FC = () => {
     setExpenses(updatedExpenses);
     setTimeout(() => {
       alert('Done!');
-      navigate("/expensehome");
+      navigate("/expense-management");
     }, 300);
   };
 
@@ -61,6 +61,7 @@ const Expense: React.FC = () => {
   const handleAmmountDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmountDesc(e.target.value);
   };
+
   return (
     <div className="container">
       <div className='expenseContainer centered'>

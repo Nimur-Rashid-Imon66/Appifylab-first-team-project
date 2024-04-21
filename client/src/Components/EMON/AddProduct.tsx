@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import uniqid from 'uniqid';
 import { OnlineUserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 interface Product {
     loginUserID: number;
     productId: string;
@@ -12,14 +13,33 @@ interface Product {
 
 }
 
+interface categoryInterface {
+    loginUserID: string;
+    categoryName: string;
+    categoryDescription: string;
+}
+
 
 const AddProduct = () => {
+    const navigate = useNavigate();
     const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
-    const loginUserID = parseInt(currentLoginUser);
+    console.log(currentLoginUser);
+    const loginUserID = currentLoginUser.userid
+    const getCategory = () => {
+        let data = localStorage.getItem('productCategory');
+        if (data) {
+            let newData = JSON.parse(data);
+            return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
+        }
+        else return [];
+    }
+    const [productCategory, setProductCategory] = useState<categoryInterface[]|[]>(getCategory()); // product category info coming from user product list
+
     const getProduct = () => {
         let data = localStorage.getItem('products');
         if (data) {
             return JSON.parse(data);
+            // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
         }
         else return [];
     }
@@ -29,7 +49,7 @@ const AddProduct = () => {
         productName: "",
         productDescription: "",
         productPrice: "",
-        productCategory: "cat1",
+        productCategory: "",
         productStatus: "In Stock"
     });
     const [products, setProducts] = useState<Product[]>(getProduct());
@@ -47,13 +67,15 @@ const AddProduct = () => {
             productName: "",
             productDescription: "",
             productPrice: "",
-            productCategory: "cat1",
+            productCategory: "",
             productStatus: "In Stock"
         });
     }
     
 
     useEffect(() => {
+        if (!loginUserID)
+            navigate('/login')
         localStorage.setItem('products', JSON.stringify(products));
     }, [products]);
 
@@ -102,9 +124,15 @@ const AddProduct = () => {
                             required
                 
                         >
-                            <option value="cat1">cat1 </option>
+                            <option value="">Select Category </option>
+                            {
+                                productCategory.map((item,idx) => {
+                                    return <option key={idx}  value={`${item.categoryName}`}>{item.categoryName} </option>
+                                })
+                            }
+                            {/* <option value="cat1">cat1 </option>
                             <option value="cat2">cat2</option>
-                            <option value="cat3 ">cat3 </option>
+                            <option value="cat3 ">cat3 </option> */}
                         </select>
                     </span>
                     <span className="flex justify-between  items-center w-full bg-white px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out" >

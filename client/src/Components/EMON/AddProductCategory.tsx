@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { OnlineUserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 
 interface categoryInterface {
@@ -8,6 +9,7 @@ interface categoryInterface {
     categoryDescription: string;
 }
 const AddProductCategory = () => {
+    const navigate = useNavigate();
     const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
     console.log(currentLoginUser);
     const loginUserID = currentLoginUser.userid
@@ -15,13 +17,16 @@ const AddProductCategory = () => {
         let data = localStorage.getItem('productCategory');
         if (data) {
             let newData = JSON.parse(data);
-            if(data)
-              newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);
+            return newData
+            // if(data)
+            //     return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);
+            // else return [];
+            
         }
         else return [];
     }
 
-    const [productCategory, setProductCategory] = useState(getCategory()); // product category info coming from user product list
+    const [productCategory, setProductCategory] = useState<categoryInterface[]|[]>(getCategory()); // product category info coming from user product list
 
     const [categoryInfo, setCategoryInfo] = useState({
         loginUserID: loginUserID,
@@ -30,7 +35,12 @@ const AddProductCategory = () => {
     });
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (productCategory&& (productCategory.filter((category) => category.categoryName.toLowerCase() === categoryInfo.categoryName.toLowerCase()).length > 0)) {
+        console.log(loginUserID,'sad')
+        if (categoryInfo.categoryName === "" || categoryInfo.categoryDescription === "") {
+            alert("Please fill all the fields");
+            return;
+        }
+        if (productCategory&& (productCategory.filter((category) => category.categoryName.toLowerCase() === categoryInfo.categoryName.toLowerCase() && category.loginUserID === loginUserID).length > 0)) {
             alert("Category already exists");
             return;
         }
@@ -42,6 +52,13 @@ const AddProductCategory = () => {
         });
         console.log(loginUserID,categoryInfo);
     }
+
+    useEffect(() => {
+        if (!loginUserID)
+            navigate('/login');
+        localStorage.setItem('productCategory', JSON.stringify(productCategory));
+
+    },[productCategory]);
     return (
         <div className='flex flex-col min-w-[100vw] min-h-[100vh] items-center justify-center'>
             <h1 className='text-xl md:text-2xl font-semibold p-4 border rounded-t-lg  min-w-[50vw]'>Add Product Category { loginUserID}</h1>
