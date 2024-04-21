@@ -1,10 +1,5 @@
 import React, { createContext, useState } from "react";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-} from "react-router-dom";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import Homee from "./Expenses/Home";
