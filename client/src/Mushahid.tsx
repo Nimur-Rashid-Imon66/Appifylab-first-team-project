@@ -3,22 +3,11 @@ import './Mushahid.css'
 import { OnlineUserContext } from "./App";
 
 function Mushahid() {
-    
-    // const ctx = useContext(OnlineUserContext);
 
-    // let userLoginData = JSON.parse(localStorage.getItem('localhostUserData'));
-    
-    // const userLoggedIn = (userLoginData[ctx.currentLoginUser].username);
-    
     let data = JSON.parse(localStorage.getItem('data'));
-    
-    // console.log(userLoggedIn);
-
-    const userLoggedIn = JSON.parse(localStorage.getItem('whoIsLoggedIn'));
-    console.log(userLoggedIn);
 
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState(userLoggedIn || 'nobody');
+    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
