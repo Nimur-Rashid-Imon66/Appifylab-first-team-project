@@ -4,10 +4,14 @@ import { OnlineUserContext } from "./App";
 
 function Mushahid() {
 
+    const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
+    
     let data = JSON.parse(localStorage.getItem('data'));
 
+
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
+    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState(currentLoginUser.username || "nobody");
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
