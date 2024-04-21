@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { OnlineUserContext } from "../App";
 
@@ -15,6 +15,7 @@ const Mainpage = () => {
         <div>Product</div>
       </div>
     </>
+
   );
 };
 

@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
-import Homee from "./Expenses/Home";
+import ExpenseHome from "./Expenses/Home";
 import Mushahid from "./Mushahid";
 import TodoApps from "./Falak/TodoApp";
 import TodoLists from "./Falak/TodoLists";
@@ -70,7 +70,7 @@ const App: React.FC = () => {
               element={<UserLogIn users={localhostUserData} />}
             />
             <Route path="/" element={<PrivateRouting />}>
-              <Route path="/expensehome" element={<Homee />} />
+              <Route path="/expensehome" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
               <Route path="/expense" element={<Expense />} />
               {/* <Route path="/ahsan" element={<Ahsan />} /> */}

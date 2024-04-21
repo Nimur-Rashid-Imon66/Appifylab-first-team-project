@@ -60,6 +60,7 @@
 
 
 .inc {
+  width: fit-content;
   display: flex;
   align-items: center;
   font-family: inherit;
@@ -87,6 +88,7 @@
 }
 
 .exp {
+  width: fit-content;
   display: flex;
   align-items: center;
   font-family: inherit;
