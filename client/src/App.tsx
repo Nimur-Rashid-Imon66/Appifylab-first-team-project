@@ -13,29 +13,36 @@ import AddProductCategory from "./Components/EMON/AddProductCategory";
 import AddProduct from "./Components/EMON/AddProduct";
 import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
+import NavBar from "./Navbar/NavBar";
 
-export const OnlineUserContext = createContext("");
+export const OnlineUserContext = createContext({});
 
 interface UserData {
   userid: string;
   username: string;
+  email: string;
   password: string;
 }
 
 const App: React.FC = () => {
-  const [currentLoginUser, setCurrentLoginUser] = useState(0);
+  const [currentLoginUser, setCurrentLoginUser] = useState({});
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
   const localhostUserData: UserData[] = getdata;
 
-  const addUser = (userid: string, username: string, password: string) => {
-    localhostUserData.push({ userid, username, password });
+  const addUser = (
+    userid: string,
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    localhostUserData.push({ userid, username, email, password });
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
     );
-    console.log(localhostUserData);
+    console.log("user", localhostUserData);
   };
 
   return (
@@ -44,10 +51,13 @@ const App: React.FC = () => {
         value={{ currentLoginUser, setCurrentLoginUser }}
       >
         <BrowserRouter>
+          <NavBar />
           <Routes>
             <Route
               path="/registration"
-              element={<UserRegistration addUser={addUser} users={localhostUserData} />}
+              element={
+                <UserRegistration addUser={addUser} users={localhostUserData} />
+              }
             />
             <Route
               path="/login"
@@ -61,10 +71,13 @@ const App: React.FC = () => {
             <Route path="/mainpage" element={<Mainpage />} />
             <Route path="/todoapps" element={<TodoApps />} />
             <Route path="/todoLists" element={<TodoLists />} />
-            <Route path='/addProductCategory' element={<AddProductCategory />} />
-          <Route path='/addProduct' element={<AddProduct />} />
-          <Route path='/showProducts' element={<ShowProduct />} />
-          <Route path='/editProduct/:id' element={<EditProduct  />} />
+            <Route
+              path="/addProductCategory"
+              element={<AddProductCategory />}
+            />
+            <Route path="/addProduct" element={<AddProduct />} />
+            <Route path="/showProducts" element={<ShowProduct />} />
+            <Route path="/editProduct/:id" element={<EditProduct />} />
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
