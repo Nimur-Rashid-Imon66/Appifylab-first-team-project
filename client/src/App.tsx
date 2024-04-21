@@ -1,67 +1,57 @@
+import React, { createContext, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import Homee from "./Expenses/Home";
-import Ahsan from "./Ahsan";
 import Mushahid from "./Mushahid";
 import TodoApps from "./Falak/TodoApp";
 import TodoLists from "./Falak/TodoLists";
 import Mainpage from "./Authentication/Mainpage";
-import React, { createContext, useState } from "react";
-import {
-  BrowserRouter,
-  Route,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
 import UserLogIn from "./Authentication/UserLogIn";
+import AddProductCategory from "./Components/EMON/AddProductCategory";
+import AddProduct from "./Components/EMON/AddProduct";
+import ShowProduct from "./Components/EMON/ShowProduct";
+import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
-// import Home from "./Home";
 
-export const OnlineUserContext = createContext("");
+export const OnlineUserContext = createContext({});
+
 interface UserData {
   userid: string;
   username: string;
+  email: string;
   password: string;
 }
+
 const App: React.FC = () => {
-  const [currentLoginUser, setCurrentLoginUser] = useState(0);
+  const [currentLoginUser, setCurrentLoginUser] = useState({});
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
   const localhostUserData: UserData[] = getdata;
 
-  const addUser = (userid: string, username: string, password: string) => {
-    localhostUserData.push({ userid, username, password });
+  const addUser = (
+    userid: string,
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    localhostUserData.push({ userid, username, email, password });
     localStorage.setItem(
       "localhostUserData",
       JSON.stringify(localhostUserData)
     );
-    console.log(localhostUserData);
+    console.log("user", localhostUserData);
   };
-  const router = createBrowserRouter([
-    {
-      path: "/expensehome",
-      element: <Homee />,
-    },
-    {
-      path: "/income",
-      element: <Income />,
-    },
-    {
-      path: "/expense",
-      element: <Expense />,
-    },
-  ]);
+
   return (
     <>
       <OnlineUserContext.Provider
         value={{ currentLoginUser, setCurrentLoginUser }}
       >
-        <RouterProvider router={router} />
         <BrowserRouter>
-          <NavBar/>
+          <NavBar />
           <Routes>
             <Route
               path="/registration"
@@ -73,13 +63,21 @@ const App: React.FC = () => {
               path="/login"
               element={<UserLogIn users={localhostUserData} />}
             />
-            {/* <Route path="/" element={<Home />} /> */}
-            <Route path="/ahsan" element={<Ahsan />} />
+            <Route path="/expensehome" element={<Homee />} />
+            <Route path="/income" element={<Income />} />
+            <Route path="/expense" element={<Expense />} />
+            {/* <Route path="/ahsan" element={<Ahsan />} /> */}
             <Route path="/mushahid" element={<Mushahid />} />
             <Route path="/mainpage" element={<Mainpage />} />
-
             <Route path="/todoapps" element={<TodoApps />} />
             <Route path="/todoLists" element={<TodoLists />} />
+            <Route
+              path="/addProductCategory"
+              element={<AddProductCategory />}
+            />
+            <Route path="/addProduct" element={<AddProduct />} />
+            <Route path="/showProducts" element={<ShowProduct />} />
+            <Route path="/editProduct/:id" element={<EditProduct />} />
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>

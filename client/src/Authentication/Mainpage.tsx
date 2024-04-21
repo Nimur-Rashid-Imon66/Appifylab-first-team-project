@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { OnlineUserContext } from "../App";
 
 const Mainpage = () => {
   const navigate = useNavigate();
+  const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
+  console.log(currentLoginUser);
   return (
     <div>
-      <div onClick={() => navigate("/todoapps")}>Todo</div>
-      <div onClick={() => navigate("/expensehome")}>Expense Mangement</div>
-      <div onClick={() => navigate("/mushahid")}>Blog post</div>
+      <h1>User Name: {currentLoginUser.username}</h1>
+      <h1>User Email: {currentLoginUser.email}</h1>
+      <h1>User Id: {currentLoginUser.userid}</h1>
       <div>Product</div>
     </div>
   );

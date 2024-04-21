@@ -18,6 +18,18 @@ function NavBar() {
         <li>
           <Link to="/mushahid">Blog Post</Link>
         </li>
+        <li>
+          <Link to="/addProductCategory">Add Product Category</Link>
+        </li>
+        <li>
+          <Link to="/addProduct">Add Product</Link>
+        </li>
+        <li>
+          <Link to="/showProducts">Show Products</Link>
+        </li>
+        <li>
+          <Link to="/login">Log Out</Link>
+        </li>
       </ul>
     </nav>
   );
