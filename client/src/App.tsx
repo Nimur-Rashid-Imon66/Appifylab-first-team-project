@@ -26,6 +26,7 @@ interface UserData {
 
 const App: React.FC = () => {
   const [currentLoginUser, setCurrentLoginUser] = useState(0);
+  console.log('loguser',currentLoginUser);
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );

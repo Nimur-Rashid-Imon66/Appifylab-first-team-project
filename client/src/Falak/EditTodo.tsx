@@ -5,9 +5,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
+
 interface FormData {
-  id:string,
-  userid:string 
+  id: string;
+  userid: string;
   title: string;
   description: string;
   priority: string;
@@ -17,39 +18,85 @@ interface FormData {
 interface Model2Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setUpdate:React.Dispatch<React.SetStateAction<number>>
+  setUpdate: React.Dispatch<React.SetStateAction<number>>;
+  editTodoId: string;
+  editData: FormData
 }
 
-const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
-  const {
+const EditTodo: React.FC<Model2Props> = ({
+  open,
+  setOpen,
+  setUpdate,
+  editTodoId,
+  editData
+}) => {
+  //console.log("edit TodoId ", editTodoId);
+//   const [editData, setEditData] = React.useState<FormData | null>(null);
+
+ //console.log('edit data pass by final ',editData)
+
+  
+ const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: editData, // Set defaultValues to editData
+  });
+
+React.useEffect(()=>{
+ console.log('edit  id change sdasdas dsa dsa',editData)
+ reset(editData)
+},[editTodoId])
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+    console.log('submit data ',data);
+    const todos:FormData[] = JSON.parse(localStorage.getItem("todos") || "[]");
+    console.log(todos);
+    if(todos){
+        const updatedTodos = todos.map(todo=>{
+            if(todo.id==data.id){
+                // console.log('milse ',todo.id);
+                todo.title=data.title;
+                todo.description=data.description;
+                todo.priority=data.priority;
+                todo.tags=data.tags;
+            }
+            return todo;
+        })
+        console.log('udate map ',updatedTodos);
+        
+        localStorage.setItem("todos", JSON.stringify(updatedTodos));
+ 
+        setUpdate((pre)=>pre+1);
+
+        setOpen(false);  
+    }
+
+    
+    setOpen(false);
+    return ;
     const uuid = uuidv4();
     const curTodo = {
-      userid:'1',
+      userid: "1",
       id: uuid,
       title: data.title,
       description: data.description,
       priority: data.priority,
       tags: data.tags,
     };
-    const existingTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
     console.log(existingTodos);
 
-    const updatedTodos = [curTodo , ...existingTodos];
+    const updatedTodos = [curTodo, ...existingTodos];
     console.log(updatedTodos);
 
-   localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
 
     reset();
-    setOpen(false);    
-    setUpdate((pre)=>pre+1);
+    setOpen(false);
+    setUpdate((pre) => pre + 1);
   };
 
   const handleClose = () => {
@@ -79,7 +126,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
           id="alert-dialog-title"
           className="flex items-center justify-between mb-0 pb-0"
         >
-          <h1 className="mx-4 font-400">Add Todo</h1>
+          <h1 className="mx-4 font-400">Edit ToDo Todo</h1>
           <button className="mx-8 text-3xl" onClick={() => setOpen(false)}>
             <MdOutlineCancel />
           </button>
@@ -104,6 +151,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
                 id="title"
                 type="text"
                 placeholder="Enter title"
+                defaultValue={'hello'}
                 {...register("title", { required: true })}
               />
               {errors.title && (
@@ -126,6 +174,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
                 }`}
                 id="description"
                 placeholder="Enter description"
+                defaultValue={editData?.description || ""}
                 {...register("description", { required: true })}
               />
               {errors.description && (
@@ -147,6 +196,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
                   errors.priority ? "border-red-500" : ""
                 }`}
                 id="priority"
+                defaultValue={editData?.priority || ""}
                 {...register("priority", { required: true })}
               >
                 <option value="">Select Priority</option>
@@ -175,6 +225,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
                 id="tags"
                 type="text"
                 placeholder="Enter tags"
+                defaultValue={editData?.tags || ""}
                 {...register("tags", { required: true })}
               />
               {errors.tags && (
@@ -189,7 +240,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
                 type="submit"
               >
-                Add Task
+                Save  Update 
               </button>
             </div>
           </form>
@@ -199,4 +250,4 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
   );
 };
 
-export default AddTodo;
+export default EditTodo;
