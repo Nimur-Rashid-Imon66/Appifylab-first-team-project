@@ -14,8 +14,7 @@ interface Product {
 
 
 const AddProduct = () => {
-    const { currentLoginUser, setCurrentLoginUser } =
-        useContext(OnlineUserContext);
+    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
     const loginUserID = parseInt(currentLoginUser);
     const getProduct = () => {
         let data = localStorage.getItem('products');
