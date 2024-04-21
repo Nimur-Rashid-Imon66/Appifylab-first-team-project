@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import uniqid from 'uniqid'
+import { OnlineUserContext } from '../../App';
 
 
 
 interface ProductInterface {
+    loginUserID: string;
     productId: string;
     productName: string;
     productDescription: string;
@@ -13,46 +15,60 @@ interface ProductInterface {
     productStatus: string;
 }
 
+interface categoryInterface {
+    loginUserID: string;
+    categoryName: string;
+    categoryDescription: string;
+}
 
 
 const EditProduct: React.FC = ({}) => {
-    const {id} = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+    console.log(currentLoginUser);
+    const loginUserID = currentLoginUser.userid
     
+    const getCategory = () => {
+        let data = localStorage.getItem('productCategory');
+        if (data) {
+            let newData = JSON.parse(data);
+            return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
+        }
+        else return [];
+    }
     const getProduct = () => {
         let data = localStorage.getItem('products');
         if (data) {
-            return JSON.parse(data);
+            return  JSON.parse(data);
         }
         else return [];
     }
     const [products, setProducts] = useState<ProductInterface[]>(getProduct());
-    const getIndividualProduct = (id: string | undefined) => {
+    const [productCategory, setProductCategory] = useState<categoryInterface[]|[]>(getCategory()); // product category info coming from user product list
+
+    const getIndividualProduct = (id: string ) => {
         console.log(id,1)
         if (products && id) {
             const x = products.find((product: ProductInterface) => product.productId === id);
-            if (x) return x;
-            else return {
-                productId: uniqid(),
-                productName: "",
-                productDescription: "",
-                productPrice: 0,
-                productCategory: "cat1",
-                productStatus: "In Stock" }
+          return x;
         }
         else return {
+            loginUserID: loginUserID,
             productId: uniqid(),
             productName: "",
             productDescription: "",
             productPrice: 0,
-            productCategory: "cat1",
+            productCategory: "",
             productStatus: "In Stock" }
     }
     const [productInfo, setProductInfo] = useState<ProductInterface>({
+            loginUserID: loginUserID,
             productId: uniqid(),
             productName: "",
             productDescription: "",
             productPrice: 0,
-            productCategory: "cat1",
+            productCategory: "",
             productStatus: "In Stock" 
     });
     const handleSubmit = (e: React.FormEvent) => {
@@ -62,7 +78,17 @@ const EditProduct: React.FC = ({}) => {
             return;
         }
         const newProducts = products.filter((product: ProductInterface) => product.productId !== id);
-        setProducts([...newProducts, productInfo ]);
+        setProducts([...newProducts, productInfo]);
+        setProductInfo({
+            loginUserID: loginUserID,
+            productId: "",
+            productName: "",
+            productDescription: "",
+            productPrice: 0,
+            productCategory: "",
+            productStatus: "In Stock" 
+        });
+        navigate('/showProducts');
         alert("Product Update Successfully");
         
     }
@@ -70,7 +96,7 @@ const EditProduct: React.FC = ({}) => {
 
     useEffect(() => {
            console.log(id)
-        const x:ProductInterface = getIndividualProduct(id);
+        const x :ProductInterface = getIndividualProduct(id);
         console.log(x)
             if(x) setProductInfo(x)
         
@@ -126,9 +152,12 @@ const EditProduct: React.FC = ({}) => {
                             required
                 
                         >
-                            <option value="cat1">cat1 </option>
-                            <option value="cat2">cat2</option>
-                            <option value="cat3 ">cat3 </option>
+                            <option value="">Select Category </option>
+                            {
+                                productCategory.map((item,idx) => {
+                                    return <option key={idx}  value={`${item.categoryName}`}>{item.categoryName} </option>
+                                })
+                            }
                         </select>
                     </span>
                     <span className="flex justify-between  items-center w-full bg-white px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out" >
