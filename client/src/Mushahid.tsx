@@ -3,9 +3,6 @@ import './Mushahid.css'
 import { OnlineUserContext } from "./App";
 
 function Mushahid() {
-
-    const { currentLoginUser, setCurrentLoginUser } =
-    useContext(OnlineUserContext);
     
     let data = JSON.parse(localStorage.getItem('data'));
 

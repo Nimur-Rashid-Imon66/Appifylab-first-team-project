@@ -15,6 +15,7 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
+import Home from "./Home";
 
 export const OnlineUserContext = createContext({});
 
@@ -69,8 +70,8 @@ const App: React.FC = () => {
               path="/login"
               element={<UserLogIn users={localhostUserData} />}
             />
-<<<<<<< HEAD
-            <Route path="/expensehome" element={<Homee />} />
+
+            <Route path="/expense-management" element={<ExpenseHome />} />
             <Route path="/income" element={<Income />} />
             <Route path="/expense" element={<Expense />} />
             
@@ -78,7 +79,7 @@ const App: React.FC = () => {
             <Route path="/mainpage" element={<Mainpage />} />
             {/* <Route path="/todoapps" element={<TodoApps />} />
             <Route path="/todoLists" element={<TodoLists />} /> */}
-=======
+
             <Route path="/" element={<PrivateRouting />}>
               <Route path="/expensehome" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
@@ -97,7 +98,7 @@ const App: React.FC = () => {
               <Route path="/showProducts" element={<ShowProduct />} />
               <Route path="/editProduct/:id" element={<EditProduct />} />
             </Route>
->>>>>>> main
+
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
