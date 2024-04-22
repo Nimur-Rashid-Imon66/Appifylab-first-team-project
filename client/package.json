@@ -20,6 +20,9 @@
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^5.3.3",
     "mui": "^0.0.1",
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

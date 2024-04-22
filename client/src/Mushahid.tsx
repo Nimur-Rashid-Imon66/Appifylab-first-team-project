@@ -11,7 +11,11 @@ function Mushahid() {
 
 
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState(currentLoginUser.username || "nobody");
+
+
+    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+
+    const whoIsLoggedIn = currentLoginUser.username;
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
@@ -31,10 +35,6 @@ function Mushahid() {
         };
         localStorage.setItem('data', JSON.stringify(cratingData));
     }
-
-    console.log(blogs);
-
-    console.log('okk')
 
     const storeTitle = (event) => {
         setBlogTitel(event.target.value);
