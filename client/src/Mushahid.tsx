@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import './Mushahid.css'
+import { OnlineUserContext } from "./App";
 
 function Mushahid() {
 
     let data = JSON.parse(localStorage.getItem('data'));
 
     const [blogs, setBlogs] = useState(data);
-    const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
+
+    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+
+    const whoIsLoggedIn = currentLoginUser.username;
 
     const [showBlogs, setShowBlogs] = useState(true);
     const [showBlogInputBox, setShowBlogInputBox] = useState(false);
@@ -26,10 +30,6 @@ function Mushahid() {
         };
         localStorage.setItem('data', JSON.stringify(cratingData));
     }
-
-    console.log(blogs);
-
-    console.log('okk')
 
     const storeTitle = (event) => {
         setBlogTitel(event.target.value);
