@@ -6,8 +6,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 interface FormData {
-  id:string,
-  userid:string 
+  id: string;
+  userid: string;
   title: string;
   description: string;
   priority: string;
@@ -17,10 +17,16 @@ interface FormData {
 interface Model2Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setUpdate:React.Dispatch<React.SetStateAction<number>>
+  setUpdate: React.Dispatch<React.SetStateAction<number>>;
+  userid: string;
 }
 
-const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
+const AddTodo: React.FC<Model2Props> = ({
+  open,
+  setOpen,
+  setUpdate,
+  userid,
+}) => {
   const {
     register,
     handleSubmit,
@@ -28,28 +34,29 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
     formState: { errors },
   } = useForm<FormData>();
 
+  console.log(userid);
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
     const uuid = uuidv4();
     const curTodo = {
-      userid:'1',
+      userid: userid,
       id: uuid,
       title: data.title,
       description: data.description,
       priority: data.priority,
       tags: data.tags,
     };
-    const existingTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
     console.log(existingTodos);
 
-    const updatedTodos = [curTodo , ...existingTodos];
+    const updatedTodos = [curTodo, ...existingTodos];
     console.log(updatedTodos);
 
-   localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
 
     reset();
-    setOpen(false);    
-    setUpdate((pre)=>pre+1);
+    setOpen(false);
+    setUpdate((pre) => pre + 1);
   };
 
   const handleClose = () => {
@@ -75,14 +82,13 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
           },
         }}
       >
-        <DialogTitle
-          id="alert-dialog-title"
-          className="flex items-center justify-between mb-0 pb-0"
-        >
-          <h1 className="mx-4 font-400">Add Todo</h1>
-          <button className="mx-8 text-3xl" onClick={() => setOpen(false)}>
-            <MdOutlineCancel />
-          </button>
+        <DialogTitle id="alert-dialog-title" className="mb-0 pb-0">
+          <div className="flex items-center justify-between">
+            <h1 className="font-400">Add_Task</h1>
+            <div className="text-3xl w-[10%]" onClick={() => setOpen(false)}>
+              x
+            </div>
+          </div>
         </DialogTitle>
 
         <DialogContent>

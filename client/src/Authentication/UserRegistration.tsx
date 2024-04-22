@@ -16,7 +16,7 @@ interface UserRegistrationProps {
 }
 
 const UserRegistration: React.FC<UserRegistrationProps> = ({
-  users,
+  users ,
   addUser,
 }) => {
   const navigate = useNavigate();

@@ -97,85 +97,153 @@ function Mushahid() {
             setEditId(indx);
             setEditValue(value)
         }
+
     }
 
-    const storeEdit = (event) => {
-        setEditValue(event.target.value);
+    blogs.blogs.splice(indx, 1);
+    localStorage.setItem("data", JSON.stringify(blogs));
+    setBlogs(JSON.parse(localStorage.getItem("data")));
+  }
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [editValue, setEditValue] = useState("");
+
+  function edit(indx, author, value) {
+    if (author != whoIsLoggedIn) {
+      alert("Only author can edit the post");
+      return;
+    } else {
+      setOpenEdit(true);
+      setEditId(indx);
+      setEditValue(value);
     }
+  }
 
-    function update() {
+  const storeEdit = (event) => {
+    setEditValue(event.target.value);
+  };
 
-        blogs.blogs[editId]['body'] = editValue;
-        localStorage.setItem('data', JSON.stringify(blogs));
-        setBlogs(JSON.parse(localStorage.getItem('data')));
+  function update() {
+    blogs.blogs[editId]["body"] = editValue;
+    localStorage.setItem("data", JSON.stringify(blogs));
+    setBlogs(JSON.parse(localStorage.getItem("data")));
 
-        setOpenEdit(false);
-        setEditId(null);
-        setEditValue('')
-    }
+    setOpenEdit(false);
+    setEditId(null);
+    setEditValue("");
+  }
 
-    return (
-        <>
-            <div>
-                {
-                    showCreatButton && (whoIsLoggedIn != 'nobody') && (whoIsLoggedIn != 'nobody') &&
-                    <button onClick={openBlogInputBox} type="button" className="btn">Write a Blog</button>
-                }
-            </div>
+  return (
+    <>
+      <div>
+        {showCreatButton &&
+          whoIsLoggedIn != "nobody" &&
+          whoIsLoggedIn != "nobody" && (
+            <button onClick={openBlogInputBox} type="button" className="btn">
+              Write a Blog
+            </button>
+          )}
+      </div>
 
-            {
-                showBlogInputBox && (
-                    <div>
-                        <div className="form-group">
-                            <label>Titel</label>
-                            <br />
-                            <input onChange={storeTitle} value={blogTitel} type="text" placeholder="titel" />
-                            <label>Post Body</label>
-                            <br />
-                            <textarea onChange={storePost} value={postBody} placeholder="body..." />
-                        </div>
-                        <button onClick={storeBlog} type="button" className="btn">post</button>
-                    </div>
-                )
-            }
-            <div>
-                {
-                    showBlogs && blogs.blogs.map((val, indx) => (
-                        <>
-                            <br />
-                            {/* <b>{val.title} {" "} </b>
+      {showBlogInputBox && (
+        <div>
+          <div className="form-group">
+            <label>Titel</label>
+            <br />
+            <input
+              onChange={storeTitle}
+              value={blogTitel}
+              type="text"
+              placeholder="titel"
+            />
+            <label>Post Body</label>
+            <br />
+            <textarea
+              onChange={storePost}
+              value={postBody}
+              placeholder="body..."
+            />
+          </div>
+          <button onClick={storeBlog} type="button" className="btn">
+            post
+          </button>
+        </div>
+      )}
+      <div>
+        {showBlogs &&
+          blogs.blogs.map((val, indx) => (
+            <>
+              <br />
+              {/* <b>{val.title} {" "} </b>
                             <small>(author: {val.author})</small> */}
 
+              <div
+                style={{
+                  border: "1px solid gray",
+                  margin: "8px",
+                  padding: "8px",
+                }}
+              >
+                {editId != indx && (
+                  <>
+                    <b>{val.title} </b>
+                    <small>(author: {val.author})</small>
 
-                            <div style={{ border: '1px solid gray', margin: '8px', padding: '8px' }}>
-                                {
-                                    (editId != indx) && (<>
-                                        <b>{val.title} {" "} </b>
-                                        <small>(author: {val.author})</small>
-
-                                        <p>{val.body}</p>
-                                        <button onClick={() => edit(indx, val.author, val.body)} style={{ height:"30px", width:"120px", marginRight: '5px', padding: '5px 10px', backgroundColor: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-                                        <button onClick={() => remove(indx, val.author)} style={{ height:"30px", width:"120px", padding: '5px 10px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
-
-                                    </>
-                                    )
-                                }
-                                {
-                                    openEdit && (editId == indx) && (<>
-                                        <div className="form-group">
-                                            <textarea onChange={storeEdit} value={editValue} placeholder="body..." />
-                                        </div>
-                                        <button onClick={update} type="button" className="btn">update</button>
-                                    </>
-                                    )
-                                }
-                            </div>
-                        </>
-                    ))
-                }
-            </div>
-        </>
-    )
+                    <p>{val.body}</p>
+                    <button
+                      onClick={() => edit(indx, val.author, val.body)}
+                      style={{
+                        height: "30px",
+                        width: "120px",
+                        marginRight: "5px",
+                        padding: "5px 10px",
+                        backgroundColor: "#ffc107",
+                        color: "black",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => remove(indx, val.author)}
+                      style={{
+                        height: "30px",
+                        width: "120px",
+                        padding: "5px 10px",
+                        backgroundColor: "#f44336",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
+                {openEdit && editId == indx && (
+                  <>
+                    <div className="form-group">
+                      <textarea
+                        onChange={storeEdit}
+                        value={editValue}
+                        placeholder="body..."
+                      />
+                    </div>
+                    <button onClick={update} type="button" className="btn">
+                      update
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          ))}
+      </div>
+    </>
+  );
 }
 
 export default Mushahid;

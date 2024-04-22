@@ -21,10 +21,21 @@ const TodoApp = () => {
   const [todos, setTodos] = useState<FormData[]>([]);
   const  [editTodoId,setEditTodoId]=useState('');
   const [editData, setEditData] = useState<FormData | null>(null);
+  const [userid,setUserid]= useState('1')
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
+    }
+    const localhostonlineusesr = localStorage.getItem('localhostonlineusesr');
+    if(localhostonlineusesr && localhostonlineusesr!=='-1'){
+      const userInfo=JSON.parse(localhostonlineusesr);
+      console.log('user info ',userInfo);
+      setUserid(userInfo.userid)
+      // console.log('user id is found set user id  ',userInfo.userid)
+    }
+    else {
+      // console.log('user id not found set user id 1 ',userid)
     }
   }, [update]);
 
@@ -60,11 +71,11 @@ const TodoApp = () => {
 
   return (
     <>
-      <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} />
+      <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} userid={userid} />
       <EditTodo open={openEdit} setOpen={setOpenEdit} setUpdate={setUpdate} editTodoId={editTodoId} editData={editData} />
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto m-10">
         <div className="flex justify-between mb-4">
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <select
               className="mr-2 px-2 py-1 border border-gray-300 bg-white rounded-md my-10"
               value={searchBy}
@@ -80,9 +91,9 @@ const TodoApp = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </div>
+          </div> */}
          
-          <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-28 my-10" onClick={() => setOpen(true)}>Add Task</button>
+          <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-28 my-10 " onClick={() => setOpen(true)}>Add Task</button>
 
         </div>
         <table className="table-auto w-full border-collapse border">
@@ -97,7 +108,7 @@ const TodoApp = () => {
           </thead>
           <tbody>
           {todos
-              .filter(todo => todo.userid === '1')
+              .filter(todo => todo.userid === userid)
               .map((todo) => (
                 <tr key={todo.id} className="border">
                   <td className="border px-4 py-2">{todo.title}</td>

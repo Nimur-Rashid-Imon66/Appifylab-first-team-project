@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import ExpenseHome from "./Expenses/Home";
@@ -20,23 +20,23 @@ import Home from "./Home";
 export const OnlineUserContext = createContext({});
 
 interface UserData {
-  userid: string;
+  userid?: string;
   username: string;
   email: string;
   password: string;
 }
 
 const App: React.FC = () => {
-  const onlineUserFromLocalHost: UserData[] = JSON.parse(
+  const onlineUserFromLocalHost: UserData = JSON.parse(
     localStorage.getItem("localhostonlineusesr") || "{}"
   );
-  const [currentLoginUser, setCurrentLoginUser] = useState(
+  const [currentLoginUser, setCurrentLoginUser]  = useState < UserData>(
     onlineUserFromLocalHost
   );
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
-  const localhostUserData: UserData[] = getdata;
+  const localhostUserData: UserData[]= getdata;
 
   const addUser = (
     userid: string,
@@ -81,7 +81,7 @@ const App: React.FC = () => {
             <Route path="/todoLists" element={<TodoLists />} /> */}
 
             <Route path="/" element={<PrivateRouting />}>
-              <Route path="/expensehome" element={<ExpenseHome />} />
+              <Route path="/expense-management" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
               <Route path="/expense" element={<Expense />} />
               {/* <Route path="/ahsan" element={<Ahsan />} /> */}
