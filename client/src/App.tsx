@@ -19,23 +19,23 @@ import PrivateRouting from "./Authentication/PrivateRouting";
 export const OnlineUserContext = createContext({});
 
 interface UserData {
-  userid: string;
+  userid?: string;
   username: string;
   email: string;
   password: string;
 }
 
 const App: React.FC = () => {
-  const onlineUserFromLocalHost: UserData[] = JSON.parse(
+  const onlineUserFromLocalHost: UserData = JSON.parse(
     localStorage.getItem("localhostonlineusesr") || "{}"
   );
-  const [currentLoginUser, setCurrentLoginUser] = useState(
+  const [currentLoginUser, setCurrentLoginUser]  = useState < UserData>(
     onlineUserFromLocalHost
   );
   const getdata: UserData[] = JSON.parse(
     localStorage.getItem("localhostUserData") || "[]"
   );
-  const localhostUserData: UserData[] = getdata;
+  const localhostUserData: UserData[]= getdata;
 
   const addUser = (
     userid: string,
