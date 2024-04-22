@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./navbar.css"; // Import your CSS file
+import { OnlineUserContext } from "../App";
 
 function NavBar() {
+  const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
   const handleOnlineId = () => {
-    localStorage.setItem("localhostonlineusesr", JSON.stringify({id:-1}));
+    localStorage.setItem("localhostonlineusesr", JSON.stringify({ id: -1 }));
   };
   return (
     <nav className="navbar">
@@ -31,9 +34,13 @@ function NavBar() {
           <Link to="/showProducts">Show Products</Link>
         </li>
         <li>
-          <Link to="/login" onClick={handleOnlineId}>
-            Log Out
-          </Link>
+          {currentLoginUser.id == -1 ? (
+            ""
+          ) : (
+            <Link to="/login" onClick={handleOnlineId}>
+              Log Out
+            </Link>
+          )}
         </li>
       </ul>
     </nav>

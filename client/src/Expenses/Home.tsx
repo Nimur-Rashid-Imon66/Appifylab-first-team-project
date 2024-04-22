@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
-  const loginUserID = parseInt(currentLoginUser);
+  const loginUserID = currentLoginUser.userid;
   const [balance, setBalance] = useState<number>(0);
   const [history, setHistory] = useState<Transaction[]>([]);
 

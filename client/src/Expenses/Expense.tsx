@@ -23,7 +23,7 @@ const Expense: React.FC = () => {
 
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
-  const loginUserID = parseInt(currentLoginUser);
+  const loginUserID = currentLoginUser.userid;
   useEffect(() => {
     localStorage.setItem('expenses', JSON.stringify(expenses));
   }, [expenses]);

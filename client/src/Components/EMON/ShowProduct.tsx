@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Product from './Product';
+import { OnlineUserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 interface ProductInterface {
     productId: string;
     productName: string;
@@ -11,16 +13,22 @@ interface ProductInterface {
 }
 
 const ShowProduct = () => {
+    const navigate = useNavigate();
+    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+    console.log(currentLoginUser);
+    const loginUserID = currentLoginUser.userid
     const getProduct = () => {
         let data = localStorage.getItem('products');
         if (data) {
             return JSON.parse(data);
+            // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);  
         }
         else return [];
     }
     const [products, setProducts] = useState<ProductInterface[]>(getProduct());
 
     useEffect(() => {
+        if (!loginUserID) navigate('/login');
         localStorage.setItem('products', JSON.stringify(products));
     },[products]);
     return (
