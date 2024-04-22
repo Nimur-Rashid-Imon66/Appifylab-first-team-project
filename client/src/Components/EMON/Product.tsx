@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 interface ProductInterface {
+    loginUserID: string;
     productId: string;
     productName: string;
     productDescription: string;

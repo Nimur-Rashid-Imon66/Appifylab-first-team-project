@@ -2,7 +2,9 @@ import { useContext, useEffect, useState } from 'react';
 import Product from './Product';
 import { OnlineUserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import { set } from 'react-hook-form';
 interface ProductInterface {
+    loginUserID: string;
     productId: string;
     productName: string;
     productDescription: string;
@@ -25,12 +27,23 @@ const ShowProduct = () => {
         }
         else return [];
     }
+    const getIndividualProduct = () => {
+        let data = localStorage.getItem('products');
+        if (data) {
+            const newData:ProductInterface[] = JSON.parse(data);
+            return newData.filter((item) => item.loginUserID === loginUserID);  
+        }
+        else return [];
+    }
     const [products, setProducts] = useState<ProductInterface[]>(getProduct());
+    const [individualProduct, setIndividualProduct] = useState<ProductInterface[]>(getIndividualProduct());
+
 
     useEffect(() => {
-        if (!loginUserID) navigate('/login');
         localStorage.setItem('products', JSON.stringify(products));
-    },[products]);
+        setIndividualProduct(getIndividualProduct());
+    }, [products]);
+    
     return (
         <div>
             <table>
@@ -44,7 +57,7 @@ const ShowProduct = () => {
                         <th className="border p-2 border-black ">Action</th>
                     </tr>
                     
-                        {products.map((product, index) => {
+                        {individualProduct.map((product, index) => {
                             return (
                                 <Product key={index} product={product} products={products} setPorducts={setProducts} />
                             );
