@@ -1,4 +1,5 @@
-import BaseSchema from "@ioc:Adonis/Lucid/Schema";
+//import BaseSchema from "@ioc:Adonis/Lucid/BaseSchema";
+import  BaseSchema  from '@ioc:Adonis/Lucid/Schema';
 
 export default class ProductCategories extends BaseSchema {
   protected tableName = "product_categories";

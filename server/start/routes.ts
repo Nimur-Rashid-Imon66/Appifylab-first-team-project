@@ -26,3 +26,5 @@ Route.get("/", async ({ view }) => {
 Route.get("/users/:id", async () => {
   return "Show user";
 }) 
+
+Route.post("/addcategory", "ProductCategoriesController.store");
