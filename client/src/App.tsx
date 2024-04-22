@@ -1,9 +1,3 @@
- 
-
-        
-import Income from './Expenses/Income'
-import Expense from './Expenses/Expense'
-import Homee from './Expenses/Home'
 import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserRegistration from "./Authentication/UserRegistration";
@@ -36,27 +30,12 @@ const App: React.FC = () => {
     );
     console.log(localhostUserData);
   };
-const router = createBrowserRouter([
-    {
-      path : '/',
-      element : <Homee/>,
-    },
-    {
-      path : '/income',
-      element : <Income/>,
-    },
-    {
-      path : '/expense',
-      element : <Expense/>,
-    }
-  ])
+
   return (
     <>
       <OnlineUserContext.Provider
-        
         value={{ currentLoginUser, setCurrentLoginUser }}
       >
-         <RouterProvider router = {router}/>
         <BrowserRouter>
           <Routes>
             <Route
@@ -81,6 +60,6 @@ const router = createBrowserRouter([
       
     </>
   );
-}; 
+};
 
 export default App;
