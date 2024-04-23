@@ -1,11 +1,50 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Product from 'App/Models/Product';
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import ProductCategory from 'App/Models/ProductCategory';
 
 export default class ProductsController {
-  public async index({}: HttpContextContract) {}
+  public async index({ request,response }: HttpContextContract) {
+    const id = request.param('id')
+    const products = await Product.query().where('userid', id);
+    return response.json({products})
+  }
 
+  public async store({request,response }: HttpContextContract) {
+    const newPostSchema = schema.create({
+      userid: schema.number([rules.exists({ table: 'users', column: 'userid' })]),
+      productname: schema.string(),
+      productdescription: schema.string(),
+      productprice: schema.number(),
+      productcategory: schema.string({}, [
+         rules.exists({ table: 'product_categories', column: 'categoryname' })
+      ]),
+      productstatus: schema.string()
+    });
+    const msg = {
+      'userid.required': 'User ID is required',
+      'productname.required': 'Product Name is required',
+      'productdescription.required': 'Product Description is required',
+      'productprice.required': 'Product Price is required',
+      'productcategory.required': 'Product Category is required',
+      'productstatus.required': 'Product Status is required',
+      'productcategory.exists': 'The product category does not exist',
+      'userid.exists': 'The user does not exist'
+     }
+
+    try {
+      const payload = await request.validate({ schema: newPostSchema, messages: msg });
+      let product = new Product();
+      product.merge(payload);
+      await product.save();
+  
+      return response.status(201).json({ message: 'product add successfully' });
+    } catch (error) {
+      return response.status(404).json({ message: error.messages });  
+    }
+  }
   public async create({}: HttpContextContract) {}
 
-  public async store({}: HttpContextContract) {}
 
   public async show({}: HttpContextContract) {}
 

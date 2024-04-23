@@ -12,10 +12,10 @@ export default class Products extends BaseSchema {
         .references("userid")
         .inTable("users")
         .notNullable();
-      table.string("productname");
+      table.string("productname").unique();
       table.string("productdescription");
       table.integer("productprice");
-      table.string("productcategory");
+      table.string("productcategory").references("categoryname").inTable("product_categories");
       table.string("productstatus");
 
       table.timestamps(true, true);
