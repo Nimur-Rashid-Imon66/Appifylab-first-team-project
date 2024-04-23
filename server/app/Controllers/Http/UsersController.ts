@@ -1,9 +1,15 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Product from "App/Models/Product";
 import User from "App/Models/User";
 
 export default class UsersController {
   public async index(ctx: HttpContextContract) {
-    const users = await User.all();
+    const users = await User.query()
+      .where('userid', 1)
+      .preload('category', (pc) => {
+      pc.where('categoryname','Electronics')
+    }).preload('product_u');
+    
     return ctx.response.json({ users });
   }
 
