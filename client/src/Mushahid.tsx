@@ -10,7 +10,7 @@ function Mushahid() {
   const { currentLoginUser, setCurrentLoginUser } =
         useContext(OnlineUserContext);
     
-  const [whoIsLoggedIn, setWhoIsLoggedIn] = useState("ahsan");
+  const whoIsLoggedIn = currentLoginUser.username;
 
   const [showBlogs, setShowBlogs] = useState(true);
   const [showBlogInputBox, setShowBlogInputBox] = useState(false);
