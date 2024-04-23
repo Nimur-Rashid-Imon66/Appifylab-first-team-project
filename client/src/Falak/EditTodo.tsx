@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { MdOutlineCancel } from "react-icons/md";
+// import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 
 interface FormData {
@@ -31,12 +31,12 @@ const EditTodo: React.FC<Model2Props> = ({
   editData
 }) => {
   //console.log("edit TodoId ", editTodoId);
-//   const [editData, setEditData] = React.useState<FormData | null>(null);
+  //   const [editData, setEditData] = React.useState<FormData | null>(null);
 
- //console.log('edit data pass by final ',editData)
+  //console.log('edit data pass by final ',editData)
 
-  
- const {
+
+  const {
     register,
     handleSubmit,
     reset,
@@ -45,38 +45,38 @@ const EditTodo: React.FC<Model2Props> = ({
     defaultValues: editData, // Set defaultValues to editData
   });
 
-React.useEffect(()=>{
- console.log('edit  id change sdasdas dsa dsa',editData)
- reset(editData)
-},[editTodoId])
+  React.useEffect(() => {
+    console.log('edit  id change sdasdas dsa dsa', editData)
+    reset(editData)
+  }, [editTodoId])
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log('submit data ',data);
-    const todos:FormData[] = JSON.parse(localStorage.getItem("todos") || "[]");
+    console.log('submit data ', data);
+    const todos: FormData[] = JSON.parse(localStorage.getItem("todos") || "[]");
     console.log(todos);
-    if(todos){
-        const updatedTodos = todos.map(todo=>{
-            if(todo.id==data.id){
-                // console.log('milse ',todo.id);
-                todo.title=data.title;
-                todo.description=data.description;
-                todo.priority=data.priority;
-                todo.tags=data.tags;
-            }
-            return todo;
-        })
-        console.log('udate map ',updatedTodos);
-        
-        localStorage.setItem("todos", JSON.stringify(updatedTodos));
- 
-        setUpdate((pre)=>pre+1);
+    if (todos) {
+      const updatedTodos = todos.map(todo => {
+        if (todo.id == data.id) {
+          // console.log('milse ',todo.id);
+          todo.title = data.title;
+          todo.description = data.description;
+          todo.priority = data.priority;
+          todo.tags = data.tags;
+        }
+        return todo;
+      })
+      console.log('udate map ', updatedTodos);
 
-        setOpen(false);  
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+
+      setUpdate((pre) => pre + 1);
+
+      setOpen(false);
     }
 
-    
+
     setOpen(false);
-    return ;
+    return;
     // const uuid = uuidv4();
     // const curTodo = {
     //   userid: "1",
@@ -124,12 +124,15 @@ React.useEffect(()=>{
       >
         <DialogTitle
           id="alert-dialog-title"
-          className="flex items-center justify-between mb-0 pb-0"
+          className="mb-0 pb-0"
         >
-          <h1 className="mx-4 font-400">Edit ToDo Todo</h1>
-          <button className="mx-8 text-3xl" onClick={() => setOpen(false)}>
-            <MdOutlineCancel />
-          </button>
+          <div className="flex items-center justify-between">
+            <h1 className="font-400">Edit_Task</h1>
+            <div className="text-3xl w-[10%]" onClick={() => setOpen(false)}>
+              x
+            </div>
+          </div>
+
         </DialogTitle>
 
         <DialogContent>
@@ -145,9 +148,8 @@ React.useEffect(()=>{
                 Title:
               </label>
               <input
-                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors.title ? "border-red-500" : ""
-                }`}
+                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.title ? "border-red-500" : ""
+                  }`}
                 id="title"
                 type="text"
                 placeholder="Enter title"
@@ -169,9 +171,8 @@ React.useEffect(()=>{
                 Description:
               </label>
               <textarea
-                className={`w-full h-24 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors.description ? "border-red-500" : ""
-                }`}
+                className={`w-full h-24 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.description ? "border-red-500" : ""
+                  }`}
                 id="description"
                 placeholder="Enter description"
                 defaultValue={editData?.description || ""}
@@ -192,9 +193,8 @@ React.useEffect(()=>{
                 Priority:
               </label>
               <select
-                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors.priority ? "border-red-500" : ""
-                }`}
+                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.priority ? "border-red-500" : ""
+                  }`}
                 id="priority"
                 defaultValue={editData?.priority || ""}
                 {...register("priority", { required: true })}
@@ -219,9 +219,8 @@ React.useEffect(()=>{
                 Tags:
               </label>
               <input
-                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors.tags ? "border-red-500" : ""
-                }`}
+                className={`w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.tags ? "border-red-500" : ""
+                  }`}
                 id="tags"
                 type="text"
                 placeholder="Enter tags"
@@ -240,7 +239,7 @@ React.useEffect(()=>{
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto"
                 type="submit"
               >
-                Save  Update 
+                Save  Update
               </button>
             </div>
           </form>
