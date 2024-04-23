@@ -6,6 +6,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 interface FormData {
+  id:string,
+  userid:string 
   title: string;
   description: string;
   priority: string;
@@ -30,6 +32,7 @@ const AddTodo: React.FC<Model2Props> = ({ open, setOpen , setUpdate }) => {
     console.log(data);
     const uuid = uuidv4();
     const curTodo = {
+      userid:'1',
       id: uuid,
       title: data.title,
       description: data.description,
