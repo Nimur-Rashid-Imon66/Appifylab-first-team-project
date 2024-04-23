@@ -15,6 +15,7 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
+import Home from "./Home";
 
 export const OnlineUserContext = createContext({});
 
@@ -61,6 +62,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/registration" element={<UserRegistration />} />
             <Route path="/login" element={<UserLogIn />} />
+
             <Route path="/" element={<PrivateRouting />}>
               <Route path="/expense-management" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
@@ -79,6 +81,7 @@ const App: React.FC = () => {
               <Route path="/showProducts" element={<ShowProduct />} />
               <Route path="/editProduct/:id" element={<EditProduct />} />
             </Route>
+
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
