@@ -21,6 +21,18 @@
 import Route from "@ioc:Adonis/Core/Route";
 
 Route.get("/", async ({ view }) => {
+ 
+  return view.render("welcome");
+});
+Route.get("/users", "UsersController.index");
+Route.get("/usersget", "UsersController.alluserget");
+Route.post("/usersset", "UsersController.alluserset");
+
+Route.post("/login", "UsersController.login");
+// Route.post("/logout", "AuthController.logout");
+
+// Route.get("profile", "ProfileController.index")
+ 
   return 'running '
 });
 
@@ -42,3 +54,4 @@ Route.post('/todos/:id/delete', 'TodosController.destroy');
   Route.get("/category/:id", "ProductCategoriesController.index")  
   Route.post("/addcategory", "ProductCategoriesController.store");
   Route.post("/addproduct", "ProductsController.store");
+ 

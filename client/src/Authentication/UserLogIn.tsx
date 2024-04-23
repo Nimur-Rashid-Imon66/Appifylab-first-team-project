@@ -3,13 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import "./UserRegistration.css";
 import "./UserRegistration.css";
 import { OnlineUserContext } from "../App";
+import axios from "axios";
 interface UserData {
   email: string;
   password: string;
 }
 interface UserRegistrationProps {}
 
-const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
+const UserLogIn: React.FC<UserRegistrationProps> = () => {
+  let users: [];
+  const fetchData = async () => {
+    await axios
+      .get("http://127.0.0.1:3333/usersget")
+      .then((e) => (users = e.data));
+  };
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
   const [email, setEmail] = useState<string>("");
@@ -25,7 +32,10 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    await fetchData();
     const isUserExist = users.filter((e: UserData) => e.email == email);
+    console.log(isUserExist);
     if (
       isUserExist.length > 0 &&
       isUserExist[0].email == email &&
