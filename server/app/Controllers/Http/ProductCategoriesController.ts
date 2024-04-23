@@ -6,7 +6,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class ProductCategoriesController {
   public async index({ request, response }: HttpContextContract) {
     const id = request.param('id')
-    const categories =await ProductCategory.query().where('userid', id)
+    const categories =await ProductCategory.query().where('userid', id).select('userid','categoryname','categorydescription')
     return response.json({categories})
   }
  
@@ -30,7 +30,8 @@ export default class ProductCategoriesController {
       'categoryname.required': 'Category Name is required',
       'categoryname.unique': 'User already has a category with this name'
     }
-
+    const data = request.only(['userid', 'categoryname', 'categorydescription'])
+    console.log(data)
     try {
       const payload = await request.validate({ schema: newPostSchema, messages: msg });
       let category = new ProductCategory();

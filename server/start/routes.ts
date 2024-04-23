@@ -31,12 +31,6 @@ Route.post("/usersset", "UsersController.alluserset");
 Route.post("/login", "UsersController.login");
 // Route.post("/logout", "AuthController.logout");
 
-// Route.get("profile", "ProfileController.index")
- 
-  return 'running '
-});
-
-
 
 
 // ----------------------------falak start------------------------
