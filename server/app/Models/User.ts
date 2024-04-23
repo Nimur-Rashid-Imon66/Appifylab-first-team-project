@@ -1,9 +1,15 @@
+
+import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+
 import { DateTime } from "luxon";
 import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+
+import Todo from "./Todo";
+
 import Product from "./Product";
 import ProductCategory from "./ProductCategory";
-// import ProductCategories from "Database/migrations/1713777689951_product_categories";
 
+ 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public userid: number;
@@ -16,6 +22,12 @@ export default class User extends BaseModel {
 
   @column()
   public password: string;
+ 
+
+  @hasMany(() => Todo,{
+    foreignKey:'userid'
+  })
+  public todos: HasMany<typeof Todo>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -29,5 +41,5 @@ export default class User extends BaseModel {
     foreignKey: "userid",
   })
   public category: HasMany<typeof ProductCategory>;
-
+ 
 }

@@ -30,27 +30,27 @@ const App: React.FC = () => {
   const onlineUserFromLocalHost: UserData = JSON.parse(
     localStorage.getItem("localhostonlineusesr") || "{}"
   );
-  const [currentLoginUser, setCurrentLoginUser]  = useState < UserData>(
+  const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
     onlineUserFromLocalHost
   );
-  const getdata: UserData[] = JSON.parse(
-    localStorage.getItem("localhostUserData") || "[]"
-  );
-  const localhostUserData: UserData[]= getdata;
+  // const getdata: UserData[] = JSON.parse(
+  //   localStorage.getItem("localhostUserData") || "[]"
+  // );
+  // const localhostUserData: UserData[] = getdata;
 
-  const addUser = (
-    userid: string,
-    username: string,
-    email: string,
-    password: string
-  ) => {
-    localhostUserData.push({ userid, username, email, password });
-    localStorage.setItem(
-      "localhostUserData",
-      JSON.stringify(localhostUserData)
-    );
-    console.log("user", localhostUserData);
-  };
+  // const addUser = (
+  //   userid: string,
+  //   username: string,
+  //   email: string,
+  //   password: string
+  // ) => {
+  //   localhostUserData.push({ userid, username, email, password });
+  //   localStorage.setItem(
+  //     "localhostUserData",
+  //     JSON.stringify(localhostUserData)
+  //   );
+  //   console.log("user", localhostUserData);
+  // };
 
   return (
     <>
@@ -60,25 +60,8 @@ const App: React.FC = () => {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route
-              path="/registration"
-              element={
-                <UserRegistration addUser={addUser} users={localhostUserData} />
-              }
-            />
-            <Route
-              path="/login"
-              element={<UserLogIn users={localhostUserData} />}
-            />
-
-            <Route path="/expense-management" element={<ExpenseHome />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/expense" element={<Expense />} />
-            
-            <Route path="/mushahid" element={<Mushahid />} />
-            <Route path="/mainpage" element={<Mainpage />} />
-            {/* <Route path="/todoapps" element={<TodoApps />} />
-            <Route path="/todoLists" element={<TodoLists />} /> */}
+            <Route path="/registration" element={<UserRegistration />} />
+            <Route path="/login" element={<UserLogIn />} />
 
             <Route path="/" element={<PrivateRouting />}>
               <Route path="/expense-management" element={<ExpenseHome />} />
