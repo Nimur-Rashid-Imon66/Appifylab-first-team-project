@@ -31,12 +31,17 @@ const UserLogIn: React.FC<UserRegistrationProps> = ({ users }) => {
       isUserExist[0].email == email &&
       isUserExist[0].password == password
     ) {
+
+      localStorage.setItem('whoIsLoggedIn', JSON.stringify(username));
+      setCurrentLoginUser(isUserExist);
+
       console.log(isUserExist[0]);
       setCurrentLoginUser(isUserExist[0]);
       localStorage.setItem(
         "localhostonlineusesr",
         JSON.stringify(isUserExist[0])
       );
+
       navigate("/mainpage");
     } else alert("username and password wrong");
   };

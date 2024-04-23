@@ -21,10 +21,61 @@
 import Route from "@ioc:Adonis/Core/Route";
 
 Route.get("/", async ({ view }) => {
-  return 'hello';
+  return 'running '
 });
-Route.get("/users/:id", async () => {
-  return "Show user";
-}) 
+Route.get("/users", "UsersController.index"); 
 
-Route.post("/addcategory", "ProductCategoriesController.store");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ----------------------------falak------------------------
+Route.get('/todos', 'TodosController.index');
+Route.get('/todos/:id', 'TodosController.show');
+Route.post('/todos', 'TodosController.store');
+Route.post('/todos/:id/update', 'TodosController.update');
+Route.post('/todos/:id/delete', 'TodosController.destroy');
+Route.get('/fusers', 'TodosController.fusers');
+Route.get('/falak', 'TodosController.falak');
