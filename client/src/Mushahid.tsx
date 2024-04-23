@@ -1,15 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Mushahid.css";
 import { OnlineUserContext } from "./App";
+import axios from "axios";
+import { MdDescription } from "react-icons/md";
 
 function Mushahid() {
-  let data = JSON.parse(localStorage.getItem("data"));
+  // --------------------------------------------------------------------------------
+  const [blogPosts, setBlogPosts] = useState([]);
 
-  const [blogs, setBlogs] = useState(data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3333/blog/show');
+        setBlogPosts(response.data.blogs);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+      }
+    };
+    fetchData();
+  }, [blogPosts]);
+  // ---------------------------------------------------------------------------------------
 
-  const { currentLoginUser, setCurrentLoginUser } =
-        useContext(OnlineUserContext);
-    
+  const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
   const whoIsLoggedIn = currentLoginUser.username;
 
   const [showBlogs, setShowBlogs] = useState(true);
@@ -17,23 +29,6 @@ function Mushahid() {
   const [showCreatButton, setShowCreatButton] = useState(true);
   const [blogTitel, setBlogTitel] = useState("");
   const [postBody, setPostBody] = useState("");
-
-  if (data == null) {
-    const cratingData = {
-      blogs: [
-        {
-          title: "example_title",
-          body: "this example body for blog",
-          author: "nobody",
-        },
-      ],
-    };
-    localStorage.setItem("data", JSON.stringify(cratingData));
-  }
-
-  console.log(blogs);
-
-  console.log("okk");
 
   const storeTitle = (event) => {
     setBlogTitel(event.target.value);
@@ -49,20 +44,19 @@ function Mushahid() {
     setShowBlogs(false);
   }
 
-  function storeBlog() {
+  async function storeBlog() {
     const newPost = {
       title: blogTitel,
       body: postBody,
       author: whoIsLoggedIn,
     };
 
-    let localData = JSON.parse(localStorage.getItem("data"));
-
-    localData["blogs"].push(newPost);
-
-    localStorage.setItem("data", JSON.stringify(localData));
-
-    setBlogs(localData);
+    await axios.post("http://localhost:3333/blog/post", {
+      title: newPost.title,
+      description: newPost.body,
+      author: newPost.author
+    });
+    setBlogPosts(blogPosts)
 
     setPostBody("");
     setBlogTitel("");
@@ -71,22 +65,23 @@ function Mushahid() {
     setShowBlogs(true);
   }
 
-  function remove(indx, author) {
+  async function remove(id, author) {
     if (author != whoIsLoggedIn) {
       alert("Only author can delete the post");
       return;
     }
-
-    blogs.blogs.splice(indx, 1);
-    localStorage.setItem("data", JSON.stringify(blogs));
-    setBlogs(JSON.parse(localStorage.getItem("data")));
+    else {
+      await axios.post(`http://localhost:3333/blog/${id}/delete`);
+      setBlogPosts(blogPosts);
+    }
   }
 
   const [openEdit, setOpenEdit] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [editPostId, setEditPostId] = useState(null);
 
-  function edit(indx, author, value) {
+  function edit(indx, author, value, id) {
     if (author != whoIsLoggedIn) {
       alert("Only author can edit the post");
       return;
@@ -94,6 +89,7 @@ function Mushahid() {
       setOpenEdit(true);
       setEditId(indx);
       setEditValue(value);
+      setEditPostId(id);
     }
   }
 
@@ -101,14 +97,15 @@ function Mushahid() {
     setEditValue(event.target.value);
   };
 
-  function update() {
-    blogs.blogs[editId]["body"] = editValue;
-    localStorage.setItem("data", JSON.stringify(blogs));
-    setBlogs(JSON.parse(localStorage.getItem("data")));
-
+  async function update() {
+    
+    await axios.post(`http://localhost:3333/blog/${editPostId}/edit`, { description: editValue })
+    setBlogPosts(blogPosts)
     setOpenEdit(false);
     setEditId(null);
-    setEditValue("");
+    setEditValue('');
+    setEditPostId(null);
+
   }
 
   return (
@@ -149,7 +146,7 @@ function Mushahid() {
       )}
       <div>
         {showBlogs &&
-          blogs.blogs.map((val, indx) => (
+          blogPosts.map((val, indx) => (
             <>
               <br />
               {/* <b>{val.title} {" "} </b>
@@ -167,9 +164,9 @@ function Mushahid() {
                     <b>{val.title} </b>
                     <small>(author: {val.author})</small>
 
-                    <p>{val.body}</p>
+                    <p>{val.description}</p>
                     <button
-                      onClick={() => edit(indx, val.author, val.body)}
+                      onClick={() => edit(indx, val.author, val.description, val.id)}
                       style={{
                         height: "30px",
                         width: "120px",
@@ -185,7 +182,7 @@ function Mushahid() {
                       Edit
                     </button>
                     <button
-                      onClick={() => remove(indx, val.author)}
+                      onClick={() => remove(val.id, val.author)}
                       style={{
                         height: "30px",
                         width: "120px",

@@ -25,4 +25,13 @@ Route.get("/", async ({ view }) => {
 });
 Route.get("/users/:id", async () => {
   return "Show user";
-}) 
+})
+
+Route.group(() => {
+
+  Route.get('/show', 'BlogsController.index')
+  Route.post('/post', 'BlogsController.store')
+  Route.post('/:id/edit', 'BlogsController.edit')
+  Route.post('/:id/delete', 'BlogsController.destroy')
+
+}).prefix('/blog')
