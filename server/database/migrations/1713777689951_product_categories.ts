@@ -13,8 +13,11 @@ export default class ProductCategories extends BaseSchema {
         .references("userid")
         .inTable("users")
         .onUpdate("CASCADE");
-      table.string("categoryname").notNullable().unique();
-      table.string("categorydescription");
+      table.string("categoryname").notNullable();
+      table.string("categorydescription").nullable();
+
+
+      table.unique(["userid", "categoryname"]);
       table.timestamps(true, true);
     });
   }

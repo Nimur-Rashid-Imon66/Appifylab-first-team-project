@@ -23,8 +23,14 @@ import Route from "@ioc:Adonis/Core/Route";
 Route.get("/", async ({ view }) => {
   return view.render("welcome");
 });
-Route.get("/users/:id", async () => {
-  return "Show user";
-}) 
+// Route.get("/users", "UsersController.index"); 
 
-Route.post("/addcategory", "ProductCategoriesController.store");
+// Route.get("/", async ({ view }) => {
+  //   return view.render("welcome");
+  // });
+  Route.get("/users", "UsersController.index"); 
+  Route.get("/product/:id", "ProductsController.index"); 
+  Route.get("/category/:id", "ProductCategoriesController.index")
+  
+  Route.post("/addcategory", "ProductCategoriesController.store");
+  Route.post("/addproduct", "ProductsController.store");
