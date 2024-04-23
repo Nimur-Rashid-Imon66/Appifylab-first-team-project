@@ -34,15 +34,16 @@ const UserLogIn: React.FC<UserRegistrationProps> = () => {
     event.preventDefault();
 
     await fetchData();
+    
     const isUserExist = users.filter((e: UserData) => e.email == email);
-    console.log(isUserExist);
+    
     if (
       isUserExist.length > 0 &&
       isUserExist[0].email == email &&
       isUserExist[0].password == password
     ) {
 
-      localStorage.setItem('whoIsLoggedIn', JSON.stringify(username));
+      localStorage.setItem('whoIsLoggedIn', JSON.stringify(isUserExist));
       setCurrentLoginUser(isUserExist);
 
       console.log(isUserExist[0]);
