@@ -1,6 +1,7 @@
 import  { useEffect, useState } from 'react';
 import AddTodo from './AddTodo';
 import EditTodo from './EditTodo';
+import BackDataCheck from './notin/BackDataCheck';
 
 
 interface FormData {
@@ -13,8 +14,8 @@ interface FormData {
 }
 
 const TodoApp = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchBy, setSearchBy] = useState('title');
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [searchBy, setSearchBy] = useState('title');
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [update,setUpdate] =useState(0);
@@ -71,8 +72,11 @@ const TodoApp = () => {
 
   return (
     <>
+      
       <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} userid={userid} />
       <EditTodo open={openEdit} setOpen={setOpenEdit} setUpdate={setUpdate} editTodoId={editTodoId} editData={editData} />
+
+      <BackDataCheck></BackDataCheck>
       <div className="overflow-x-auto m-10">
         <div className="flex justify-between mb-4">
           {/* <div className="flex items-center">
