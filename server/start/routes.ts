@@ -21,7 +21,7 @@
 import Route from "@ioc:Adonis/Core/Route";
 
 Route.get("/", async ({ view }) => {
-  return view.render("welcome");
+  return 'hello';
 });
 Route.get("/users/:id", async () => {
   return "Show user";
