@@ -14,36 +14,43 @@ import AddProduct from "./Components/EMON/AddProduct";
 import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
+import PrivateRouting from "./Authentication/PrivateRouting";
+import Home from "./Home";
 
 export const OnlineUserContext = createContext({});
 
 interface UserData {
-  userid: string;
+  userid?: string;
   username: string;
   email: string;
   password: string;
 }
 
 const App: React.FC = () => {
-  const [currentLoginUser, setCurrentLoginUser] = useState({});
-  const getdata: UserData[] = JSON.parse(
-    localStorage.getItem("localhostUserData") || "[]"
+  const onlineUserFromLocalHost: UserData = JSON.parse(
+    localStorage.getItem("localhostonlineusesr") || "{}"
   );
-  const localhostUserData: UserData[] = getdata;
+  const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
+    onlineUserFromLocalHost
+  );
+  // const getdata: UserData[] = JSON.parse(
+  //   localStorage.getItem("localhostUserData") || "[]"
+  // );
+  // const localhostUserData: UserData[] = getdata;
 
-  const addUser = (
-    userid: string,
-    username: string,
-    email: string,
-    password: string
-  ) => {
-    localhostUserData.push({ userid, username, email, password });
-    localStorage.setItem(
-      "localhostUserData",
-      JSON.stringify(localhostUserData)
-    );
-    console.log("user", localhostUserData);
-  };
+  // const addUser = (
+  //   userid: string,
+  //   username: string,
+  //   email: string,
+  //   password: string
+  // ) => {
+  //   localhostUserData.push({ userid, username, email, password });
+  //   localStorage.setItem(
+  //     "localhostUserData",
+  //     JSON.stringify(localhostUserData)
+  //   );
+  //   console.log("user", localhostUserData);
+  // };
 
   return (
     <>
@@ -53,30 +60,28 @@ const App: React.FC = () => {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route
-              path="/registration"
-              element={
-                <UserRegistration addUser={addUser} users={localhostUserData} />
-              }
-            />
-            <Route
-              path="/login"
-              element={<UserLogIn users={localhostUserData} />}
-            />
-            <Route path="/expense-management" element={<ExpenseHome />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/expense" element={<Expense />} />
-            <Route path="/mushahid" element={<Mushahid />} />
-            <Route path="/mainpage" element={<Mainpage />} />
-            <Route path="/todoapps" element={<TodoApps />} />
-            <Route path="/todoLists" element={<TodoLists />} />
-            <Route
-              path="/addProductCategory"
-              element={<AddProductCategory />}
-            />
-            <Route path="/addProduct" element={<AddProduct />} />
-            <Route path="/showProducts" element={<ShowProduct />} />
-            <Route path="/editProduct/:id" element={<EditProduct />} />
+            <Route path="/registration" element={<UserRegistration />} />
+            <Route path="/login" element={<UserLogIn />} />
+
+            <Route path="/" element={<PrivateRouting />}>
+              <Route path="/expense-management" element={<ExpenseHome />} />
+              <Route path="/income" element={<Income />} />
+              <Route path="/expense" element={<Expense />} />
+              {/* <Route path="/ahsan" element={<Ahsan />} /> */}
+              <Route path="/mushahid" element={<Mushahid />} />
+
+              <Route path="/mainpage" element={<Mainpage />} />
+              <Route path="/todoapps" element={<TodoApps />} />
+              <Route path="/todoLists" element={<TodoLists />} />
+              <Route
+                path="/addProductCategory"
+                element={<AddProductCategory />}
+              />
+              <Route path="/addProduct" element={<AddProduct />} />
+              <Route path="/showProducts" element={<ShowProduct />} />
+              <Route path="/editProduct/:id" element={<EditProduct />} />
+            </Route>
+
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
