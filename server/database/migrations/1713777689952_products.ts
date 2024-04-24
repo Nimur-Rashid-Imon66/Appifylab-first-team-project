@@ -15,7 +15,11 @@ export default class Products extends BaseSchema {
       table.string("productname").unique();
       table.string("productdescription");
       table.integer("productprice");
+<<<<<<< HEAD
       table.string("productcategory");
+=======
+      table.string("productcategory")
+>>>>>>> 833ba027e7aa500ebf2e4e842450543c39eb508f
       table.string("productstatus");
 
       table.timestamps(true, true);

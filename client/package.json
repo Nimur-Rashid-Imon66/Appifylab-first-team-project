@@ -10,30 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@mui/material": "^5.15.15",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-=======
-
-    "@mui/material": "^5.15.15",
-    "bootstrap": "^5.3.3",
-
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@material-tailwind/react": "^2.1.9",
-    "@mui/material": "^5.15.15",
->>>>>>> 5dc6263cf31131e19fc24b5acb23002f48475dfb
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "mui": "^0.0.1",
-<<<<<<< HEAD
-=======
-    "bootstrap": "^5.3.3",
-    "mui": "^0.0.1",
-
->>>>>>> 5dc6263cf31131e19fc24b5acb23002f48475dfb
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
