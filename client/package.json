@@ -10,20 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@mui/material": "^5.15.15",
-    "bootstrap": "^5.3.3",
-=======
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.15.15",
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^5.3.3",
     "mui": "^0.0.1",
-<<<<<<< HEAD
->>>>>>> main
-=======
->>>>>>> main
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
