@@ -20,6 +20,11 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
+
+
+
+
+//================================Ahsan Rout======================================
 Route.get("/", async ({ view }) => {
  
   return view.render("welcome");
@@ -33,8 +38,7 @@ Route.post("/login", "UsersController.login");
 
 // Route.get("profile", "ProfileController.index")
  
-  return 'running '
-});
+//================================Ahsan Rout======================================
 
 
 
