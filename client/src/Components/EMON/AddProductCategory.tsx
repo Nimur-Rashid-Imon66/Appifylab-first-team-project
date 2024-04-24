@@ -55,7 +55,7 @@ const AddProductCategory = () => {
     }
     return (
         <div className='flex flex-col min-w-[100vw] min-h-[100vh] items-center justify-center'>
-            <h1 className='text-xl md:text-2xl font-semibold p-4 border rounded-t-lg  min-w-[50vw]'>Add Product Category { loginUserID}</h1>
+            <h1 className='text-xl md:text-2xl font-semibold p-4 border rounded-t-lg  min-w-[50vw]'>Add Product Category </h1>
             <form
                 onSubmit={handleSubmit}
                 className='flex flex-col gap-4 p-4 min-w-[50vw] rounded-b-lg items-center justify-center bg-gray-200 border'

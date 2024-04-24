@@ -30,8 +30,8 @@ export default class ProductCategoriesController {
       'categoryname.required': 'Category Name is required',
       'categoryname.unique': 'User already has a category with this name'
     }
-    const data = request.only(['userid', 'categoryname', 'categorydescription'])
-    console.log(data)
+    // const data = request.only(['userid', 'categoryname', 'categorydescription'])
+    // console.log(data)
     try {
       const payload = await request.validate({ schema: newPostSchema, messages: msg });
       let category = new ProductCategory();
