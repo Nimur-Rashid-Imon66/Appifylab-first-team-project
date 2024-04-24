@@ -14,9 +14,33 @@ export default class BlogsController {
 
     public async store({ request }: HttpContextContract) {
 
-        const postData = await request.all();
-        await Blog.create(postData);
+        const newPostSchema = schema.create({
+            title: schema.string(),
+            description: schema.string(),
+            author: schema.string(),
+        })
 
+        const msg = {
+            "title.required": "Title is required",
+            "description.required": "description is required",
+            "author.required": "Your not a user",
+        };
+
+        try {
+            const payload = await request.validate({
+                schema: newPostSchema,
+                messages: msg,
+            });
+            await Blog.create(payload);
+            console.log(payload)
+
+            return
+        }
+        catch (e) {
+            console.log(e);
+
+            return
+        }
     }
 
     public async edit({ request, params }: HttpContextContract) {

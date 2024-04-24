@@ -51,11 +51,20 @@ function Mushahid() {
       author: whoIsLoggedIn,
     };
 
+    const Title = (newPost.title).trim();
+    const Body = (newPost.body).trim();
+
+    if (Title.length == 0 || Body.length == 0) {
+      alert('Titel and Body cannot be null or empty');
+      return;
+    }
+
     await axios.post("http://localhost:3333/blog/post", {
       title: newPost.title,
       description: newPost.body,
       author: newPost.author
     });
+    
     setBlogPosts(blogPosts)
 
     setPostBody("");
@@ -99,6 +108,17 @@ function Mushahid() {
 
   async function update() {
     
+    const edv = editValue.trim();
+
+    if (edv.length == 0) {
+      alert('Your Updated value contain nothing do you want to delete the post');
+      setBlogPosts(blogPosts)
+      setOpenEdit(false);
+      setEditId(null);
+      setEditValue('');
+      setEditPostId(null);
+      return;
+    }
     await axios.post(`http://localhost:3333/blog/${editPostId}/edit`, { description: editValue })
     setBlogPosts(blogPosts)
     setOpenEdit(false);
