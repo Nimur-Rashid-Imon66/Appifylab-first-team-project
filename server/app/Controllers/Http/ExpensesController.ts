@@ -13,6 +13,7 @@ export default class ExpensesController {
 		await Expense.create(data);
 		return data
 	}
+	
 	public async update({ request, params }: HttpContextContract) {
 		const data = request.all();
 		await Expense.query().where('id', params.id).update(data);
