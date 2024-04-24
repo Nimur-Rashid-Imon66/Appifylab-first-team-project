@@ -11,12 +11,6 @@ interface UserData {
 interface UserRegistrationProps {}
 
 const UserLogIn: React.FC<UserRegistrationProps> = () => {
-  let users: [];
-  const fetchData = async () => {
-    await axios
-      .get("http://127.0.0.1:3333/usersget")
-      .then((e) => (users = e.data));
-  };
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
   const [email, setEmail] = useState<string>("");
@@ -32,26 +26,24 @@ const UserLogIn: React.FC<UserRegistrationProps> = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = {
+      email,
+      password,
+    };
 
-    await fetchData();
-    const isUserExist = users.filter((e: UserData) => e.email == email);
-    console.log(isUserExist);
-    if (
-      isUserExist.length > 0 &&
-      isUserExist[0].email == email &&
-      isUserExist[0].password == password
-    ) {
-
-      localStorage.setItem('whoIsLoggedIn', JSON.stringify(username));
-      setCurrentLoginUser(isUserExist);
-
-      console.log(isUserExist[0]);
-      setCurrentLoginUser(isUserExist[0]);
+    const isUserExist = await axios.post(
+      "http://127.0.0.1:3333/login",
+      formData
+    );
+    // console.log("usre", isUserExist.data);
+    console.log("usre", Object.keys(isUserExist.data).length);
+    if (Object.keys(isUserExist.data).length) {
+      // localStorage.setItem("whoIsLoggedIn", JSON.stringify(isUserExist));
+      setCurrentLoginUser(isUserExist.data);
       localStorage.setItem(
         "localhostonlineusesr",
-        JSON.stringify(isUserExist[0])
+        JSON.stringify(isUserExist.data)
       );
-
       navigate("/mainpage");
     } else alert("username and password wrong");
   };

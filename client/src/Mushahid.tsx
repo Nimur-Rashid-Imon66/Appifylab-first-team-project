@@ -1,103 +1,80 @@
 import React, { useContext, useEffect, useState } from "react";
-import './Mushahid.css'
+import "./Mushahid.css";
 import { OnlineUserContext } from "./App";
 
 function Mushahid() {
-    
-    let data = JSON.parse(localStorage.getItem('data'));
+  let data = JSON.parse(localStorage.getItem("data"));
 
+  const [blogs, setBlogs] = useState(data);
 
-    const [blogs, setBlogs] = useState(data);
+  const { currentLoginUser, setCurrentLoginUser } =
+    useContext(OnlineUserContext);
 
+  const whoIsLoggedIn = currentLoginUser.username;
 
-    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+  const [showBlogs, setShowBlogs] = useState(true);
+  const [showBlogInputBox, setShowBlogInputBox] = useState(false);
+  const [showCreatButton, setShowCreatButton] = useState(true);
+  const [blogTitel, setBlogTitel] = useState("");
+  const [postBody, setPostBody] = useState("");
 
-    const whoIsLoggedIn = currentLoginUser.username;
+  if (data == null) {
+    const cratingData = {
+      blogs: [
+        {
+          title: "example_title",
+          body: "this example body for blog",
+          author: "nobody",
+        },
+      ],
+    };
+    localStorage.setItem("data", JSON.stringify(cratingData));
+  }
 
-    const [showBlogs, setShowBlogs] = useState(true);
-    const [showBlogInputBox, setShowBlogInputBox] = useState(false);
-    const [showCreatButton, setShowCreatButton] = useState(true);
-    const [blogTitel, setBlogTitel] = useState("");
-    const [postBody, setPostBody] = useState("");
+  console.log(blogs);
 
-    if (data == null) {
-        const cratingData = {
-            blogs: [
-                {
-                    "title": "example_title",
-                    "body": "this example body for blog",
-                    "author": "nobody"
-                }
-            ]
-        };
-        localStorage.setItem('data', JSON.stringify(cratingData));
-    }
+  console.log("okk");
 
-    const storeTitle = (event) => {
-        setBlogTitel(event.target.value);
-    }
+  const storeTitle = (event) => {
+    setBlogTitel(event.target.value);
+  };
 
-    const storePost = (event) => {
-        setPostBody(event.target.value);
-    }
+  const storePost = (event) => {
+    setPostBody(event.target.value);
+  };
 
-    function openBlogInputBox() {
-        setShowBlogInputBox(true);
-        setShowCreatButton(false)
-        setShowBlogs(false)
-    }
+  function openBlogInputBox() {
+    setShowBlogInputBox(true);
+    setShowCreatButton(false);
+    setShowBlogs(false);
+  }
 
-    function storeBlog() {
+  function storeBlog() {
+    const newPost = {
+      title: blogTitel,
+      body: postBody,
+      author: whoIsLoggedIn,
+    };
 
-        const newPost = {
-            title: blogTitel,
-            body: postBody,
-            author: whoIsLoggedIn
-        }
+    let localData = JSON.parse(localStorage.getItem("data"));
 
-        let localData = JSON.parse(localStorage.getItem('data'));
+    localData["blogs"].push(newPost);
 
-        localData['blogs'].push(newPost);
+    localStorage.setItem("data", JSON.stringify(localData));
 
-        localStorage.setItem('data', JSON.stringify(localData));
+    setBlogs(localData);
 
-        setBlogs(localData);
+    setPostBody("");
+    setBlogTitel("");
+    setShowBlogInputBox(false);
+    setShowCreatButton(true);
+    setShowBlogs(true);
+  }
 
-        setPostBody("");
-        setBlogTitel("");
-        setShowBlogInputBox(false);
-        setShowCreatButton(true);
-        setShowBlogs(true)
-
-    }
-
-    function remove(indx, author) {
-
-        if (author != whoIsLoggedIn) {
-            alert('Only author can delete the post');
-            return;
-        }
-
-        blogs.blogs.splice(indx, 1);
-        localStorage.setItem('data', JSON.stringify(blogs));
-        setBlogs(JSON.parse(localStorage.getItem('data')));
-    }
-
-    const [openEdit, setOpenEdit] = useState(false);
-    const [editId, setEditId] = useState(null);
-    const [editValue, setEditValue] = useState('');
-
-    function edit(indx, author, value) {
-        if (author != whoIsLoggedIn) {
-            alert('Only author can edit the post');
-            return;
-        }
-        else {
-            setOpenEdit(true);
-            setEditId(indx);
-            setEditValue(value)
-        }
-
+  function remove(indx, author) {
+    if (author != whoIsLoggedIn) {
+      alert("Only author can delete the post");
+      return;
     }
 
     blogs.blogs.splice(indx, 1);
