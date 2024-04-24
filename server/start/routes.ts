@@ -31,12 +31,6 @@ Route.post("/usersset", "UsersController.alluserset");
 Route.post("/login", "UsersController.login");
 // Route.post("/logout", "AuthController.logout");
 
-// Route.get("profile", "ProfileController.index")
- 
-  return 'running '
-});
-
-
 
 
 // ----------------------------falak start------------------------
@@ -52,6 +46,11 @@ Route.post('/todos/:id/delete', 'TodosController.destroy');
  
   Route.get("/product/:id", "ProductsController.index"); 
   Route.get("/category/:id", "ProductCategoriesController.index")  
+  Route.get('/indproduct/:id',"ProductsController.individualProduct")
+  
   Route.post("/addcategory", "ProductCategoriesController.store");
-  Route.post("/addproduct", "ProductsController.store");
+Route.post("/addproduct", "ProductsController.store");
+  Route.post("/editproduct/:id","ProductsController.update")
+Route.post("/deleteproduct/:id", "ProductsController.destroy");
+  
  
