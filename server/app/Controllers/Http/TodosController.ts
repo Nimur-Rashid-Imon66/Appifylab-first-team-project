@@ -5,12 +5,13 @@ import User from "App/Models/User";
 
 export default class TodosController {
   public async index({ response }: HttpContextContract) {
-    return "index";
+    // return "index";
     const todos = await Todo.all();
     return response.json(todos);
   }
 
   public async store({ request, response }: HttpContextContract) {
+    // return request;
     const validationSchema = schema.create({
       userid: schema.number(),
       title: schema.string({}, [rules.required(), rules.maxLength(255)]),
@@ -18,10 +19,12 @@ export default class TodosController {
       priority: schema.string(),
       tags: schema.string({}, [rules.required()]),
     });
-
+    const data =  request.only(['title','description','priority','tags','userid']);
+    console.log(data)
     try {
       const payload = await request.validate({ schema: validationSchema });
       //   return payload;
+      
 
       let todo = new Todo();
       todo.merge(payload);
@@ -34,7 +37,7 @@ export default class TodosController {
   }
 
   public async show({ params, response }: HttpContextContract) {
-    return "show";
+    // return "show";
     const todo = await Todo.findOrFail(params.id);
     return response.json(todo);
   }
