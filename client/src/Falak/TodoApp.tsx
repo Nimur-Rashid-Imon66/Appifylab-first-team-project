@@ -48,7 +48,7 @@ const TodoApp = () => {
     //   // console.log('user id not found set user id 1 ',userid)
     // }
    // db todos
-   axios.get('http://127.0.0.1:3333/todos',)
+    axios.get('http://127.0.0.1:3333/todos',)
     .then(res => setTodos(res.data))
     .catch(err => console.log(err))
 
@@ -79,7 +79,7 @@ const TodoApp = () => {
   };
 
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     console.log('Delete id ',id);
     // const afterDeleteData = todos.filter((todo)=>{
     //   return todo.id !== id ;
@@ -142,8 +142,8 @@ const TodoApp = () => {
           </thead>
           <tbody>
           {todos
-              .filter(todo => todo.userid === userid)
-              .map((todo) => (
+              ?.filter(todo => todo.userid === userid)
+              ?.map((todo) => (
                 
                 <tr key={todo.id} className="border">
                   <td className="border px-4 py-2">{todo.title}</td>
