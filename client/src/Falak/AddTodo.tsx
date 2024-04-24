@@ -4,21 +4,23 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 // import { MdOutlineCancel } from "react-icons/md";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 interface FormData {
-  id: string;
-  userid: string;
+  userid: number;
+  id:number 
   title: string;
   description: string;
   priority: string;
   tags: string;
 }
 
+
 interface Model2Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setUpdate: React.Dispatch<React.SetStateAction<number>>;
-  userid: string;
+  userid: number;
 }
 
 const AddTodo: React.FC<Model2Props> = ({
@@ -27,6 +29,7 @@ const AddTodo: React.FC<Model2Props> = ({
   setUpdate,
   userid,
 }) => {
+  
   const {
     register,
     handleSubmit,
@@ -34,26 +37,29 @@ const AddTodo: React.FC<Model2Props> = ({
     formState: { errors },
   } = useForm<FormData>();
 
-  console.log(userid);
+  //console.log(userid);
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    const uuid = uuidv4();
+  //  console.log(data);
+    
     const curTodo = {
       userid: userid,
-      id: uuid,
       title: data.title,
       description: data.description,
       priority: data.priority,
       tags: data.tags,
     };
-    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    console.log(existingTodos);
+    // const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
+    // console.log(existingTodos);
 
-    const updatedTodos = [curTodo, ...existingTodos];
-    console.log(updatedTodos);
+    // const updatedTodos = [curTodo, ...existingTodos];
+    // console.log(updatedTodos);
 
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    // localStorage.setItem("todos", JSON.stringify(updatedTodos));
 
+    //db data 
+    axios.post(`http://127.0.0.1:3333/todos`,curTodo)
+    .then(res => console.log('respose ',res))
+    .catch(err => console.log(err))
     reset();
     setOpen(false);
     setUpdate((pre) => pre + 1);
