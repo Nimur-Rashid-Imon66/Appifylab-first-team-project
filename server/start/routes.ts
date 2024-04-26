@@ -50,3 +50,8 @@ Route.group(() => {
 }).prefix('/history')
 
 ////////////////////////////////////////////////////////////////
+//testing for commit
+Route.group(() => {
+  Route.get('/:id', 'HistoriesController.show');
+  Route.post('/', 'HistoriesController.create');
+}).prefix('/emni')
