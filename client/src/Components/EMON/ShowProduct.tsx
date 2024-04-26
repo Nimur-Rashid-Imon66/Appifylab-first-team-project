@@ -3,14 +3,15 @@ import Product from './Product';
 import { OnlineUserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { set } from 'react-hook-form';
+import axios from 'axios';
 interface ProductInterface {
-    loginUserID: string;
-    productId: string;
-    productName: string;
-    productDescription: string;
-    productPrice: number;
-    productCategory: string;
-    productStatus: string;
+    userid: number;
+    prouductid: number;
+    productname: string;
+    productdescription: string;
+    productprice: number;
+    productcategory: string;
+    productstatus: string;
 
 }
 
@@ -19,30 +20,24 @@ const ShowProduct = () => {
     const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
     console.log(currentLoginUser);
     const loginUserID = currentLoginUser.userid
-    const getProduct = () => {
-        let data = localStorage.getItem('products');
-        if (data) {
-            return JSON.parse(data);
-            // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);  
-        }
-        else return [];
-    }
-    const getIndividualProduct = () => {
-        let data = localStorage.getItem('products');
-        if (data) {
-            const newData:ProductInterface[] = JSON.parse(data);
-            return newData.filter((item) => item.loginUserID === loginUserID);  
-        }
-        else return [];
-    }
-    const [products, setProducts] = useState<ProductInterface[]>(getProduct());
-    const [individualProduct, setIndividualProduct] = useState<ProductInterface[]>(getIndividualProduct());
 
+    const [products, setProducts] = useState<ProductInterface[]>([]);
+    const fetchData = async () => {
+        try {
+            await axios
+            .get(`http://127.0.0.1:3333/product/${loginUserID}`)
+            .then((e) => {
+                console.log(e.data.products)
+                setProducts(e.data.products);
+            })
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
 
     useEffect(() => {
-        localStorage.setItem('products', JSON.stringify(products));
-        setIndividualProduct(getIndividualProduct());
-    }, [products]);
+        fetchData();
+    }, []);
     
     return (
         <div>
@@ -57,9 +52,9 @@ const ShowProduct = () => {
                         <th className="border p-2 border-black ">Action</th>
                     </tr>
                     
-                        {individualProduct.map((product, index) => {
+                        {products.map((product, index) => {
                             return (
-                                <Product key={index} product={product} products={products} setPorducts={setProducts} />
+                                <Product key={index} product={product} products={ products} setProducts={setProducts} />
                             );
                         })}
                     

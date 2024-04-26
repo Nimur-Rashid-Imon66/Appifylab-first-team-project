@@ -1,84 +1,77 @@
 import React, { useContext, useEffect, useState } from 'react';
-import uniqid from 'uniqid';
 import { OnlineUserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 interface Product {
-    loginUserID: number;
-    productId: string;
-    productName: string;
-    productDescription: string;
-    productPrice: number|"";
-    productCategory: string;
-    productStatus: string;
+    userid: number;
+    productname: string;
+    productdescription: string;
+    productprice: number|"";
+    productcategory: string;
+    productstatus: string;
 
 }
 
 interface categoryInterface {
-    loginUserID: string;
-    categoryName: string;
-    categoryDescription: string;
+    userid: number;
+    categoryname: string;
+    categorydescription: string;
 }
 
 
 const AddProduct = () => {
-    const navigate = useNavigate();
+    const [category,setCategory] = useState<categoryInterface[]>([]);
     const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
-    console.log(currentLoginUser);
     const loginUserID = currentLoginUser.userid
-    const getCategory = () => {
-        let data = localStorage.getItem('productCategory');
-        if (data) {
-            let newData = JSON.parse(data);
-            return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
-        }
-        else return [];
-    }
-    const [productCategory, setProductCategory] = useState<categoryInterface[]|[]>(getCategory()); // product category info coming from user product list
 
-    const getProduct = () => {
-        let data = localStorage.getItem('products');
-        console.log(data)
-        if (data) {
-            return JSON.parse(data);
-            // return newData = newData.filter((item: { loginUserID: string }) => item.loginUserID === loginUserID);    
-        }
-        else return [];
+    const fatcData = async () => {
+        await axios
+            .get(`http://127.0.0.1:3333/category/${loginUserID}`)
+            .then((e) => {
+                console.log(e.data.categories)
+                setCategory(e.data.categories);
+            })
     }
+    const addProduct = async () => {
+        try {
+            console.log(productInfo);
+            await axios.post(`http://127.0.0.1:3333/addproduct`, productInfo);
+            alert("Product Added Successfully");
+            setProductInfo({
+                userid: loginUserID,
+                productname: "",
+                productdescription: "",
+                productprice: "",
+                productcategory: "",
+                productstatus: "In Stock"
+            });
+        } catch (error) {
+            console.error("Error adding product:", error);
+        }
+    };
+    
     const [productInfo, setProductInfo] = useState<Product>({
-        loginUserID: loginUserID,
-        productId: uniqid(),
-        productName: "",
-        productDescription: "",
-        productPrice: "",
-        productCategory: "",
-        productStatus: "In Stock"
+        userid: loginUserID,
+        productname: "",
+        productdescription: "",
+        productprice: "",
+        productcategory: "",
+        productstatus: "In Stock"
     });
-    const [products, setProducts] = useState<Product[]>(getProduct());
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault(); 
-        if (productInfo.productName === "" || productInfo.productDescription === "" || productInfo.productPrice === "" || productInfo.productCategory === "" || productInfo.productStatus === "") {
+        if (productInfo.productname === "" || productInfo.productdescription === "" || productInfo.productprice === "" || productInfo.productcategory === "" || productInfo.productstatus === "") {
             alert("Please fill all the fields");
             return;
         }
-        setProducts([...products, productInfo ]);
-        alert("Product Added Successfully");
-        setProductInfo({
-            loginUserID: loginUserID,
-            productId: uniqid(),
-            productName: "",
-            productDescription: "",
-            productPrice: "",
-            productCategory: "",
-            productStatus: "In Stock"
-        });
+        await addProduct()
+        
     }
     
 
     useEffect(() => {
-        // if (!loginUserID)
-        //     navigate('/login')
-        localStorage.setItem('products', JSON.stringify(products));
-    }, [products]);
+        fatcData();
+    }, []);
 
     return (
         <div className="flex items-center justify-center ">
@@ -92,16 +85,16 @@ const AddProduct = () => {
                         className='w-full px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
                         type="text"
                         placeholder="Product Name"
-                        value={productInfo.productName}
-                        onChange={(e) => setProductInfo({ ...productInfo, productName: e.target.value })}
+                        value={productInfo.productname}
+                        onChange={(e) => setProductInfo({ ...productInfo, productname: e.target.value })}
                         required
                     />
                     <input
                         className='w-full px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
                         type="text"
                         placeholder="Product Description"
-                        value={productInfo.productDescription}
-                        onChange={(e) => setProductInfo({ ...productInfo, productDescription: e.target.value })}
+                        value={productInfo.productdescription}
+                        onChange={(e) => setProductInfo({ ...productInfo, productdescription: e.target.value })}
                         required
                     />
                     <input
@@ -109,8 +102,8 @@ const AddProduct = () => {
                         type="number"
                         min='0'
                         placeholder="Product Price"
-                        value={productInfo.productPrice}
-                        onChange={(e) => setProductInfo({ ...productInfo, productPrice: parseFloat(e.target.value) })}
+                        value={productInfo.productprice}
+                        onChange={(e) => setProductInfo({ ...productInfo, productprice: parseFloat(e.target.value) })}
                         required
                     />
                     {/* <input type="" placeholder="Product Category" />
@@ -120,15 +113,18 @@ const AddProduct = () => {
                         <select
                             // className="ml-1 py-2 px-4 border "
                             className='w-[40%] px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
-                            value={productInfo.productCategory}
-                            onChange={e => setProductInfo({ ...productInfo, productCategory: e.target.value })}
+                            value={productInfo.productcategory}
+                            onChange={e => setProductInfo({ ...productInfo, productcategory: e.target.value })}
                             required
                 
                         >
                             <option value="">Select Category </option>
                             {
-                                productCategory.map((item,idx) => {
-                                    return <option key={idx}  value={`${item.categoryName}`}>{item.categoryName} </option>
+                                category.map((item,idx) => {
+                                    return <option key={idx}
+                                        value={`${item.categoryname}`}
+                                        className='text-black'
+                                    >{item.categoryname} </option>
                                 })
                             }
                             {/* <option value="cat1">cat1 </option>
@@ -141,8 +137,8 @@ const AddProduct = () => {
                         <select
                             className='w-[40%] px-1 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
                             // value={userInfo.accountType}
-                            value={productInfo.productStatus}
-                            onChange={e => setProductInfo({ ...productInfo, productStatus: e.target.value })}
+                            value={productInfo.productstatus}
+                            onChange={e => setProductInfo({ ...productInfo, productstatus: e.target.value })}
                             required
                         >
                             <option value="In Stock">In Stock </option>
