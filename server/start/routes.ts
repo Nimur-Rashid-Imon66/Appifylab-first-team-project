@@ -1,5 +1,6 @@
 import Route from "@ioc:Adonis/Core/Route";
 
+//================================Ahsan Rout======================================
 Route.get("/", async ({ view }) => {
  
   return view.render("welcome");
@@ -11,6 +12,11 @@ Route.post("/usersset", "UsersController.alluserset");
 
 Route.post("/login", "UsersController.login");
 // Route.post("/logout", "AuthController.logout");
+
+// Route.get("profile", "ProfileController.index")
+ 
+//================================Ahsan Rout======================================
+
 
 
 
@@ -30,9 +36,14 @@ Route.post('/todos/:id/delete', 'TodosController.destroy');
   Route.get('/indproduct/:id',"ProductsController.individualProduct")
   
   Route.post("/addcategory", "ProductCategoriesController.store");
-Route.post("/addproduct", "ProductsController.store");
+  Route.post("/addproduct", "ProductsController.store");
   Route.post("/editproduct/:id","ProductsController.update")
-Route.post("/deleteproduct/:id", "ProductsController.destroy");
+  Route.post("/deleteproduct/:id", "ProductsController.destroy");
+
+
+
+
+
 
 
 
@@ -49,9 +60,4 @@ Route.group(() => {
   Route.post('/', 'HistoriesController.create');
 }).prefix('/history')
 
-////////////////////////////////////////////////////////////////
-//testing for commit
-Route.group(() => {
-  Route.get('/:id', 'HistoriesController.show');
-  Route.post('/', 'HistoriesController.create');
-}).prefix('/emni')
+//////////////////// END OF Nahid 's Route ///////////////////////
