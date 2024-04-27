@@ -1,22 +1,34 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Product from 'App/Models/Product';
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import ProductCategory from 'App/Models/ProductCategory';
+import { getlogUser } from './AuthController';
 
 export default class ProductsController {
-  public async index({ request,response }: HttpContextContract) {
-    const id = request.param('id')
+  
+  public async index({ request, response }: HttpContextContract) {
+    // return loginUser
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+    
+    const id = parseInt(request.param('id'))
+    if (typeof id !== 'number') return response.status(404).json({ message: 'Invalid user id' });
+    
+
     const products = (await Product.query().where('userid', id).select('prouductid','userid','productname','productdescription','productprice','productcategory','productstatus'));
     return response.json({products})
   }
-  public async individualProduct({ request, response }: HttpContextContract) {
-    const id = request.param('id')
-    const product = (await Product.query().where('prouductid', id).select('prouductid','userid','productname','productdescription','productprice','productcategory','productstatus'));
-    return response.json({product})
-  }
-  public async store({request,response }: HttpContextContract) {
+  // public async individualProduct({ request, response }: HttpContextContract) {
+  //   // console.log(loginUser)
+  //   const id = request.param('id')
+  //   const product = (await Product.query().where('prouductid', id).select('prouductid','userid','productname','productdescription','productprice','productcategory','productstatus'));
+  //   return response.json({product})
+  // }
+  public async store({ request, response }: HttpContextContract) {
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+    
     const newPostSchema = schema.create({
-      userid: schema.number([rules.exists({ table: 'users', column: 'userid' })]),
+      // userid: schema.number([rules.exists({ table: 'users', column: 'userid' })]),
       productname: schema.string(),
       productdescription: schema.string(),
       productprice: schema.number(),
@@ -26,18 +38,19 @@ export default class ProductsController {
       productstatus: schema.string()
     });
     const msg = {
-      'userid.required': 'User ID is required',
+      // 'userid.required': 'User ID is required',
       'productname.required': 'Product Name is required',
       'productdescription.required': 'Product Description is required',
       'productprice.required': 'Product Price is required',
       'productcategory.required': 'Product Category is required',
       'productstatus.required': 'Product Status is required',
       'productcategory.exists': 'The product category does not exist',
-      'userid.exists': 'The user does not exist'
+      // 'userid.exists': 'The user does not exist'
      }
 
     try {
-      const payload = await request.validate({ schema: newPostSchema, messages: msg });
+      let payload = await request.validate({ schema: newPostSchema, messages: msg });
+      payload['userid'] = user.userid;
       let product = new Product();
       product.merge(payload);
       await product.save();
@@ -49,8 +62,13 @@ export default class ProductsController {
   }
 
 
-  public async update({ request,response}: HttpContextContract) {
-    const id = request.param('id')
+  public async update({ request, response }: HttpContextContract) {
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+
+    const id = parseInt(request.param('id'))
+    if (typeof id !== 'number') return response.status(404).json({ message: 'Invalid product id' });
+
     const newPostSchema = schema.create({
       productname: schema.string(),
       productdescription: schema.string(),
@@ -85,8 +103,13 @@ export default class ProductsController {
     }
   }
 
-  public async destroy({request,response }: HttpContextContract) {
-    const id = request.param('id')
+  public async destroy({ request, response }: HttpContextContract) {
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+
+    const id = parseInt(request.param('id'))
+    if (typeof id !== 'number') return response.status(404).json({ message: 'Invalid product id' });
+
     const product = await Product.find(id);
     if(product){
       await product.delete();

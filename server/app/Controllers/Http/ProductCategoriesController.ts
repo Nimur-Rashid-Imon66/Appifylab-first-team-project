@@ -1,10 +1,13 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProductCategory from 'App/Models/ProductCategory'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-
+import {getlogUser} from './AuthController'
 
 export default class ProductCategoriesController {
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response,auth}: HttpContextContract) {
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+    
     const id = request.param('id')
     const categories =await ProductCategory.query().where('userid', id).select('userid','categoryname','categorydescription')
     return response.json({categories})
@@ -12,8 +15,10 @@ export default class ProductCategoriesController {
  
   
   public async store({ request, response }: HttpContextContract) {
+    const user = await getlogUser();
+    if (user.userid === 0) return response.status(404).json({ message: 'Please login first' });
+
     const newPostSchema = schema.create({
-      userid: schema.number(),
       categoryname: schema.string({}, [
         rules.unique({
           table: 'product_categories',
@@ -26,7 +31,6 @@ export default class ProductCategoriesController {
       categorydescription: schema.string.nullable(),
     });
     const msg = {
-      'userid.required': 'User ID is required',
       'categoryname.required': 'Category Name is required',
       'categoryname.unique': 'User already has a category with this name'
     }
@@ -34,13 +38,14 @@ export default class ProductCategoriesController {
     // console.log(data)
     try {
       const payload = await request.validate({ schema: newPostSchema, messages: msg });
+      payload['userid'] = user.userid;
       let category = new ProductCategory();
       category.merge(payload);
       await category.save();
-  
       return response.status(201).json({ message: 'Category created successfully' });
     } catch (error) {
-      return response.status(404).json({ message: error.messages });  
+      console.log(error.messages.errors[0].message)
+      return response.status(404).json({ message: error.messages.errors[0].message });  
     }
 
 
