@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import "./Mushahid.css";
-import { OnlineUserContext } from "./App";
+import { useContext, useEffect, useState } from "react";
+import "../Mushahid.css";
+import { OnlineUserContext } from "../App";
 import axios from "axios";
-import { MdDescription } from "react-icons/md";
 
 function Mushahid() {
-  // --------------------------------------------------------------------------------
+
   const [blogPosts, setBlogPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,17 +18,17 @@ function Mushahid() {
       }
     };
     fetchData();
-  }, [blogPosts]);
-  // ---------------------------------------------------------------------------------------
+    console.log('ok')
+  }, []);
+
+  console.log(blogPosts);
 
   const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
-  const whoIsLoggedIn = currentLoginUser.username;
-
+  
   const [showBlogs, setShowBlogs] = useState(true);
   const [showBlogInputBox, setShowBlogInputBox] = useState(false);
-  const [showCreatButton, setShowCreatButton] = useState(true);
-  const [blogTitel, setBlogTitel] = useState("");
-  const [postBody, setPostBody] = useState("");
+  const [blogTitel, setBlogTitel] = useState();
+  const [postBody, setPostBody] = useState();
 
   const storeTitle = (event) => {
     setBlogTitel(event.target.value);
@@ -40,58 +40,65 @@ function Mushahid() {
 
   function openBlogInputBox() {
     setShowBlogInputBox(true);
-    setShowCreatButton(false);
     setShowBlogs(false);
   }
 
   async function storeBlog() {
     const newPost = {
       title: blogTitel,
-      body: postBody,
-      author: whoIsLoggedIn,
+      description: postBody,
+      author: currentLoginUser.username,
     };
 
     const Title = (newPost.title).trim();
-    const Body = (newPost.body).trim();
+    const Body = (newPost.description).trim();
 
     if (Title.length == 0 || Body.length == 0) {
       alert('Titel and Body cannot be null or empty');
       return;
     }
-
+    setIsLoading(true);
     await axios.post("http://localhost:3333/blog/post", {
       title: newPost.title,
-      description: newPost.body,
+      description: newPost.description,
       author: newPost.author
     });
-    
-    setBlogPosts(blogPosts)
+    blogPosts.unshift(newPost)
+    setBlogPosts(blogPosts);
 
     setPostBody("");
     setBlogTitel("");
     setShowBlogInputBox(false);
-    setShowCreatButton(true);
     setShowBlogs(true);
+    setIsLoading(false);
   }
 
-  async function remove(id, author) {
-    if (author != whoIsLoggedIn) {
+  async function remove(id, author, indx) {
+    if (author != currentLoginUser.username) {
       alert("Only author can delete the post");
       return;
     }
     else {
+      setIsLoading(true);
       await axios.post(`http://localhost:3333/blog/${id}/delete`);
-      setBlogPosts(blogPosts);
+      
+      const newArray = blogPosts.filter((_, index) => index !== indx);
+      setBlogPosts(newArray);
+      setIsLoading(false);
     }
   }
-
+  
   const [openEdit, setOpenEdit] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [editPostId, setEditPostId] = useState(null);
 
+  const storeEdit = (event) => {
+    setEditValue(event.target.value);
+  };
+
   function edit(indx, author, value, id) {
-    if (author != whoIsLoggedIn) {
+    if (author != currentLoginUser.username) {
       alert("Only author can edit the post");
       return;
     } else {
@@ -102,42 +109,36 @@ function Mushahid() {
     }
   }
 
-  const storeEdit = (event) => {
-    setEditValue(event.target.value);
-  };
-
   async function update() {
-    
+
     const edv = editValue.trim();
 
     if (edv.length == 0) {
       alert('Your Updated value contain nothing do you want to delete the post');
-      setBlogPosts(blogPosts)
       setOpenEdit(false);
       setEditId(null);
       setEditValue('');
       setEditPostId(null);
       return;
     }
+    setIsLoading(true);
     await axios.post(`http://localhost:3333/blog/${editPostId}/edit`, { description: editValue })
+    blogPosts[editId].description = editValue;
     setBlogPosts(blogPosts)
     setOpenEdit(false);
     setEditId(null);
     setEditValue('');
     setEditPostId(null);
+    setIsLoading(false);
 
   }
 
   return (
     <>
       <div>
-        {showCreatButton &&
-          whoIsLoggedIn != "nobody" &&
-          whoIsLoggedIn != "nobody" && (
-            <button onClick={openBlogInputBox} type="button" className="btn">
-              Write a Blog
-            </button>
-          )}
+        <button onClick={openBlogInputBox} type="button" className="btn" disabled={isLoading}>
+          Write a Blog
+        </button>
       </div>
 
       {showBlogInputBox && (
@@ -160,7 +161,7 @@ function Mushahid() {
             />
           </div>
           <button onClick={storeBlog} type="button" className="btn">
-            post
+             {isLoading ? 'Loading...' : 'Submit'}
           </button>
         </div>
       )}
@@ -169,8 +170,6 @@ function Mushahid() {
           blogPosts.map((val, indx) => (
             <>
               <br />
-              {/* <b>{val.title} {" "} </b>
-                            <small>(author: {val.author})</small> */}
 
               <div
                 style={{
@@ -198,11 +197,12 @@ function Mushahid() {
                         borderRadius: "4px",
                         cursor: "pointer",
                       }}
+                      disabled={isLoading}
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => remove(val.id, val.author)}
+                      onClick={() => remove(val.id, val.author, indx)}
                       style={{
                         height: "30px",
                         width: "120px",
@@ -213,8 +213,9 @@ function Mushahid() {
                         borderRadius: "4px",
                         cursor: "pointer",
                       }}
+                      disabled={isLoading}
                     >
-                      Delete
+                     {isLoading ? 'Loading...' : 'Delete'}
                     </button>
                   </>
                 )}
@@ -227,8 +228,8 @@ function Mushahid() {
                         placeholder="body..."
                       />
                     </div>
-                    <button onClick={update} type="button" className="btn">
-                      update
+                    <button onClick={update} disabled={isLoading} type="button" className="btn">
+                       {isLoading ? 'Loading...' : 'update'}
                     </button>
                   </>
                 )}

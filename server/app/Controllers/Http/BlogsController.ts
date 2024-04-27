@@ -4,15 +4,15 @@ import Blog from 'App/Models/Blog';
 
 export default class BlogsController {
 
-    public async index({ response }: HttpContextContract) {
+    public async index() {
 
         const blogs = await Blog.all();
         console.log(blogs)
-        return response.json({ blogs });
+        return { blogs };
 
     }
 
-    public async store({ request }: HttpContextContract) {
+    public async store({ request, response }: HttpContextContract) {
 
         const newPostSchema = schema.create({
             title: schema.string(),
@@ -38,22 +38,40 @@ export default class BlogsController {
         }
         catch (e) {
             console.log(e);
-
             return
         }
     }
 
     public async edit({ request, params }: HttpContextContract) {
 
-        const updatedData = await request.all();
-        await Blog.query().where('id', params.id).update(updatedData)
-        console.log(updatedData);
+        const editSchema = schema.create({
+            description: schema.string(),
+        })
+
+        try {
+            const payload = await request.validate({
+                schema: editSchema,
+            });
+            await Blog.create(payload);
+            await Blog.query().where('id', params.id).update(payload)
+            console.log(payload)
+
+            return
+        }
+        catch (e) {
+            console.log(e);
+            return
+        }
+
+        // const updatedData = await request.all();
+        // await Blog.query().where('id', params.id).update(updatedData)
 
     }
 
-    public async destroy({ params }: HttpContextContract) {
+    public async destroy({ response, params }: HttpContextContract) {
 
         const data = await Blog.find(params.id);
         data?.delete();
+        
     }
 }

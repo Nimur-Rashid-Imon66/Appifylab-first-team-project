@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
 import ExpenseHome from "./Expenses/Home";
-import Mushahid from "./Mushahid";
 import TodoApps from "./Falak/TodoApp";
 import TodoLists from "./Falak/TodoLists";
 import Mainpage from "./Authentication/Mainpage";
@@ -15,6 +14,8 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
+import Mushahid from "./Mushahid/Mushahid";
+import BlogData from "./Mushahid/BlogData";
 
 export const OnlineUserContext = createContext({});
 
@@ -75,7 +76,6 @@ const App: React.FC = () => {
               <Route path="/expense" element={<Expense />} />
               {/* <Route path="/ahsan" element={<Ahsan />} /> */}
               <Route path="/mushahid" element={<Mushahid />} />
-
               <Route path="/mainpage" element={<Mainpage />} />
               <Route path="/todoapps" element={<TodoApps />} />
               <Route path="/todoLists" element={<TodoLists />} />
