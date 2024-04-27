@@ -106,7 +106,7 @@ const Expense: React.FC = () => {
               required />
           </div>
           <button type="submit" className='exp' disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Add Income'}
+            {isLoading ? 'Loading...' : 'Add Expense'}
           </button>
         </form>
       </div>
