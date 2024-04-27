@@ -8,8 +8,8 @@ function Mushahid() {
   const [blogs, setBlogs] = useState(data);
 
   const { currentLoginUser, setCurrentLoginUser } =
-        useContext(OnlineUserContext);
-    
+    useContext(OnlineUserContext);
+
   const whoIsLoggedIn = currentLoginUser.username;
 
   const [showBlogs, setShowBlogs] = useState(true);
