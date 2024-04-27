@@ -51,13 +51,14 @@ Route.post('/todos/:id/delete', 'TodosController.destroy');
 
 Route.group(() => {
   Route.get('/:id', 'ExpensesController.show');
+  Route.get('/:id/balance','ExpensesController.showBalance')
   Route.post('/', 'ExpensesController.create');
   Route.post('/:id', 'ExpensesController.update');
 }).prefix('/expenseManagement')
 
 Route.group(() => {
   Route.get('/:id', 'HistoriesController.show');
-  Route.post('/', 'HistoriesController.create');
+  Route.post('/:id', 'HistoriesController.create');
 }).prefix('/history')
 
 //////////////////// END OF Nahid 's Route ///////////////////////

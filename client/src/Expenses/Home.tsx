@@ -6,7 +6,6 @@ import "./home.css";
 
 
 interface Expense {
-  // id: number;
   balance: number;
   history: Transaction[];
 }
@@ -19,7 +18,7 @@ interface Transaction {
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { currentLoginUser, setCurrentLoginUser }= useContext(OnlineUserContext);
+  const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
   const loginUserID = currentLoginUser.userid;
   const [loginUserData, setLoginUserData] = useState<Expense>({
     balance: 0,
@@ -34,6 +33,7 @@ const Home: React.FC = () => {
           balance: response.data.balance,
           history: response.data.history
         };
+
         setLoginUserData(userData);
       } catch (error) {
         console.error("Error fetching data:", error);

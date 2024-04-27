@@ -5,7 +5,6 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class ExpensesController {
 
-
   public async show({ params }: HttpContextContract) {
     const balance = await Expense.query().select('balance').where('id', params.id);
     const history = await History.query().select('description', 'amount', 'type').where('id', params.id);
@@ -20,15 +19,6 @@ export default class ExpensesController {
     const balance = await Expense.query().select('balance').where('id', params.id);
     return balance.length > 0 ? balance[0].balance : 0;
   }
-
-
-  public async create({ request }: HttpContextContract) {
-    const data = request.all()
-    if (data.id <= 0 || data.balance != 0) return;
-    await Expense.create(data);
-    return data
-  }
-
 
   public async update({ request, params }: HttpContextContract) {
     const newPostSchema = schema.create({
