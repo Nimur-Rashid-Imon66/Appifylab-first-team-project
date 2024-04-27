@@ -5,7 +5,6 @@ import { Navigate, Outlet } from "react-router-dom";
 function PrivateRouting() {
   const { currentLoginUser, setCurrentLoginUser } =
     useContext(OnlineUserContext);
-    console.log(currentLoginUser);
   return currentLoginUser.id != -1 ? <Outlet /> : <Navigate to={"/login"} />;
 }
 
