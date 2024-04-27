@@ -1,19 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import uniqid from "uniqid";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { OnlineUserContext } from "../../App";
 import axios from "axios";
-
-  interface ProductInterface {
-    userid: number;
-    prouductid: number;
-    productname: string;
-    productdescription: string;
-    productprice: number|"";
-    productcategory: string;
-    productstatus: string;
-
-}
+import port from '../../Port'
 
 interface indProductInterface {
   prouductid: number,
@@ -35,28 +24,22 @@ interface categoryInterface {
 const EditProduct: React.FC = ({}) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentLoginUser, setCurrentLoginUser } =
-    useContext(OnlineUserContext);
-  console.log(currentLoginUser);
+  const { currentLoginUser } = useContext<any>(OnlineUserContext);
   const loginUserID = currentLoginUser.userid;
   const [category, setCategory] = useState<categoryInterface[]>([]);
-  const [productInfo, setProductInfo] = useState<indProductInterface>({});
+  const [productInfo, setProductInfo] = useState<indProductInterface>(
+    {} as indProductInterface
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const location  = useLocation();
 
   const fatcData = async () => {
-    await axios
-        .get(`http://127.0.0.1:3333/category/${loginUserID}`)
-        .then((e) => {
-            console.log(e.data.categories)
-            setCategory(e.data.categories);
-        })
-  }
-  const individualProductData = async () => {
-    await axios
-    .get(`http://127.0.0.1:3333/indproduct/${id}`)
-    .then((e:any) => {
-      console.log(e.data.product[0])
-      setProductInfo(e.data.product[0])
-    })
+    setLoading(true);
+    await axios.get(`${port}/category/${loginUserID}`)
+              .then((e) => {
+              setCategory(e.data.categories);
+            })
+    setLoading(false);
   }
   const handleSubmit =async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,15 +53,16 @@ const EditProduct: React.FC = ({}) => {
       alert("Please fill all the fields");
       return;
     }
-
-    await axios.post(`http://127.0.0.1:3333/editproduct/${id}`,productInfo)
+    setLoading(true);
+    await axios.post(`${port}/editproduct/${id}`, productInfo)
+    setLoading(false);
     alert("Product Update Successfully");
     navigate("/showProducts");
   };
 
   useEffect(() => {
+    setProductInfo(location.state.product);
     fatcData();
-    individualProductData();
 }, []);
   return (
     <div className="flex items-center justify-center ">
@@ -170,10 +154,14 @@ const EditProduct: React.FC = ({}) => {
             </select>
           </span>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+            disabled={loading}  
+            className={`px-4 py-2 rounded-md transition duration-300 ease-in-out ${loading
+              ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
             type="submit"
           >
-            Add Product
+            Update Product
           </button>
         </form>
       </div>

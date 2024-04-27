@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import Product from './Product';
 import { OnlineUserContext } from '../../App';
-import { useNavigate } from 'react-router-dom';
-import { set } from 'react-hook-form';
 import axios from 'axios';
+import port from '../../Port';
+
+
 interface ProductInterface {
     userid: number;
     prouductid: number;
@@ -12,24 +13,27 @@ interface ProductInterface {
     productprice: number;
     productcategory: string;
     productstatus: string;
-
 }
 
+
 const ShowProduct = () => {
-    const navigate = useNavigate();
-    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+    const { currentLoginUser } = useContext<any>(OnlineUserContext);
     console.log(currentLoginUser);
     const loginUserID = currentLoginUser.userid
 
     const [products, setProducts] = useState<ProductInterface[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+   
     const fetchData = async () => {
         try {
+            setLoading(true);
             await axios
-            .get(`http://127.0.0.1:3333/product/${loginUserID}`)
+            .get(`${port}/product/${loginUserID}`)
             .then((e) => {
                 console.log(e.data.products)
                 setProducts(e.data.products);
             })
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -51,12 +55,15 @@ const ShowProduct = () => {
                         <th className="border p-2 border-black ">Product Status</th>
                         <th className="border p-2 border-black ">Action</th>
                     </tr>
-                    
-                        {products.map((product, index) => {
+                        
+                    {
+                        loading ? <tr className="text-3xl ">Loading...</tr>
+                        :products.map((product, index) => {
                             return (
-                                <Product key={index} product={product} products={ products} setProducts={setProducts} />
+                                <Product key={index} product={product} products={ products} setProducts={setProducts} />   
                             );
-                        })}
+                        })
+                    }
                     
                 </thead>
             </table>

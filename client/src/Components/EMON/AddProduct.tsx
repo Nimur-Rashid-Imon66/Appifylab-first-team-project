@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { OnlineUserContext } from '../../App';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import port from '../../Port';
 interface Product {
-    userid: number;
+    // userid: number;
     productname: string;
     productdescription: string;
     productprice: number|"";
     productcategory: string;
     productstatus: string;
-
 }
 
 interface categoryInterface {
@@ -20,25 +19,29 @@ interface categoryInterface {
 
 
 const AddProduct = () => {
-    const [category,setCategory] = useState<categoryInterface[]>([]);
-    const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
+    const [category, setCategory] = useState<categoryInterface[]>([]);
+    const [loading,setLoading] = useState<boolean>(false);
+    const { currentLoginUser } = useContext<any>(OnlineUserContext);
     const loginUserID = currentLoginUser.userid
 
     const fatcData = async () => {
         await axios
-            .get(`http://127.0.0.1:3333/category/${loginUserID}`)
+            .get(`${port}/category/${loginUserID}`)
             .then((e) => {
-                console.log(e.data.categories)
+                // console.log(e.data.categories)
                 setCategory(e.data.categories);
             })
     }
     const addProduct = async () => {
         try {
             console.log(productInfo);
-            await axios.post(`http://127.0.0.1:3333/addproduct`, productInfo);
+            setLoading(true);
+            await axios.post(`${port}/addproduct`, productInfo);
+            setLoading(false);
+            
             alert("Product Added Successfully");
             setProductInfo({
-                userid: loginUserID,
+                // userid: loginUserID,
                 productname: "",
                 productdescription: "",
                 productprice: "",
@@ -51,7 +54,7 @@ const AddProduct = () => {
     };
     
     const [productInfo, setProductInfo] = useState<Product>({
-        userid: loginUserID,
+        // userid: loginUserID,
         productname: "",
         productdescription: "",
         productprice: "",
@@ -108,11 +111,11 @@ const AddProduct = () => {
                     />
                     {/* <input type="" placeholder="Product Category" />
                      */}
-                     <span className="flex justify-between items-center w-full bg-white px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out">
-                         Select Product Category 
+                     <span className="flex justify-between items-center w-full  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out">
+                         {/* Select Product Category  */}
                         <select
                             // className="ml-1 py-2 px-4 border "
-                            className='w-[40%] px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
+                            className='w-full px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out'
                             value={productInfo.productcategory}
                             onChange={e => setProductInfo({ ...productInfo, productcategory: e.target.value })}
                             required
@@ -146,7 +149,10 @@ const AddProduct = () => {
                         </select>
                     </span>
                     <button
-                        className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out'
+                        disabled={loading}
+                        className={`px-4 py-2 rounded-md transition duration-300 ease-in-out ${
+                            loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+                          }`}
                         type="submit">Add Product</button>
                 </form>
             </div>

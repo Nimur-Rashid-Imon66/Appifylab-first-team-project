@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./navbar.css"; // Import your CSS file
 import { OnlineUserContext } from "../App";
+import port from "../Port";
+import axios from "axios";
 
 function NavBar() {
-  const { currentLoginUser, setCurrentLoginUser } =
-    useContext(OnlineUserContext);
-  const handleOnlineId = () => {
+  const { currentLoginUser } =
+    useContext<any>(OnlineUserContext);
+  const handleOnlineId =async () => {
+    await axios.get(`${port}/logout`);
     localStorage.setItem("localhostonlineusesr", JSON.stringify({ id: -1 }));
   };
   return (

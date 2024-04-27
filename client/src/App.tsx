@@ -15,9 +15,9 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
-import Home from "./Home";
 
 export const OnlineUserContext = createContext({});
+export const editProducContext = createContext({});
 
 interface UserData {
   userid?: string;
@@ -26,6 +26,7 @@ interface UserData {
   password: string;
 }
 
+
 const App: React.FC = () => {
   const onlineUserFromLocalHost: UserData = JSON.parse(
     localStorage.getItem("localhostonlineusesr") || "{}"
@@ -33,6 +34,7 @@ const App: React.FC = () => {
   const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
     onlineUserFromLocalHost
   );
+  // const [indpro,setIndpro] = useState<ProductInterface>({} as ProductInterface);
   // const getdata: UserData[] = JSON.parse(
   //   localStorage.getItem("localhostUserData") || "[]"
   // );
@@ -77,9 +79,10 @@ const App: React.FC = () => {
                 path="/addProductCategory"
                 element={<AddProductCategory />}
               />
-              <Route path="/addProduct" element={<AddProduct />} />
               <Route path="/showProducts" element={<ShowProduct />} />
               <Route path="/editProduct/:id" element={<EditProduct />} />
+              <Route path="/addProduct" element={<AddProduct />} />
+              
             </Route>
 
           </Routes>

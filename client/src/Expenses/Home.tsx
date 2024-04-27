@@ -2,48 +2,70 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./home.css";
 import { OnlineUserContext } from "../App";
+import axios from "axios";
 
 interface Expense {
-  id: number;
+  // id: number;
   balance: number;
   history: Transaction[];
 }
 
 interface Transaction {
-  desc: string;
+  description: string;
   amount: number;
   type: string;
 }
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { currentLoginUser, setCurrentLoginUser } =
+  const { currentLoginUser } =
     useContext(OnlineUserContext);
   const loginUserID = currentLoginUser.userid;
-  const [balance, setBalance] = useState<number>(0);
-  const [history, setHistory] = useState<Transaction[]>([]);
-
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const storedExpenses = localStorage.getItem("expenses");
-    return storedExpenses ? JSON.parse(storedExpenses) : [];
+  const [loginUserData, setLoginUserData] = useState<Expense>({
+    // id: 0,
+    balance: 0,
+    history: []
   });
-  console.log(expenses);
-  useEffect(() => {
-    if (expenses.length > 0) {
-      localStorage.setItem("expenses", JSON.stringify(expenses));
-    }
-  }, [expenses]);
 
   useEffect(() => {
-    const loginUserData = expenses.find((user) => loginUserID === user.id);
-    console.log(loginUserData);
-    if (loginUserData) {
-      setBalance(loginUserData.balance);
-      setHistory(loginUserData.history);
-    } else {
-      setExpenses([...expenses, { id: loginUserID, balance: 0, history: [] }]);
-    }
+    const fetchData = async () => {
+      try {
+        const [response1, response2] = await Promise.all([
+          axios.get(`http://localhost:3333/expenseManagement/${loginUserID}`),
+          axios.get(`http://localhost:3333/history/${loginUserID}`)
+        ]);
+        // alert(response1.data)
+        const userData: Expense = {
+          
+          balance: response1.data,
+          history: response2.data
+        };
+        setLoginUserData(userData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [loginUserID]);
+  console.log(loginUserData.history);
+
+  // useEffect(() => {
+  //   if (expenses.length > 0) {
+  //     localStorage.setItem("expenses", JSON.stringify(expenses));
+  //   }
+  // }, [expenses]);
+
+  // useEffect(() => {
+  //   const loginUserData = expenses.find((user) => loginUserID === user.id);
+  //   console.log(loginUserData);
+  //   if (loginUserData) {
+  //     setBalance(loginUserData.balance);
+  //     setHistory(loginUserData.history);
+  //   } else {
+  //     setExpenses([...expenses, { id: loginUserID, balance: 0, history: [] }]);
+  //   }
+  // }, [loginUserID]);
 
   return (
     <div className="container">
@@ -53,7 +75,7 @@ const Home: React.FC = () => {
         </h2>
         <div className="currentBalance">
           <h3 className="bal">Current Balance</h3>
-          <h1>{balance}</h1>
+          <h1>{loginUserData.balance}</h1>
           <h3 className="tk">TK.</h3>
         </div>
         <div className="income-expense">
@@ -78,11 +100,11 @@ const Home: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {history.length > 0 ? (
-                history.map((data, ind) => (
+              {loginUserData.history.length > 0 ? (
+                loginUserData.history.map((data, ind) => (
                   <tr key={ind}>
                     <td>{ind + 1}</td>
-                    <td>{data.desc}</td>
+                    <td>{data.description}</td>
                     <td>{data.type}</td>
                     <td>{data.amount} TK</td>
                   </tr>

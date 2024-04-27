@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
+import port from "../../Port";
 
 interface ProductInterface {
     userid: number;
@@ -18,11 +19,12 @@ interface ProductProps {
 }
 
 
-const Product: React.FC<ProductProps> = ({ product,products,setProducts }) => {
+const Product: React.FC<ProductProps> = ({ product, products, setProducts }) => {
     const handleDelete = async() => {
-        await axios.post(`http://127.0.0.1:3333/deleteproduct/${product.prouductid}`)
+        await axios.post(`${port}/deleteproduct/${product.prouductid}`)
         setProducts(products.filter((p)=>p.prouductid!==product.prouductid))
     }
+    
     return (
         <tr>
             <td className="border p-2 border-black ">{product.productname}</td>
@@ -34,8 +36,9 @@ const Product: React.FC<ProductProps> = ({ product,products,setProducts }) => {
                 <Link
                     className="bg-green-400 p-1 rounded"
                     to={{ pathname: `/editProduct/${product.prouductid}` }}
+                    state={{product:product}}
                 >
-                    Edit
+                    Edit 
                 </Link>
                 <button
                     className="bg-red-400 p-1 rounded"
