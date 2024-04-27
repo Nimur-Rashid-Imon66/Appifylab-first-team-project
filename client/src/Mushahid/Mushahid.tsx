@@ -26,15 +26,15 @@ function Mushahid() {
   const { currentLoginUser, setCurrentLoginUser } = useContext(OnlineUserContext);
   
   const [showBlogs, setShowBlogs] = useState(true);
-  const [showBlogInputBox, setShowBlogInputBox] = useState(false);
-  const [blogTitel, setBlogTitel] = useState();
-  const [postBody, setPostBody] = useState();
+  const [showBlogInputBox, setShowBlogInputBox] = useState<boolean>(false);
+  const [blogTitel, setBlogTitel] = useState<string>();
+  const [postBody, setPostBody] = useState<string>();
 
-  const storeTitle = (event) => {
+  const storeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBlogTitel(event.target.value);
   };
 
-  const storePost = (event) => {
+  const storePost = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostBody(event.target.value);
   };
 
@@ -50,21 +50,28 @@ function Mushahid() {
       author: currentLoginUser.username,
     };
 
-    const Title = (newPost.title).trim();
-    const Body = (newPost.description).trim();
+    const Title = newPost.title.trim();
+    const Body = newPost.description.trim();
 
     if (Title.length == 0 || Body.length == 0) {
       alert('Titel and Body cannot be null or empty');
       return;
     }
     setIsLoading(true);
-    await axios.post("http://localhost:3333/blog/post", {
+
+    try {
+      await axios.post("http://localhost:3333/blog/post", {
       title: newPost.title,
       description: newPost.description,
       author: newPost.author
     });
-    blogPosts.unshift(newPost)
+    blogPosts.unshift(newPost);
     setBlogPosts(blogPosts);
+      
+    } catch {
+      alert('something went wrong');
+    }
+    
 
     setPostBody("");
     setBlogTitel("");
@@ -73,31 +80,38 @@ function Mushahid() {
     setIsLoading(false);
   }
 
-  async function remove(id, author, indx) {
+  async function remove(id: number, author: string, indx: number) {
     if (author != currentLoginUser.username) {
       alert("Only author can delete the post");
       return;
     }
     else {
       setIsLoading(true);
-      await axios.post(`http://localhost:3333/blog/${id}/delete`);
+      try {
+
+        await axios.post(`http://localhost:3333/blog/${id}/delete`);
       
       const newArray = blogPosts.filter((_, index) => index !== indx);
       setBlogPosts(newArray);
+        
+      } catch {
+        alert('Something went wrong');
+      }
+      
       setIsLoading(false);
     }
   }
   
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editId, setEditId] = useState(null);
-  const [editValue, setEditValue] = useState("");
-  const [editPostId, setEditPostId] = useState(null);
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState<string>("");
+  const [editPostId, setEditPostId] = useState<number | null >(null);
 
-  const storeEdit = (event) => {
+  const storeEdit = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditValue(event.target.value);
   };
 
-  function edit(indx, author, value, id) {
+  function edit(indx: number, author: string, value: string, id: number) {
     if (author != currentLoginUser.username) {
       alert("Only author can edit the post");
       return;
@@ -122,9 +136,14 @@ function Mushahid() {
       return;
     }
     setIsLoading(true);
-    await axios.post(`http://localhost:3333/blog/${editPostId}/edit`, { description: editValue })
+    try {
+      await axios.post(`http://localhost:3333/blog/${editPostId}/edit`, { description: editValue })
     blogPosts[editId].description = editValue;
     setBlogPosts(blogPosts)
+    }catch{
+      alert('SomeThing went wrong');
+    }
+    
     setOpenEdit(false);
     setEditId(null);
     setEditValue('');

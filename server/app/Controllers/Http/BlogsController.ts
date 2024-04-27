@@ -12,7 +12,7 @@ export default class BlogsController {
 
     }
 
-    public async store({ request, response }: HttpContextContract) {
+    public async store({ request }: HttpContextContract) {
 
         const newPostSchema = schema.create({
             title: schema.string(),
@@ -68,7 +68,7 @@ export default class BlogsController {
 
     }
 
-    public async destroy({ response, params }: HttpContextContract) {
+    public async destroy({  params }: HttpContextContract) {
 
         const data = await Blog.find(params.id);
         data?.delete();
