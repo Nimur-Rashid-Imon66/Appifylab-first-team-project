@@ -12,6 +12,7 @@ import port from '../../Port';
 // }
 const AddProductCategory = () => {
     // let category:categoryInterface[] = [];
+    const token = JSON.parse(localStorage.getItem("token"));
     const { currentLoginUser } = useContext<any>(OnlineUserContext);
     const loginUserID = currentLoginUser.userid
     const [categoryInfo, setCategoryInfo] = useState({
@@ -23,7 +24,14 @@ const AddProductCategory = () => {
     const addCategory = async () => {
         try {
             setLoading(true);
-            await axios.post(`${port}/addcategory`, categoryInfo);
+            await axios.post(`${port}/addcategory`, categoryInfo,
+                {
+                    headers: {
+                    Authorization: `Bearer ${token.token}`,
+                    "Content-Type": "application/json",
+                    },
+                }
+            );
             setLoading(false);
             alert("Category added successfully");
             setCategoryInfo({

@@ -15,22 +15,34 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
+import Home from "./Home";
+import PrivateRoutingLog from "./Authentication/PrivateRoutingLog";
 
 export const OnlineUserContext = createContext({});
 export const editProducContext = createContext({});
 
 interface UserData {
   userid?: string;
-  username: string;
-  email: string;
-  password: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  id?: number;
 }
 
-
 const App: React.FC = () => {
-  const onlineUserFromLocalHost: UserData = JSON.parse(
-    localStorage.getItem("localhostonlineusesr") || "{}"
-  );
+  const storedData = localStorage.getItem("localhostonlineusesr");
+  let onlineUserFromLocalHost: UserData;
+
+  if (storedData) {
+    try {
+      onlineUserFromLocalHost = JSON.parse(storedData);
+    } catch (error) {
+      //  console.error("Error parsing JSON:", error);
+      onlineUserFromLocalHost = { id: -1 };
+    }
+  } else {
+    onlineUserFromLocalHost = { id: -1 };
+  }
   const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
     onlineUserFromLocalHost
   );
@@ -62,9 +74,10 @@ const App: React.FC = () => {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route path="/registration" element={<UserRegistration />} />
-            <Route path="/login" element={<UserLogIn />} />
-
+            <Route element={<PrivateRoutingLog />}>
+              <Route path="/registration" element={<UserRegistration />} />
+              <Route path="/login" element={<UserLogIn />} />
+            </Route>
             <Route path="/" element={<PrivateRouting />}>
               <Route path="/expense-management" element={<ExpenseHome />} />
               <Route path="/income" element={<Income />} />
@@ -72,7 +85,6 @@ const App: React.FC = () => {
               {/* <Route path="/ahsan" element={<Ahsan />} /> */}
               <Route path="/mushahid" element={<Mushahid />} />
 
-              <Route path="/mainpage" element={<Mainpage />} />
               <Route path="/todoapps" element={<TodoApps />} />
               <Route path="/todoLists" element={<TodoLists />} />
               <Route
@@ -81,10 +93,9 @@ const App: React.FC = () => {
               />
               <Route path="/showProducts" element={<ShowProduct />} />
               <Route path="/editProduct/:id" element={<EditProduct />} />
-              <Route path="/addProduct" element={<AddProduct />} />
-              
-            </Route>
 
+              <Route path="/" element={<Mainpage />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>
