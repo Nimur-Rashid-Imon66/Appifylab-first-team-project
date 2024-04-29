@@ -2,9 +2,11 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProductCategory from 'App/Models/ProductCategory'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
-
+import obj from '../../../start/routes'
 export default class ProductCategoriesController {
+
   public async index({ request, response }: HttpContextContract) {
+    return obj;
     const id = request.param('id')
     const categories =await ProductCategory.query().where('userid', id)
     return response.json({categories})

@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Product from 'App/Models/Product';
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import ProductCategory from 'App/Models/ProductCategory';
 
 export default class ProductsController {
   public async index({ request,response }: HttpContextContract) {
