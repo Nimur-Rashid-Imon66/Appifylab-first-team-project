@@ -7,25 +7,18 @@ Route.get("/", async () => {
 
 Route.post('/register', 'AuthController.register');
 Route.post('/login', 'AuthController.login');
+Route.post('/logout', 'AuthController.logout').middleware('auth:api');
 Route.post('/logininfo', 'AuthController.logininfo').middleware('auth:api')
 
 
-// Route.get('/todos', 'TodosController.index');
-// Route.get('/todos/:id', 'TodosController.show');
-// Route.post('/todos', 'TodosController.store');
-// Route.post('/todos/:id/update', 'TodosController.update');
-// Route.post('/todos/:id/delete', 'TodosController.destroy');
 
-// Route.get('/todos/:userid', 'TodosController.index').middleware('auth:api');
-Route.get('/todos/:userid', 'TodosController.index')
-Route.get('/todos/:id', 'TodosController.show');
-Route.post('/todos', 'TodosController.store');
-Route.post('/todos/:id/update', 'TodosController.update');
-Route.post('/todos/:id/delete', 'TodosController.destroy');
+Route.get('/todos', 'TodosController.index').middleware('auth:api')
+Route.post('/todos', 'TodosController.store').middleware('auth:api')
+Route.post('/todos/:id/update', 'TodosController.update').middleware('auth:api')
+Route.post('/todos/:id/delete', 'TodosController.destroy').middleware('auth:api')
 
 
 
-Route.get('/av', 'ProductCategoriesController.index');
 
 
 
@@ -39,5 +32,3 @@ Route.get('/av', 'ProductCategoriesController.index');
 // }
 
 
-// Authorization
-// Bearer MTQ.sB1V_dNfVGzhB8jIU3C07A5A6_XM1MtFirqgyLM06o9a7LPt9ZTDdx1dpyTD

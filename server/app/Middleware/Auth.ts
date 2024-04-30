@@ -60,6 +60,7 @@ export default class AuthMiddleware {
    * Handle request
    */
   public async handle ({ auth }: HttpContextContract, next: () => Promise<void>, customGuards: string[]) {
+    console.log('auth emon ',auth);
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file

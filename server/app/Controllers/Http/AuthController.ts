@@ -44,6 +44,15 @@ export default class AuthController {
       return response.status(401).json({ message: 'Invalid credentials' })
     }
   }
+  
+
+  public async logout ({ auth, response }: HttpContextContract) {
+    // return 'click  log out ';
+      await auth.use("api").revoke();
+      return  'logout done '
+    
+
+  }
   public async logininfo ({ auth, response }: HttpContextContract) {
     console.log(auth)
     return auth.user
