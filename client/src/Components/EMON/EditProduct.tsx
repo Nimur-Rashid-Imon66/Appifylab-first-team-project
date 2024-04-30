@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { OnlineUserContext } from "../../App";
+import { OnlineUserContext, useCategoryContext } from "../../App";
 import axios from "axios";
 import port from '../../Port'
 
@@ -14,19 +14,24 @@ interface indProductInterface {
   productstatus: string
 }
 
-interface categoryInterface {
-    userid: number;
-    categoryname: string;
-    categorydescription: string;
-}
+// interface categoryInterface {
+//     // userid: number;
+//     categoryname: string;
+//     // categorydescription: string;
+// }
 
 
-const EditProduct: React.FC = ({}) => {
+const EditProduct: React.FC = ({ }) => {
+  let temp = localStorage.getItem("token")
+  let token: {token:string};
+  if (temp) token = JSON.parse(temp);
+  else return <h1 className="text-3xl ">No user data found</h1>;
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentLoginUser } = useContext<any>(OnlineUserContext);
   const loginUserID = currentLoginUser.userid;
-  const [category, setCategory] = useState<categoryInterface[]>([]);
+  const {category, setCategory} = useCategoryContext();
   const [productInfo, setProductInfo] = useState<indProductInterface>(
     {} as indProductInterface
   );
@@ -34,12 +39,26 @@ const EditProduct: React.FC = ({}) => {
   const location  = useLocation();
 
   const fatcData = async () => {
-    setLoading(true);
-    await axios.get(`${port}/category/${loginUserID}`)
-              .then((e) => {
-              setCategory(e.data.categories);
+    if(category.length <=0)
+    {
+        setLoading(true);
+        try {
+            const res = await axios.get(`${port}/category/${loginUserID}`, {
+                headers: {
+                    Authorization: `Bearer ${token.token}`,
+                    "Content-Type": "application/json",
+                }
             })
-    setLoading(false);
+            setCategory(res.data.categories);
+            localStorage.setItem("category", JSON.stringify(res.data.categories));
+        } catch (error) {
+            alert("Something went wrong finding the category")
+        }finally {
+            setLoading(false);
+        }
+    }
+
+   
   }
   const handleSubmit =async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +73,18 @@ const EditProduct: React.FC = ({}) => {
       return;
     }
     setLoading(true);
-    await axios.post(`${port}/editproduct/${id}`, productInfo)
-    setLoading(false);
+    try {
+      await axios.post(`${port}/editproduct/${id}`, productInfo,{
+        headers: {
+            Authorization: `Bearer ${token.token}`,
+            "Content-Type": "application/json",
+        }
+    })
+    } catch (error) {
+      console.error("Error updating product:", error);
+    } finally {
+      setLoading(false);
+    }
     alert("Product Update Successfully");
     navigate("/showProducts");
   };

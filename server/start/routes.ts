@@ -33,7 +33,7 @@ Route.post("/profile", "UsersController.index").middleware('auth:api')
 Route.get("/usersget", "UsersController.alluserget");
 Route.post("/usersset", "UsersController.alluserset");
 Route.post("/login", "UsersController.login");
-Route.post("/logout", async ({ auth, response }) => {
+Route.post("/logout", async ({ auth }) => {
   await auth.use("api").revoke();
   return {
     revoked: true,
@@ -41,7 +41,6 @@ Route.post("/logout", async ({ auth, response }) => {
 });
 // Route.post("/logout", "AuthController.logout");
 
-// Route.get("profile", "ProfileController.index")
 
 // ----------------------------falak start------------------------
 Route.get("/todos", "TodosController.index");

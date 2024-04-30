@@ -66,14 +66,17 @@ export default class AuthMiddleware {
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
+  
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file
      */
     
     const guards = customGuards.length ? customGuards : [auth.name]
+    // console.log("🚀 ~ AuthMiddleware ~ guards:", guards)
     // console.log('sdflkf')
-    await this.authenticate(auth, guards)
+    const temp = await this.authenticate(auth, guards)
+    console.log("🚀 ~ AuthMiddleware ~ temp:", temp)
     
     await next()
   }

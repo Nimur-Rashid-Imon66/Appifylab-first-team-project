@@ -12,7 +12,7 @@ export default class ProductCategoriesController {
     if (check) {
       const id = parseInt(request.param('id'))
       if (typeof id !== 'number') return response.status(404).json({ message: 'Invalid user id' });
-      const categories = (await ProductCategory.query().where('userid', id).select('categoryid', 'userid', 'categoryname', 'categorydescription'));
+      const categories = (await ProductCategory.query().where('userid', id).select('categoryname'));
       return response.json({ categories })
     }
     return response.status(404).json({ message: 'Please login first' });
@@ -56,9 +56,6 @@ export default class ProductCategoriesController {
       }
     }
     return response.status(404).json({ message: 'Please login first' });
-
-
-
   }
   public async create({}: HttpContextContract) {}
 

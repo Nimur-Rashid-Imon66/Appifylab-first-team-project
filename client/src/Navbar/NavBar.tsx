@@ -1,15 +1,24 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./navbar.css"; // Import your CSS file
 import { OnlineUserContext } from "../App";
 import axios from "axios";
 
-function NavBar() {
-  const [logout, setLogout] = useState(true);
-  const { currentLoginUser, setCurrentLoginUser } =
-    useContext(OnlineUserContext);
+// interface UserData {
+//   userid?: string;
+//   username?: string;
+//   email?: string;
+//   password?: string;
+//   id?: number;
+// }
 
-  const token = JSON.parse(localStorage.getItem("token"));
+function NavBar() {
+  const { currentLoginUser } = useContext<any>(OnlineUserContext);
+
+  let tempTkn = localStorage.getItem("token")
+  let token: {token:string};
+  if (tempTkn) token = JSON.parse(tempTkn);
+  
   const handleOnlineId = async () => {
     localStorage.setItem("localhostonlineusesr", JSON.stringify({ id: -1 }));
     await axios.post(
@@ -23,6 +32,7 @@ function NavBar() {
       }
     );
     localStorage.removeItem("token");
+    localStorage.removeItem("category");
     window.location.reload();
   };
   return (

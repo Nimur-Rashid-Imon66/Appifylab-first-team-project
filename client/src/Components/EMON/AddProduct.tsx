@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { OnlineUserContext } from '../../App';
+import { OnlineUserContext, useCategoryContext } from '../../App';
 import axios from 'axios';
 import port from '../../Port';
 interface Product {
@@ -11,34 +11,54 @@ interface Product {
     productstatus: string;
 }
 
-interface categoryInterface {
-    userid: number;
-    categoryname: string;
-    categorydescription: string;
-}
+// interface categoryInterface {
+//     categoryname: string;
+// }
 
 
 const AddProduct = () => {
-    const [category, setCategory] = useState<categoryInterface[]>([]);
+    let temp = localStorage.getItem("token")
+    let token: {token:string};
+    if (temp) token = JSON.parse(temp);
+    else return <h1 className="text-3xl ">No user data find</h1>;;
+    
+    // const [category, setCategory] = useState<categoryInterface[]>([]);
+    const {category, setCategory} = useCategoryContext();
     const [loading,setLoading] = useState<boolean>(false);
     const { currentLoginUser } = useContext<any>(OnlineUserContext);
     const loginUserID = currentLoginUser.userid
 
     const fatcData = async () => {
-        await axios
-            .get(`${port}/category/${loginUserID}`)
-            .then((e) => {
-                // console.log(e.data.categories)
-                setCategory(e.data.categories);
-            })
+        if(category.length <=0 )
+        {
+            console.log("category adding");
+            setLoading(true);
+            try {
+                const res = await axios.get(`${port}/category/${loginUserID}`, {
+                    headers: {
+                        Authorization: `Bearer ${token.token}`,
+                        "Content-Type": "application/json",
+                    }
+                })
+                setCategory(res.data.categories);
+                localStorage.setItem("category", JSON.stringify(res.data.categories));
+            } catch (error) {
+                alert("Something went wrong finding the category")
+            }finally {
+                setLoading(false);
+            }
+        }
     }
     const addProduct = async () => {
         try {
             console.log(productInfo);
             setLoading(true);
-            await axios.post(`${port}/addproduct`, productInfo);
-            setLoading(false);
-            
+            await axios.post(`${port}/addproduct`, productInfo, {
+                headers: {
+                Authorization: `Bearer ${token.token}`,
+                "Content-Type": "application/json",
+                },
+            });
             alert("Product Added Successfully");
             setProductInfo({
                 // userid: loginUserID,
@@ -50,6 +70,9 @@ const AddProduct = () => {
             });
         } catch (error) {
             console.error("Error adding product:", error);
+        }
+        finally {
+            setLoading(false);
         }
     };
     
@@ -123,7 +146,7 @@ const AddProduct = () => {
                         >
                             <option value="">Select Category </option>
                             {
-                                category.map((item,idx) => {
+                                category?.map((item,idx) => {
                                     return <option key={idx}
                                         value={`${item.categoryname}`}
                                         className='text-black'

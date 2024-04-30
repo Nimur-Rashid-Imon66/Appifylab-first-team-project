@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Income from "./Expenses/Income";
 import Expense from "./Expenses/Expense";
@@ -15,11 +15,25 @@ import ShowProduct from "./Components/EMON/ShowProduct";
 import EditProduct from "./Components/EMON/EditProduct";
 import NavBar from "./Navbar/NavBar";
 import PrivateRouting from "./Authentication/PrivateRouting";
-import Home from "./Home";
 import PrivateRoutingLog from "./Authentication/PrivateRoutingLog";
+import ModalParent from "./Components/Modal Practice/ModalParent";
+
+
+export interface categoryInterface {
+  categoryname: string;
+}
+interface categoryContextInterface {  
+  category: categoryInterface[] ;
+  setCategory: React.Dispatch<React.SetStateAction<categoryInterface[]>>
+}
 
 export const OnlineUserContext = createContext({});
-export const editProducContext = createContext({});
+const categoryContext = createContext<categoryContextInterface>({category:[],setCategory:()=>{}});
+
+export function useCategoryContext() {
+  const category = useContext(categoryContext);
+  return category;
+}
 
 interface UserData {
   userid?: string;
@@ -43,9 +57,8 @@ const App: React.FC = () => {
   } else {
     onlineUserFromLocalHost = { id: -1 };
   }
-  const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
-    onlineUserFromLocalHost
-  );
+  const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(onlineUserFromLocalHost);
+  const [category, setCategory] = useState<categoryInterface[]>([]);
   // const [indpro,setIndpro] = useState<ProductInterface>({} as ProductInterface);
   // const getdata: UserData[] = JSON.parse(
   //   localStorage.getItem("localhostUserData") || "[]"
@@ -71,6 +84,7 @@ const App: React.FC = () => {
       <OnlineUserContext.Provider
         value={{ currentLoginUser, setCurrentLoginUser }}
       >
+      <categoryContext.Provider value={{category,setCategory}}>
         <BrowserRouter>
           <NavBar />
           <Routes>
@@ -87,17 +101,19 @@ const App: React.FC = () => {
 
               <Route path="/todoapps" element={<TodoApps />} />
               <Route path="/todoLists" element={<TodoLists />} />
-              <Route
-                path="/addProductCategory"
-                element={<AddProductCategory />}
-              />
-              <Route path="/showProducts" element={<ShowProduct />} />
-              <Route path="/editProduct/:id" element={<EditProduct />} />
+             
+                <Route path="/addProductCategory" element={<AddProductCategory />}/>
+                <Route path="/addProduct" element={<AddProduct />} />
+                <Route path="/showProducts" element={<ShowProduct />} />
+                <Route path="/editProduct/:id" element={<EditProduct />} />
+                <Route path="/modal" element={<ModalParent />} />
+              
 
               <Route path="/" element={<Mainpage />} />
             </Route>
           </Routes>
         </BrowserRouter>
+      </categoryContext.Provider>
       </OnlineUserContext.Provider>
     </>
   );

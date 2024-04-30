@@ -1,18 +1,24 @@
-import React, { useContext, useState } from 'react';
-import { OnlineUserContext } from '../../App';
+import React, { useContext, useEffect, useState } from 'react';
+import { OnlineUserContext, useCategoryContext } from '../../App';
 import axios from 'axios';
 import port from '../../Port';
 
-
-
 // interface categoryInterface {
-//     userid: number;
 //     categoryname: string;
-//     categorydescription: string;
 // }
 const AddProductCategory = () => {
     // let category:categoryInterface[] = [];
-    const token = JSON.parse(localStorage.getItem("token"));
+    let tempTkn = localStorage.getItem("token")
+    let token: {token:string};
+    if (tempTkn) token = JSON.parse(tempTkn);
+    else return <h1 className="text-3xl ">No user data find</h1>;
+
+    // let tempCat :string|null = localStorage.getItem("category");
+    // let category:categoryInterface[];
+    // if (tempCat) category = JSON.parse(tempCat);
+    // else category = [];
+    const {category, setCategory} = useCategoryContext();
+ 
     const { currentLoginUser } = useContext<any>(OnlineUserContext);
     const loginUserID = currentLoginUser.userid
     const [categoryInfo, setCategoryInfo] = useState({
@@ -21,9 +27,29 @@ const AddProductCategory = () => {
         categorydescription: ""
     });
     const [loading, setLoading] = useState<boolean>(false);
-    const addCategory = async () => {
-        try {
+    const fatcData = async () => {
+        if(category.length <=0 )
+        {
             setLoading(true);
+            try {
+                const res = await axios.get(`${port}/category/${loginUserID}`, {
+                    headers: {
+                        Authorization: `Bearer ${token.token}`,
+                        "Content-Type": "application/json",
+                    }
+                })
+                setCategory(res.data.categories);
+                localStorage.setItem("category", JSON.stringify(res.data.categories));
+            } catch (error) {
+                alert("Something went wrong finding the category")
+            }finally {
+                setLoading(false);
+            }
+        }
+    }
+    const addCategory = async () => {
+        setLoading(true);
+        try {
             await axios.post(`${port}/addcategory`, categoryInfo,
                 {
                     headers: {
@@ -33,6 +59,9 @@ const AddProductCategory = () => {
                 }
             );
             setLoading(false);
+            category.push({ categoryname: categoryInfo.categoryname });
+            setCategory(category);
+            localStorage.setItem("category", JSON.stringify(category));
             alert("Category added successfully");
             setCategoryInfo({
                 userid: loginUserID,
@@ -41,6 +70,9 @@ const AddProductCategory = () => {
             })
         } catch (error: any) {
             alert( error.response.data.message);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -53,6 +85,9 @@ const AddProductCategory = () => {
         await addCategory();
         
     }
+    useEffect(() => { 
+        fatcData();
+    } , []);
     return (
         <div className='flex flex-col min-w-[100vw] min-h-[100vh] items-center justify-center'>
             <h1 className='text-xl md:text-2xl font-semibold p-4 border rounded-t-lg  min-w-[50vw]'>Add Product Category </h1>

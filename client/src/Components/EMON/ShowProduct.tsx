@@ -17,6 +17,12 @@ interface ProductInterface {
 
 
 const ShowProduct = () => {
+    
+    let temp = localStorage.getItem("token")
+    let token: {token:string};
+    if (temp) token = JSON.parse(temp);
+    else return <h1 className="text-3xl ">No user data find</h1>;
+
     const { currentLoginUser } = useContext<any>(OnlineUserContext);
     console.log(currentLoginUser);
     const loginUserID = currentLoginUser.userid
@@ -28,7 +34,12 @@ const ShowProduct = () => {
         try {
             setLoading(true);
             await axios
-            .get(`${port}/product/${loginUserID}`)
+            .get(`${port}/product/${loginUserID}`,{
+                headers: {
+                    Authorization: `Bearer ${token.token}`,
+                    "Content-Type": "application/json",
+                }
+            })
             .then((e) => {
                 console.log(e.data.products)
                 setProducts(e.data.products);
