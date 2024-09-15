@@ -14,20 +14,20 @@ interface UserData {
 const UserRegistration: React.FC = () => {
   const navigate = useNavigate();
   // const [users, setUser] = useState([]);
-  let users: [];
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
   const [password, setPassword] = useState<string>("");
-  const fetchData = async () => {
-    await axios
-      .get("http://127.0.0.1:3333/usersget")
-      .then((e) => (users = e.data));
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsValidEmail(emailRegex.test(event.target.value));
   };
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,17 +36,36 @@ const UserRegistration: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
     const formData = {
       username,
       email,
       password,
     };
-    await fetchData();
-    const isUserExist = users.filter((e: UserData) => e.email == email);
-    if (!isUserExist.length && username && password) {
-      await axios.post("http://127.0.0.1:3333/usersset", formData);
-      navigate("/login");
-    } else alert("email exist");
+    if (isValidEmail) {
+      try {
+        const isUserExist = await axios.post(
+          "http://127.0.0.1:3333/usersset",
+          formData
+        );
+
+        setLoading(false);
+        if (!Object.keys(isUserExist.data).length) {
+          navigate("/login");
+        } else {
+          alert("email exist");
+          setLoading(false);
+        }
+      } catch (e) {
+        // console.error("Login failed:", error.message);
+        setError("Registration failed. Please try again.");
+        setLoading(false);
+      }
+    } else {
+      setError("Email invalid");
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,8 +100,12 @@ const UserRegistration: React.FC = () => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          Register
+        </button>
       </form>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       Already have an account? <Link to="/login">Log In</Link>
     </div>
   );

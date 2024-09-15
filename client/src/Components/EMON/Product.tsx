@@ -1,47 +1,45 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 interface ProductInterface {
-    loginUserID: string;
-    productId: string;
-    productName: string;
-    productDescription: string;
-    productPrice: number;
-    productCategory: string;
-    productStatus: string;
+    userid: number;
+    prouductid: number;
+    productname: string;
+    productdescription: string;
+    productprice: number;
+    productcategory: string;
+    productstatus: string;
 }
 
 interface ProductProps {
     product: ProductInterface;
     products: ProductInterface[];
-    setPorducts:React.Dispatch<React.SetStateAction<ProductInterface[]>>
+    setProducts:React.Dispatch<React.SetStateAction<ProductInterface[]>>
 }
-const Product:React.FC<ProductProps> = ({ product,products,setPorducts}) => {
+
+
+const Product: React.FC<ProductProps> = ({ product,products,setProducts }) => {
+    const handleDelete = async() => {
+        await axios.post(`http://127.0.0.1:3333/deleteproduct/${product.prouductid}`)
+        setProducts(products.filter((p)=>p.prouductid!==product.prouductid))
+    }
     return (
         <tr>
-            <td className="border p-2 border-black ">{product.productName}</td>
-            <td className="border p-2 border-black ">{product.productDescription}</td>
-            <td className="border p-2 border-black ">{product.productPrice}</td>
-            <td className="border p-2 border-black ">{product.productCategory}</td>
-            <td className="border p-2 border-black ">{product.productStatus}</td>
+            <td className="border p-2 border-black ">{product.productname}</td>
+            <td className="border p-2 border-black ">{product.productdescription}</td>
+            <td className="border p-2 border-black ">{product.productprice}</td>
+            <td className="border p-2 border-black ">{product.productcategory}</td>
+            <td className="border p-2 border-black ">{product.productstatus}</td>
             <td className="border p-2 border-black flex gap-2" >
                 <Link
-                    // to={{ pathname: '/editProduct', state: { porduct: product } }}
                     className="bg-green-400 p-1 rounded"
-                    // params={{ product: product }}
-                    // Add the 'state' property to the type of the 'to' prop
-                    // by updating the 'LinkProps' interface
-                    to={{ pathname: `/editProduct/${product.productId}` }}
+                    to={{ pathname: `/editProduct/${product.prouductid}` }}
                 >
                     Edit
                 </Link>
                 <button
                     className="bg-red-400 p-1 rounded"
-                    onClick={() => {
-                        console.log(product.productId);
-                        const newProducts = products.filter((item) => item.productId !== product.productId);
-                        console.log(newProducts);
-                        setPorducts(newProducts);
-                    }}
+                    onClick={handleDelete}
                 >
                     Delete</button>
             </td>

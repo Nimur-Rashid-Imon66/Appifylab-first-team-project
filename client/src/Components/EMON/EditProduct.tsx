@@ -2,22 +2,35 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import uniqid from "uniqid";
 import { OnlineUserContext } from "../../App";
+import axios from "axios";
 
-interface ProductInterface {
-  loginUserID: string;
-  productId: string;
-  productName: string;
-  productDescription: string;
-  productPrice: number;
-  productCategory: string;
-  productStatus: string;
+  interface ProductInterface {
+    userid: number;
+    prouductid: number;
+    productname: string;
+    productdescription: string;
+    productprice: number|"";
+    productcategory: string;
+    productstatus: string;
+
+}
+
+interface indProductInterface {
+  prouductid: number,
+  userid: number,
+  productname: string,
+  productdescription:string,
+  productprice: number,
+  productcategory: string,
+  productstatus: string
 }
 
 interface categoryInterface {
-  loginUserID: string;
-  categoryName: string;
-  categoryDescription: string;
+    userid: number;
+    categoryname: string;
+    categorydescription: string;
 }
+
 
 const EditProduct: React.FC = ({}) => {
   const { id } = useParams();
@@ -26,97 +39,47 @@ const EditProduct: React.FC = ({}) => {
     useContext(OnlineUserContext);
   console.log(currentLoginUser);
   const loginUserID = currentLoginUser.userid;
+  const [category, setCategory] = useState<categoryInterface[]>([]);
+  const [productInfo, setProductInfo] = useState<indProductInterface>({});
 
-  const getCategory = () => {
-    let data = localStorage.getItem("productCategory");
-    if (data) {
-      let newData = JSON.parse(data);
-      return (newData = newData.filter(
-        (item: { loginUserID: string }) => item.loginUserID === loginUserID
-      ));
-    } else return [];
-  };
-  const getProduct = () => {
-    let data = localStorage.getItem("products");
-    if (data) {
-      return JSON.parse(data);
-    } else return [];
-  };
-  const [products, setProducts] = useState<ProductInterface[]>(getProduct());
-  const [productCategory, setProductCategory] = useState<
-    categoryInterface[] | []
-  >(getCategory()); // product category info coming from user product list
-
-  const getIndividualProduct = (id: string) => {
-    console.log(id, 1);
-    if (products && id) {
-      const x = products.find(
-        (product: ProductInterface) => product.productId === id
-      );
-      return x;
-    } else
-      return {
-        loginUserID: loginUserID,
-        productId: uniqid(),
-        productName: "",
-        productDescription: "",
-        productPrice: 0,
-        productCategory: "",
-        productStatus: "In Stock",
-      };
-  };
-  const [productInfo, setProductInfo] = useState<ProductInterface>({
-    loginUserID: loginUserID,
-    productId: uniqid(),
-    productName: "",
-    productDescription: "",
-    productPrice: 0,
-    productCategory: "",
-    productStatus: "In Stock",
-  });
-  const handleSubmit = (e: React.FormEvent) => {
+  const fatcData = async () => {
+    await axios
+        .get(`http://127.0.0.1:3333/category/${loginUserID}`)
+        .then((e) => {
+            console.log(e.data.categories)
+            setCategory(e.data.categories);
+        })
+  }
+  const individualProductData = async () => {
+    await axios
+    .get(`http://127.0.0.1:3333/indproduct/${id}`)
+    .then((e:any) => {
+      console.log(e.data.product[0])
+      setProductInfo(e.data.product[0])
+    })
+  }
+  const handleSubmit =async (e: React.FormEvent) => {
     e.preventDefault();
     if (
-      productInfo.productName === "" ||
-      productInfo.productDescription === "" ||
-      productInfo.productPrice === 0 ||
-      productInfo.productCategory === "" ||
-      productInfo.productStatus === ""
+      productInfo.productname === "" ||
+      productInfo.productdescription === "" ||
+      productInfo.productprice === 0 ||
+      productInfo.productcategory === "" ||
+      productInfo.productstatus === ""
     ) {
       alert("Please fill all the fields");
       return;
     }
-    const newProducts = products.filter(
-      (product: ProductInterface) => product.productId !== id
-    );
-    // setProducts([...newProducts, productInfo]);
-    newProducts.push(productInfo);
 
-    localStorage.setItem("products", JSON.stringify(newProducts));
-    setProductInfo({
-      loginUserID: loginUserID,
-      productId: "",
-      productName: "",
-      productDescription: "",
-      productPrice: 0,
-      productCategory: "",
-      productStatus: "In Stock",
-    });
-    navigate("/showProducts");
+    await axios.post(`http://127.0.0.1:3333/editproduct/${id}`,productInfo)
     alert("Product Update Successfully");
+    navigate("/showProducts");
   };
 
   useEffect(() => {
-    console.log(id);
-    const x: ProductInterface = getIndividualProduct(id);
-    console.log(x);
-    if (x) setProductInfo(x);
-  }, []);
-
-  useEffect(() => {
-    console.log('prduce',products);
-    localStorage.setItem("products", JSON.stringify(products));
-  }, [products]);
+    fatcData();
+    individualProductData();
+}, []);
   return (
     <div className="flex items-center justify-center ">
       <div className="flex flex-col min-w-[40vw]">
@@ -129,9 +92,9 @@ const EditProduct: React.FC = ({}) => {
             className="w-full px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"
             type="text"
             placeholder="Product Name"
-            value={productInfo.productName}
+            value={productInfo.productname}
             onChange={(e) =>
-              setProductInfo({ ...productInfo, productName: e.target.value })
+              setProductInfo({ ...productInfo, productname: e.target.value })
             }
             required
           />
@@ -139,11 +102,11 @@ const EditProduct: React.FC = ({}) => {
             className="w-full px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"
             type="text"
             placeholder="Product Description"
-            value={productInfo.productDescription}
+            value={productInfo.productdescription}
             onChange={(e) =>
               setProductInfo({
                 ...productInfo,
-                productDescription: e.target.value,
+                productdescription: e.target.value,
               })
             }
             required
@@ -153,11 +116,11 @@ const EditProduct: React.FC = ({}) => {
             type="number"
             min="0"
             placeholder="Product Price"
-            value={productInfo.productPrice}
+            value={productInfo.productprice}
             onChange={(e) =>
               setProductInfo({
                 ...productInfo,
-                productPrice: parseFloat(e.target.value),
+                productprice: parseFloat(e.target.value),
               })
             }
             required
@@ -169,20 +132,20 @@ const EditProduct: React.FC = ({}) => {
             <select
               // className="ml-1 py-2 px-4 border "
               className="w-[40%] px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"
-              value={productInfo.productCategory}
+              value={productInfo.productcategory}
               onChange={(e) =>
                 setProductInfo({
                   ...productInfo,
-                  productCategory: e.target.value,
+                  productcategory: e.target.value,
                 })
               }
               required
             >
               <option value="">Select Category </option>
-              {productCategory.map((item, idx) => {
+              {category.map((item, idx) => {
                 return (
-                  <option key={idx} value={`${item.categoryName}`}>
-                    {item.categoryName}{" "}
+                  <option key={idx} value={`${item.categoryname}`}>
+                    {item.categoryname}{" "}
                   </option>
                 );
               })}
@@ -193,11 +156,11 @@ const EditProduct: React.FC = ({}) => {
             <select
               className="w-[40%] px-1 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"
               // value={userInfo.accountType}
-              value={productInfo.productStatus}
+              value={productInfo.productstatus}
               onChange={(e) =>
                 setProductInfo({
                   ...productInfo,
-                  productStatus: e.target.value,
+                  productstatus: e.target.value,
                 })
               }
               required

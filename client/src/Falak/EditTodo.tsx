@@ -5,10 +5,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 // import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { OnlineUserContext } from "../App";
 
 interface FormData {
-  id: string;
-  userid: string;
+  userid: number;
+  id:number;
   title: string;
   description: string;
   priority: string;
@@ -20,7 +22,8 @@ interface Model2Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setUpdate: React.Dispatch<React.SetStateAction<number>>;
   editTodoId: string;
-  editData: FormData
+  editData: FormData;
+  userid: number;
 }
 
 const EditTodo: React.FC<Model2Props> = ({
@@ -28,8 +31,11 @@ const EditTodo: React.FC<Model2Props> = ({
   setOpen,
   setUpdate,
   editTodoId,
-  editData
+  editData,
+  userid
 }) => {
+  
+  //console.log(userid);
   //console.log("edit TodoId ", editTodoId);
   //   const [editData, setEditData] = React.useState<FormData | null>(null);
 
@@ -45,58 +51,33 @@ const EditTodo: React.FC<Model2Props> = ({
     defaultValues: editData, // Set defaultValues to editData
   });
 
+
+  const { currentLoginUser} = React.useContext(OnlineUserContext);
+
   React.useEffect(() => {
-    console.log('edit  id change sdasdas dsa dsa', editData)
+  //  console.log('edit  id change sdasdas dsa dsa', editData)
     reset(editData)
   }, [editTodoId])
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log('submit data ', data);
-    const todos: FormData[] = JSON.parse(localStorage.getItem("todos") || "[]");
-    console.log(todos);
-    if (todos) {
-      const updatedTodos = todos.map(todo => {
-        if (todo.id == data.id) {
-          // console.log('milse ',todo.id);
-          todo.title = data.title;
-          todo.description = data.description;
-          todo.priority = data.priority;
-          todo.tags = data.tags;
-        }
-        return todo;
-      })
-      console.log('udate map ', updatedTodos);
+     
+    const curTodo = {
+      userid: currentLoginUser.userid,
+      title: data.title,
+      description: data.description,
+      priority: data.priority,
+      tags: data.tags,
+    };
 
-      localStorage.setItem("todos", JSON.stringify(updatedTodos));
-
+    console.log('before hit',curTodo)
+    axios.post(`http://127.0.0.1:3333/todos/${editTodoId}/update`,curTodo)
+    .then(res => console.log('respose ',res))
+    .catch(err => console.log(err))
       setUpdate((pre) => pre + 1);
 
       setOpen(false);
-    }
-
-
-    setOpen(false);
-    return;
-    // const uuid = uuidv4();
-    // const curTodo = {
-    //   userid: "1",
-    //   id: uuid,
-    //   title: data.title,
-    //   description: data.description,
-    //   priority: data.priority,
-    //   tags: data.tags,
-    // };
-    // const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    // console.log(existingTodos);
-
-    // const updatedTodos = [curTodo, ...existingTodos];
-    // console.log(updatedTodos);
-
-    // localStorage.setItem("todos", JSON.stringify(updatedTodos));
-
-    // reset();
-    // setOpen(false);
-    // setUpdate((pre) => pre + 1);
+  
   };
 
   const handleClose = () => {
