@@ -1,57 +1,34 @@
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-|
-| This file is dedicated for defining HTTP routes. A single file is enough
-| for majority of projects, however you can define routes in different
-| files and just make sure to import them inside this file. For example
-|
-| Define routes in following two files
-| ├── start/routes/cart.ts
-| ├── start/routes/customer.ts
-|
-| and then import them inside `start/routes.ts` as follows
-|
-| import './routes/cart'
-| import './routes/customer''
-|
-*/
-
 import Route from "@ioc:Adonis/Core/Route";
 
-Route.get("/", async ({ view }) => {
- 
-  return view.render("welcome");
-});
-Route.get("/users", "UsersController.index");
-Route.get("/usersget", "UsersController.alluserget");
-Route.post("/usersset", "UsersController.alluserset");
-
-Route.post("/login", "UsersController.login");
-// Route.post("/logout", "AuthController.logout");
-
-// Route.get("profile", "ProfileController.index")
- 
-  return 'running '
+Route.get("/", async () => {
+   return 'server is running   🏃 🏃 🏃 🏃 🏃 '
 });
 
 
+Route.post('/register', 'AuthController.register');
+Route.post('/login', 'AuthController.login');
+Route.post('/logout', 'AuthController.logout').middleware('auth:api');
+Route.post('/logininfo', 'AuthController.logininfo').middleware('auth:api')
 
 
-// ----------------------------falak start------------------------
-Route.get('/todos', 'TodosController.index');
-Route.get('/todos/:id', 'TodosController.show');
-Route.post('/todos', 'TodosController.store');
-Route.post('/todos/:id/update', 'TodosController.update');
-Route.post('/todos/:id/delete', 'TodosController.destroy');
-// Route.get('/fusers', 'TodosController.fusers');
-// Route.get('/falak', 'TodosController.falak');
-// ----------------------------falak end ------------------------
 
- 
-  Route.get("/product/:id", "ProductsController.index"); 
-  Route.get("/category/:id", "ProductCategoriesController.index")  
-  Route.post("/addcategory", "ProductCategoriesController.store");
-  Route.post("/addproduct", "ProductsController.store");
- 
+Route.get('/todos', 'TodosController.index').middleware('auth:api')
+Route.post('/todos', 'TodosController.store').middleware('auth:api')
+Route.post('/todos/:id/update', 'TodosController.update').middleware('auth:api')
+Route.post('/todos/:id/delete', 'TodosController.destroy').middleware('auth:api')
+
+
+
+
+
+
+// {
+//   "userid":6,
+//   "title":"check for get  updattttttt.",
+//   "description":"going to study with rohin korim ",
+//   "priority":"Low",
+//   "tags":"activitites"
+
+// }
+
+

@@ -1,94 +1,97 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import Todo from "App/Models/Todo";
-import User from "App/Models/User";
-
+interface FormData {
+  id:string 
+  title: string;
+  description: string;
+  priority: string;
+  tags: string;
+}
 export default class TodosController {
-  public async index({ response }: HttpContextContract) {
-    return "index";
-    const todos = await Todo.all();
+
+  public async index({ request, response ,auth }: HttpContextContract) {
+    const userid=auth.user?.userid
+    if(!userid){
+      return [] ;//some how user id it  bull
+    }
+    const todos = await Todo.query().where('userid', userid)
     return response.json(todos);
   }
 
-  public async store({ request, response }: HttpContextContract) {
-    const validationSchema = schema.create({
-      userid: schema.number(),
-      title: schema.string({}, [rules.required(), rules.maxLength(255)]),
-      description: schema.string({}, [rules.required()]),
-      priority: schema.string(),
-      tags: schema.string({}, [rules.required()]),
-    });
-
-    try {
-      const payload = await request.validate({ schema: validationSchema });
-      //   return payload;
-
-      let todo = new Todo();
-      todo.merge(payload);
-
-      await todo.save();
-      return response.status(200).json({ message: "Todo add successfully", data: todo });
-    } catch (error) {
-      return error;
-    }
-  }
-
   public async show({ params, response }: HttpContextContract) {
-    return "show";
-    const todo = await Todo.findOrFail(params.id);
+    const todo = await Todo.find(params.id);
     return response.json(todo);
   }
 
-  public async update({ params, request, response }: HttpContextContract) {
-    
-    const validationSchema = schema.create({
-      userid: schema.number(),
-      title: schema.string.optional({}, [rules.maxLength(255)]),
-      description: schema.string.optional(),
-      priority: schema.string.optional(),
-      tags: schema.string.optional(),
-    });
-
-
-    try {
-      const payload = await request.validate({ schema: validationSchema });
-
-      const todo = await Todo.findOrFail(params.id);
-      if(todo.userid!==payload.userid){
-         return 'userid should be same!'
+  public async store({ request, response ,auth }: HttpContextContract) {
+    // return auth.user;
+    let data = await request.validate({
+      schema: schema.create({
+        title: schema.string(),
+        description: schema.string(),
+        priority: schema.string(),
+        tags: schema.string.optional(),
+        // userid: schema.number(),
+      }),
+      messages: {
+        'title.required': 'Please provide a title for your todo',
+        'description.required': 'Please provide a description for your todo',
+        'priority.required': 'Please provide a priority for your todo',
       }
-      todo.merge(payload);
-      await todo.save();
-      
-      return response.status(200).json({ message: "Todo updated successfully", data: todo });
-    } catch (error) {
-      return response.status(422).json({ message: "Validation failed", errors: error.messages });
+    });
+ 
+    data["userid"] = auth.user?.userid;
+    const todo = await Todo.create(data);
+    const resData = {
+      id:todo.id,
+      title:todo.title,
+      description:todo.description,
+      priority:todo.priority,
+      tags:todo.tags
     }
+
+  
+    return response.json(resData);
   }
 
-  public async destroy({ params, response }: HttpContextContract) {
-    
-    try {
-        const todo = await Todo.findOrFail(params.id);    
-    // const deletedData=todo;
-    await todo.delete();
-    return "Todo deleted successfully";
-    } catch (error) {
-         return "No id match "
-    }
-    
-  }
-  public async fusers() {
-    return await User.all();
-  }
-  public async falak() {
-    const users = await User.query().preload('todos',(todo)=>{
-       todo.select('title')
+  public async update({ params, request, response,auth }: HttpContextContract) {
+
+    // return 'yes  in update todos'
+    const todo = await Todo.findOrFail(params.id);
+
+    if(todo.userid!==auth.user?.userid){{
+    return 'userid is not match  with   auth user'
+    }}
+    return 'you have permision to  update  this'    
+
+    const data = await request.validate({
+      schema: schema.create({
+        title: schema.string.optional(),
+        description: schema.string.optional(),
+        priority: schema.string(),
+        tags: schema.string.optional(),
+      })
     });
-    return users;
- 
+
+    todo.merge(data);
+    await todo.save();
+    return response.json(todo);
+  }
+
+  public async destroy({ params, response , auth }: HttpContextContract) {
+    // return 'hit delete route'
+    const todo = await Todo.find(params.id);
+  
+    if(todo?.userid!==auth.user?.userid){
+      return { message: 'Todo delete operation  is fail' }
+    }
+
+    await todo?.delete();
+    return { message: 'Todo deleted successfully' };
   }
 }
+
 
 // {
 //     "userid":2,
@@ -98,3 +101,5 @@ export default class TodosController {
 //     "tags":"activitites"
 
 // }
+
+

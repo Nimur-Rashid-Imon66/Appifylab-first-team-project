@@ -1,11 +1,14 @@
-import  { useEffect, useState } from 'react';
+import  { useContext, useEffect, useState } from 'react';
 import AddTodo from './AddTodo';
 import EditTodo from './EditTodo';
+import BackDataCheck from './notin/BackDataCheck';
+import axios from 'axios';
+import { OnlineUserContext } from '../App';
 
 
 interface FormData {
-  userid: string;
-  id:string 
+  userid: number;
+  id:number;
   title: string;
   description: string;
   priority: string;
@@ -13,45 +16,64 @@ interface FormData {
 }
 
 const TodoApp = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchBy, setSearchBy] = useState('title');
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [searchBy, setSearchBy] = useState('title');
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [update,setUpdate] =useState(0);
   const [todos, setTodos] = useState<FormData[]>([]);
-  const  [editTodoId,setEditTodoId]=useState('');
+  const  [editTodoId,setEditTodoId]=useState(0);
   const [editData, setEditData] = useState<FormData | null>(null);
-  const [userid,setUserid]= useState('1')
+  const [userid,setUserid]= useState(1);
+  const { currentLoginUser} = useContext(OnlineUserContext);
+  //console.log('heloo ',currentLoginUser);
+
+  useEffect(()=>{
+    // console.log('user id ',currentLoginUser.userid)
+    setUserid(currentLoginUser.userid);
+  },[])
   useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-    const localhostonlineusesr = localStorage.getItem('localhostonlineusesr');
-    if(localhostonlineusesr && localhostonlineusesr!=='-1'){
-      const userInfo=JSON.parse(localhostonlineusesr);
-      console.log('user info ',userInfo);
-      setUserid(userInfo.userid)
-      // console.log('user id is found set user id  ',userInfo.userid)
-    }
-    else {
-      // console.log('user id not found set user id 1 ',userid)
-    }
+    // const storedTodos = localStorage.getItem('todos');
+    // if (storedTodos) {
+    //   setTodos(JSON.parse(storedTodos));
+    // }
+    // const localhostonlineusesr = localStorage.getItem('localhostonlineusesr');
+    // if(localhostonlineusesr && localhostonlineusesr!=='-1'){
+    //   const userInfo=JSON.parse(localhostonlineusesr);
+    //   console.log('user info ',userInfo);
+    //   setUserid(userInfo.userid)
+    //   // console.log('user id is found set user id  ',userInfo.userid)
+    // }
+    // else {
+    //   // console.log('user id not found set user id 1 ',userid)
+    // }
+   // db todos
+   axios.get('http://127.0.0.1:3333/todos',)
+    .then(res => setTodos(res.data))
+    .catch(err => console.log(err))
+
+
+
   }, [update]);
 
-  const handleEdit = (id: string) => {
+  const handleEdit = (id: number) => {
     // Handle edit action here
-    console.log('handleEdit ',id)
+   // console.log('handleEdit ',id)
     setEditTodoId(id);
-    const existingTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    console.log(existingTodos);
-    if (existingTodos) {
-      const editData = existingTodos.find((todo: FormData) => {
+ 
+     console.log('edit in todos ',todos);
+
+      const editData = todos.find((todo: FormData ) => {
         return todo.id === id;
       });
-      console.log("editData from final ", editData);
-      setEditData(editData);
-    }
+
+  
+      if(editData){
+        console.log("editData from final ", editData);
+        setEditData(editData);
+      }
+      
+    
 
     setOpenEdit(true);
   };
@@ -59,20 +81,32 @@ const TodoApp = () => {
 
   const handleDelete = (id: string) => {
     console.log('Delete id ',id);
-    const afterDeleteData = todos.filter((todo)=>{
-      return todo.id !== id ;
-    })
-    console.log('after delete data ',afterDeleteData);
-    setTodos(afterDeleteData);
-    localStorage.setItem('todos', JSON.stringify(afterDeleteData));
+    // const afterDeleteData = todos.filter((todo)=>{
+    //   return todo.id !== id ;
+    // })
+    // console.log('after delete data ',afterDeleteData);
+    // setTodos(afterDeleteData);
+    // localStorage.setItem('todos', JSON.stringify(afterDeleteData));
+    //db data
+    axios.post(`http://127.0.0.1:3333/todos/${id}/delete`,)
+    .then(res => console.log('delete done ',res))
+    .catch(err => console.log(err))
+
+    setUpdate((pre)=>pre+1);
+
   };
 
   
 
+
+
   return (
     <>
+      <h1>{userid}</h1>
       <AddTodo open={open} setOpen={setOpen} setUpdate={setUpdate} userid={userid} />
-      <EditTodo open={openEdit} setOpen={setOpenEdit} setUpdate={setUpdate} editTodoId={editTodoId} editData={editData} />
+      <EditTodo open={openEdit} setOpen={setOpenEdit} setUpdate={setUpdate} editTodoId={editTodoId} editData={editData}  userid={userid}/>
+
+      {/* <BackDataCheck></BackDataCheck> */}
       <div className="overflow-x-auto m-10">
         <div className="flex justify-between mb-4">
           {/* <div className="flex items-center">
@@ -110,6 +144,7 @@ const TodoApp = () => {
           {todos
               .filter(todo => todo.userid === userid)
               .map((todo) => (
+                
                 <tr key={todo.id} className="border">
                   <td className="border px-4 py-2">{todo.title}</td>
                   <td className="border px-4 py-2">{todo.description}</td>
