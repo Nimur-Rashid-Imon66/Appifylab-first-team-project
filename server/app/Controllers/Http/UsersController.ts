@@ -2,6 +2,8 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Product from "App/Models/Product";
 import User from "App/Models/User";
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
+import { Hash } from "@adonisjs/hash";
+import Expense from "App/Models/Expense";
 export default class UsersController {
   public async index(ctx: HttpContextContract) {
     return ctx.response.json(await User.all());
@@ -31,16 +33,29 @@ export default class UsersController {
       });
       const data = await User.create(payload);
       data.save();
+
+      ///By Nahid ////
+      const expense = await Expense.create({ id: data.userid, balance: 0 });
+      expense.save();
+      ////////////////
+
       return ctx.response.json({ message: "Validation successful" });
     } catch (error) {
       return ctx.response.json(error.messages);
     }
   }
   public async login({ request, response, auth }: HttpContextContract) {
-    const { email, password } = request.only(["email", "password"]);
-    console.log("hello");
-
-    return response.json({ email, password });
+    const email = request.input("email");
+    const inputpassword = request.input("password");
+    const user = await User.findBy("email", email);
+    if (user) {
+      const password = user.password;
+      if (password == inputpassword) return user;
+    }
+    // if (await Hash.verify(hashedValue, password)) {
+    //   // verified
+    // }
+    return {};
   }
 
   public async create({}: HttpContextContract) {}

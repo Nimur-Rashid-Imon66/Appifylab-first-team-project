@@ -21,15 +21,26 @@ export const OnlineUserContext = createContext({});
 
 interface UserData {
   userid?: string;
-  username: string;
-  email: string;
-  password: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  id?: number;
 }
 
 const App: React.FC = () => {
-  const onlineUserFromLocalHost: UserData = JSON.parse(
-    localStorage.getItem("localhostonlineusesr") || "{}"
-  );
+  const storedData = localStorage.getItem("localhostonlineusesr");
+  let onlineUserFromLocalHost: UserData;
+
+  if (storedData) {
+    try {
+      onlineUserFromLocalHost = JSON.parse(storedData);
+    } catch (error) {
+      //  console.error("Error parsing JSON:", error);
+      onlineUserFromLocalHost = { id: -1 };
+    }
+  } else {
+    onlineUserFromLocalHost = { id: -1 };
+  }
   const [currentLoginUser, setCurrentLoginUser] = useState<UserData>(
     onlineUserFromLocalHost
   );
@@ -81,7 +92,6 @@ const App: React.FC = () => {
               <Route path="/showProducts" element={<ShowProduct />} />
               <Route path="/editProduct/:id" element={<EditProduct />} />
             </Route>
-
           </Routes>
         </BrowserRouter>
       </OnlineUserContext.Provider>

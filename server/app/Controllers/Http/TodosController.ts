@@ -5,12 +5,20 @@ import User from "App/Models/User";
 
 export default class TodosController {
   public async index({ response }: HttpContextContract) {
+<<<<<<< HEAD
     return "index";
+=======
+    // return "index";
+>>>>>>> 833ba027e7aa500ebf2e4e842450543c39eb508f
     const todos = await Todo.all();
     return response.json(todos);
   }
 
   public async store({ request, response }: HttpContextContract) {
+<<<<<<< HEAD
+=======
+    // return request;
+>>>>>>> 833ba027e7aa500ebf2e4e842450543c39eb508f
     const validationSchema = schema.create({
       userid: schema.number(),
       title: schema.string({}, [rules.required(), rules.maxLength(255)]),
@@ -18,10 +26,19 @@ export default class TodosController {
       priority: schema.string(),
       tags: schema.string({}, [rules.required()]),
     });
+<<<<<<< HEAD
 
     try {
       const payload = await request.validate({ schema: validationSchema });
       //   return payload;
+=======
+    const data =  request.only(['title','description','priority','tags','userid']);
+    console.log(data)
+    try {
+      const payload = await request.validate({ schema: validationSchema });
+      //   return payload;
+      
+>>>>>>> 833ba027e7aa500ebf2e4e842450543c39eb508f
 
       let todo = new Todo();
       todo.merge(payload);
@@ -34,7 +51,11 @@ export default class TodosController {
   }
 
   public async show({ params, response }: HttpContextContract) {
+<<<<<<< HEAD
     return "show";
+=======
+    // return "show";
+>>>>>>> 833ba027e7aa500ebf2e4e842450543c39eb508f
     const todo = await Todo.findOrFail(params.id);
     return response.json(todo);
   }

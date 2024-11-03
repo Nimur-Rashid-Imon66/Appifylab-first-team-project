@@ -28,6 +28,7 @@
   "dependencies": {
     "@adonisjs/auth": "^5.1.1",
     "@adonisjs/core": "^5.9.0",
+    "@adonisjs/hash": "^9.0.3",
     "@adonisjs/lucid": "^18.4.0",
     "@adonisjs/repl": "^3.1.11",
     "@adonisjs/session": "^6.4.0",
@@ -36,6 +37,7 @@
     "luxon": "^3.4.4",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.7",
+    "phc-argon2": "^1.1.4",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.2.2",
     "source-map-support": "^0.5.21"
